@@ -10,10 +10,11 @@ int main()
     while (x > 0)
     {
         buffer = readline("$> ");
-        if (buffer && buffer != NULL)
+        if (buffer)
         {
-          //  x = -1;
             printf("buffer : %s\n", buffer);
+            if (*buffer)
+                add_history(buffer);
             ft_parse(buffer);
             free(buffer);
         }

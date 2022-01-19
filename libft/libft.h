@@ -19,6 +19,12 @@
 # include <unistd.h>
 # include <limits.h>
 
+typedef struct s_list
+{
+    void *content;
+    void *next;
+} t_list ;
+
 void		*ft_memset(void *b, int c, size_t len);
 void		ft_bzero(void *s, size_t n);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
@@ -53,5 +59,8 @@ void		ft_putstr_fd(char *s, int fd);
 void		ft_putendl_fd(char *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
 char		*ft_itoa(int n);
+void	ft_lstadd_back(t_list **alst, t_list *new);
+t_list	*ft_lstnew(void *content);
+t_list	*ft_lstlast(t_list *lst);
 char		*ft_strjoin_char(char *str, char c);
 #endif
