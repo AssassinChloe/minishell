@@ -14,7 +14,12 @@ int main()
         {
           //  x = -1;
             printf("buffer : %s\n", buffer);
+            ft_parse(buffer);
             free(buffer);
+        }
+        else
+        {
+            x = -1;
         }
     }
     printf("end \n");

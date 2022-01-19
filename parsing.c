@@ -1,22 +1,23 @@
 #include "minishell.h"
 
-int main()
+void    ft_parse(char *str)
 {
-    char    *buffer;
-    int     buffer_size;
-    int x;
+    int i;
+    char *command;
 
-    x = 1;
-    while (x > 0)
+    i = 0;
+    command = ft_calloc(1, sizeof(char));
+    while(str[i])
     {
-        buffer = readline("$> ");
-        if (buffer && buffer != NULL)
-        {
-          //  x = -1;
-            printf("buffer : %s\n", buffer);
-            free(buffer);
+        while (str[i] && ft_isspace(str[i]) == 0 && ft_isquote(str[i]) == 0
+        && ft_ispipe(str[i]) == 0)
+        {    
+            command = ft_strjoin_char(command, str[i]);
+            i++;
         }
+        printf("command: %s\n", command);
+        free(command);
+        return ;
+        i++;
     }
-    printf("end \n");
-    return (0);
 }

@@ -1,12 +1,14 @@
 NAME	= minishell
 
-SRCS	= parsing.c
+SRCS	= minishell.c parsing.c ft_issomething.c
 
 OBJSD   = .obj/
 
 OBJS    = $(addprefix $(OBJSD), $(SRCS:%.c=%.o))
 
 INC		= -I minishell.h
+
+LIB		= libft/libft.a
 
 FLAG	= -Wall -Wextra -Werror -lreadline
 
@@ -15,12 +17,15 @@ CC		= clang
 all		:	$(NAME)
 
 $(NAME)	:	$(OBJS)
-				$(CC) -o $(NAME) $(OBJS) $(FLAG)
+				$(MAKE) -C libft
+				$(CC) -o $(NAME) $(OBJS) $(LIB) $(FLAG)
 
 clean	:	
+				$(MAKE) clean -C libft
 				rm -rf $(OBJSD)
 
 fclean	:	clean
+				$(MAKE) fclean -C libft
 				rm -rf $(NAME)
 
 re		:	fclean all
