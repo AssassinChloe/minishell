@@ -18,7 +18,7 @@ char	*ft_strjoin_char(char *str, char c)
 	int		i;
 
 	i = 0;
-	newstr = malloc(sizeof(char) * ft_strlen(str) + 2);
+	newstr = malloc(sizeof(char) * (ft_strlen(str) + 2));
 	if (!newstr)
 	{
 		if (str)

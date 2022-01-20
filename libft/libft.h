@@ -61,6 +61,8 @@ void		ft_putnbr_fd(int n, int fd);
 char		*ft_itoa(int n);
 void	ft_lstadd_back(t_list **alst, t_list *new);
 t_list	*ft_lstnew(void *content);
+void	ft_lstdelone(t_list *lst);
 t_list	*ft_lstlast(t_list *lst);
+void	ft_lstclear(t_list **lst);
 char		*ft_strjoin_char(char *str, char c);
 #endif

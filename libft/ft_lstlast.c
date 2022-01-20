@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cassassi <cassassi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/01 16:03:52 by cassassi          #+#    #+#             */
-/*   Updated: 2020/12/01 16:41:04 by cassassi         ###   ########.fr       */
+/*   Created: 2021/05/25 13:34:03 by vmercier          #+#    #+#             */
+/*   Updated: 2021/05/25 13:34:52 by vmercier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 t_list	*ft_lstlast(t_list *lst)
 {
-	while (lst && lst->next)
+	if (!lst)
+		return (0);
+	while (lst->next)
 		lst = lst->next;
 	return (lst);
 }
