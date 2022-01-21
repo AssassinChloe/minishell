@@ -25,9 +25,11 @@ int ft_issimplequote(char c);
 int ft_isdoublequote(char c);
 int ft_ispipe(char c);
 void    ft_printchain(t_list *elem);
-void    ft_addone(t_list **tokens, char *tmp);
+void    ft_addone(t_list **tokens, char **tmp);
 int	has_dollar(char *str);
 int	ft_strcmp(char *s1, char *s2);
 int get_token_type(char *str);
+void	ft_extract_var(t_list **tokens, char *str);
+
 
 #endif

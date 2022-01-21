@@ -21,6 +21,7 @@ int main()
         else
         {
             x = -1;
+            rl_clear_history();
         }
     }
     printf("end \n");

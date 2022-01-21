@@ -1,6 +1,6 @@
 NAME	= minishell
 
-SRCS	= minishell.c parsing.c ft_issomething.c handlechainlist.c
+SRCS	= minishell.c parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote.c
 
 OBJSD   = .obj/
 

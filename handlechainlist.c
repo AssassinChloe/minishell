@@ -15,15 +15,15 @@ void    ft_printchain(t_list *elem)
     }
 }
 
-void    ft_addone(t_list **tokens, char *tmp)
+void    ft_addone(t_list **tokens, char **tmp)
 {
-    if (tmp != NULL)
+    if (*tmp != NULL)
     {
         if (*tokens == NULL)
-            *tokens = ft_lstnew(ft_strdup(tmp));
+            *tokens = ft_lstnew(ft_strdup(*tmp));
         else
-            ft_lstadd_back(tokens, ft_lstnew(ft_strdup(tmp)));
-        free(tmp);
-        tmp = NULL;
+            ft_lstadd_back(tokens, ft_lstnew(ft_strdup(*tmp)));
+        free(*tmp);
+        *tmp = NULL;
     }
 }
