@@ -1,18 +1,19 @@
-NAME	= minishell
+NAME	=	minishell
 
-SRCS	= minishell.c parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote.c
+SRCS	=	minishell.c parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote.c handle_redir.c\
+			
 
-OBJSD   = .obj/
+OBJSD   =	.obj/
 
-OBJS    = $(addprefix $(OBJSD), $(SRCS:%.c=%.o))
+OBJS    =	$(addprefix $(OBJSD), $(SRCS:%.c=%.o))
 
-INC		= -I minishell.h
+INC		=	-I minishell.h
 
-LIB		= libft/libft.a
+LIB		=	libft/libft.a
 
-FLAG	= -Wall -Wextra -Werror -lreadline
+FLAG	=	-Wall -Wextra -Werror -lreadline
 
-CC		= clang
+CC		=	clang
 
 all		:	$(NAME)
 

@@ -58,6 +58,7 @@ int	has_dollar(char *str);
 int	ft_strcmp(char *s1, char *s2);
 int get_token_type(char *str);
 void	ft_extract_var(t_list **tokens, char *str);
-
+int ft_isredir(char c);
+int ft_isdoubleredir(char *str, int i);
 
 #endif

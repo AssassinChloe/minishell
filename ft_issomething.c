@@ -13,4 +13,3 @@ int ft_ispipe(char c)
         return (1);
     return (0);
 }
-

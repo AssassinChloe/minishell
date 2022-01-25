@@ -16,14 +16,12 @@ int ft_isclosed(char *str, int i)
     return (-1);
 }
 
-char    *ft_handleis(char *str, int *i)
+char    *ft_handleis(char *str, int *i, int *multiple)
 {
     char *quote;
     int j;
     int ret;
-    static int multipipe = 0;
-
-    j = 0;
+ 
     if (ft_isspace(str[*i]) == 1)
     {
         while(str[*i] && ft_isspace(str[*i]) == 1)
@@ -31,7 +29,7 @@ char    *ft_handleis(char *str, int *i)
     }
     else if (ft_isdoublequote(str[*i]) == 2 || ft_issimplequote(str[*i]) == 1)
     {
-        multipipe = 0;
+        *multiple = 0;
         ret = ft_isclosed(str, *i);
         if (ret < 0)
         {
@@ -41,6 +39,7 @@ char    *ft_handleis(char *str, int *i)
         }
         else
         {
+            j = 0;
             quote = malloc(sizeof(char) * (ret - *i) + 2);
             while (*i <= ret)
             {
@@ -54,9 +53,9 @@ char    *ft_handleis(char *str, int *i)
     }
     else if (ft_ispipe(str[*i]) == 1)
     {
-        if (multipipe == 0)
+        if (*multiple == 0)
         {
-            multipipe = 1;
+            *multiple = 1;
             quote = malloc(sizeof(char) * 2);
             quote[0] = str[*i];
             quote[1] = '\0';
@@ -66,10 +65,54 @@ char    *ft_handleis(char *str, int *i)
         else
         {
             *i = -1;
-            printf("error multipipe without arg between\n");
-            multipipe = 0;
+            printf("error multiple specific char without arg between\n");
+            *multiple = 0;
             return (NULL);
         }
+    }
+    else if (ft_isredir(str[*i]) > 0)
+    {
+        if (*multiple == 0)
+        {
+
+            *multiple = 1;
+            ret = ft_isdoubleredir(str, *i);
+            if (ret == 1)
+            {
+                quote = malloc(sizeof(char) * 3);
+                j = 0;
+                while (j < 2)
+                {
+                    quote[j] = str[*i];
+                    j++;
+                    *i = *i + 1;
+                }
+                quote[j] = '\0';
+                return (quote);
+            }
+            else if (ret == 0)
+            {
+                quote = malloc(sizeof(char) * 2);
+                quote[0] = str[*i];
+                quote[1] = '\0';
+                *i = *i + 1;
+                return (quote);
+            }
+            else
+            {
+                *i = -1;
+                printf("error multiple specific char without arg between\n");
+                *multiple = 0;
+                return (NULL);
+            }
+        }
+        else
+            {
+                *i = -1;
+                printf("error multiple specific char without arg between\n");
+                *multiple = 0;
+                return (NULL);
+            }
     }
     return (NULL);
 }
@@ -80,17 +123,20 @@ void    ft_parse(char *str)
     char *tmp;
     t_list *tokens;
     int keepgoing;
+    int multiple;
   
     i = 0;
     tmp = NULL;
     tokens = NULL;
     keepgoing = 1;
-    while(str[i])
+    multiple = 0;
+        while(str[i])
     {
-        while (str[i] && ft_isspace(str[i]) == 0 && ft_ispipe(str[i]) == 0 && keepgoing == 1)
+        while (str[i] && ft_isspace(str[i]) == 0 && ft_isredir(str[i]) == 0 && ft_ispipe(str[i]) == 0 && keepgoing == 1)
         {
+            multiple = 0;
             while (str[i] && ft_isspace(str[i]) == 0 && ft_isquote(str[i]) == 0
-            && ft_ispipe(str[i]) == 0)
+            && ft_ispipe(str[i]) == 0 && ft_isredir(str[i]) == 0)
             {   
                 if (str[i] == ';' || str[i] == 92)
                 {
@@ -117,9 +163,11 @@ void    ft_parse(char *str)
         ft_addone(&tokens, &tmp);
         keepgoing = 1;
         while (str[i] && ft_isspace(str[i]) == 1 || ft_isquote(str[i]) > 0
-        || ft_ispipe(str[i]) == 1)
+        || ft_ispipe(str[i]) == 1 || ft_isredir(str[i]) > 0)
         {
-            tmp = ft_handleis(str, &i);
+            tmp = ft_handleis(str, &i, &multiple);
+            if (ft_isquote(str[i]) > 0)
+                multiple = 0;
             if (tmp && tmp[0] == '"' && has_dollar(tmp) == 1)
             {
                 ft_extract_var(&tokens, tmp);
