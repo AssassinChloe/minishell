@@ -22,12 +22,3 @@ int ft_isdoublequote(char c)
         return (2);
     return (0);
 }
-
-// intcheckemptyquote()
-// {
-
-// }
-// char *extract_quote(char)
-// {
-
-// }

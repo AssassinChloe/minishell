@@ -21,6 +21,7 @@ char    *ft_handleis(char *str, int *i)
     char *quote;
     int j;
     int ret;
+    static int multipipe = 0;
 
     j = 0;
     if (ft_isspace(str[*i]) == 1)
@@ -30,10 +31,11 @@ char    *ft_handleis(char *str, int *i)
     }
     else if (ft_isdoublequote(str[*i]) == 2 || ft_issimplequote(str[*i]) == 1)
     {
+        multipipe = 0;
         ret = ft_isclosed(str, *i);
         if (ret < 0)
         {
-            *i = ret;
+            *i = -1;
             printf("the quote is not closed\n");
             return (NULL);
         }
@@ -52,11 +54,22 @@ char    *ft_handleis(char *str, int *i)
     }
     else if (ft_ispipe(str[*i]) == 1)
     {
-        quote = malloc(sizeof(char) * 2);
-        quote[0] = str[*i];
-        quote[1] = '\0';
-        *i = *i + 1;
-        return (quote);
+        if (multipipe == 0)
+        {
+            multipipe = 1;
+            quote = malloc(sizeof(char) * 2);
+            quote[0] = str[*i];
+            quote[1] = '\0';
+            *i = *i + 1;
+            return (quote);
+        }
+        else
+        {
+            *i = -1;
+            printf("error multipipe without arg between\n");
+            multipipe = 0;
+            return (NULL);
+        }
     }
     return (NULL);
 }
@@ -112,6 +125,14 @@ void    ft_parse(char *str)
                 ft_extract_var(&tokens, tmp);
                 free(tmp);
             }
+            else if (tmp == NULL && i < 0)
+            {
+                    if (tmp)
+                        free(tmp);
+                    if (tokens)
+                        ft_lstclear(&tokens);
+                    return ;
+            }     
             else
                 ft_addone(&tokens, &tmp);
         }

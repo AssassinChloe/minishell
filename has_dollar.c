@@ -32,9 +32,12 @@ void	ft_extract_var(t_list **tokens, char *str)
 	{
 		int i;
 		char *tmp;
+		int	number;
 
-		i = 1;
 		tmp = NULL;
+		tmp = ft_strjoin_char(tmp, '"');
+		i = 1;
+		number = 0;
 		while (str[i] != '"')
 		{
 			while(str[i] != '"' && str[i] != '$')
@@ -54,8 +57,7 @@ void	ft_extract_var(t_list **tokens, char *str)
 					ft_addone(tokens, &tmp);
 					tmp = ft_strjoin_char(tmp, str[i]);
 					i++;
-					if (ft_isdigit(str[i]) == 1 || ft_isspace(str[i]) == 1
-					|| str[i] == '$')
+					if (ft_isdigit(str[i]) == 1 || str[i] == '$')
 					{
 						tmp = ft_strjoin_char(tmp, str[i]);
 						ft_addone(tokens, &tmp);
@@ -63,15 +65,20 @@ void	ft_extract_var(t_list **tokens, char *str)
 					}
 					else
 					{
-						while (str[i] !='"' && ft_isalnum(str[i]) == 1)
+						while (str[i] !='"' && ft_isspace(str[i]) == 0
+						&& ft_isalnum(str[i]) == 1 && number == 0)
 						{
 							tmp = ft_strjoin_char(tmp, str[i]);
+							if (ft_isdigit(str[i]) == 1)
+								number = 1;
 							i++;
 						}
+						ft_addone(tokens, &tmp);
 					}
 				}
 				
 			}
 		}
+		tmp = ft_strjoin_char(tmp, str[i]);
 		ft_addone(tokens, &tmp);
 	}
