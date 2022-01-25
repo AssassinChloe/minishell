@@ -28,16 +28,21 @@ int	has_dollar(char *str)
 	return (0);
 }
 
-void	ft_extract_var(t_list **tokens, char *str)
+int	ft_isvarphabet(char c)
+{
+	if (ft_isalnum(c) == 1 || c == '_')
+		return (1);
+	return (0);
+}
+
+void	ft_extract_varquote(t_list **tokens, char *str)
 	{
 		int i;
 		char *tmp;
-		int	number;
-
+	
 		tmp = NULL;
 		tmp = ft_strjoin_char(tmp, '"');
 		i = 1;
-		number = 0;
 		while (str[i] != '"')
 		{
 			while(str[i] != '"' && str[i] != '$')
@@ -66,11 +71,9 @@ void	ft_extract_var(t_list **tokens, char *str)
 					else
 					{
 						while (str[i] !='"' && ft_isspace(str[i]) == 0
-						&& ft_isalnum(str[i]) == 1 && number == 0)
+						&& ft_isvarphabet(str[i]) == 1)
 						{
 							tmp = ft_strjoin_char(tmp, str[i]);
-							if (ft_isdigit(str[i]) == 1)
-								number = 1;
 							i++;
 						}
 						ft_addone(tokens, &tmp);
@@ -82,3 +85,8 @@ void	ft_extract_var(t_list **tokens, char *str)
 		tmp = ft_strjoin_char(tmp, str[i]);
 		ft_addone(tokens, &tmp);
 	}
+
+void	ft_extreact_var()
+{
+
+}
