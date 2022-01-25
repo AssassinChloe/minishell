@@ -18,14 +18,17 @@ char	*ft_strjoin_char(char *str, char c)
 	int		i;
 
 	i = 0;
-	newstr = malloc(sizeof(char) * (ft_strlen(str) + 2));
+	if (str != NULL)
+		newstr = malloc(sizeof(char) * (ft_strlen(str) + 2));
+	else
+		newstr = malloc(sizeof(char) * 2);
 	if (!newstr)
 	{
-		if (str)
+		if (str != NULL)
 			free(str);
 		return (NULL);
 	}
-	if (str)
+	if (str != NULL)
 	{
 		while (str[i])
 		{

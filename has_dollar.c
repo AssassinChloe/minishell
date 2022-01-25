@@ -27,3 +27,51 @@ int	has_dollar(char *str)
 	}
 	return (0);
 }
+
+void	ft_extract_var(t_list **tokens, char *str)
+	{
+		int i;
+		char *tmp;
+
+		i = 1;
+		tmp = NULL;
+		while (str[i] != '"')
+		{
+			while(str[i] != '"' && str[i] != '$')
+			{
+				tmp = ft_strjoin_char(tmp, str[i]);
+				i++;
+			}
+			if (str[i] == '$')
+			{
+				if (str[i + 1] == '"' || ft_isspace(str[i + 1]) == 1)
+				{
+					tmp = ft_strjoin_char(tmp, str[i]);
+					i++;
+				}
+				else
+				{
+					ft_addone(tokens, &tmp);
+					tmp = ft_strjoin_char(tmp, str[i]);
+					i++;
+					if (ft_isdigit(str[i]) == 1 || ft_isspace(str[i]) == 1
+					|| str[i] == '$')
+					{
+						tmp = ft_strjoin_char(tmp, str[i]);
+						ft_addone(tokens, &tmp);
+						i++;
+					}
+					else
+					{
+						while (str[i] !='"' && ft_isalnum(str[i]) == 1)
+						{
+							tmp = ft_strjoin_char(tmp, str[i]);
+							i++;
+						}
+					}
+				}
+				
+			}
+		}
+		ft_addone(tokens, &tmp);
+	}

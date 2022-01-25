@@ -6,7 +6,7 @@
 #    By: cassassi <cassassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/18 15:59:27 by cassassi          #+#    #+#              #
-#    Updated: 2021/10/11 10:41:00 by cassassi         ###   ########.fr        #
+#    Updated: 2022/01/21 15:46:58 by cassassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ CC	= gcc
 
 RM	= rm -rf
 
-INC	= libft.h
+INC	= -I .
 
 FLAGS	= -Wall -Wextra -Werror
 
