@@ -10,7 +10,7 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <signal.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
 # define T_ERR 1
 # define T_PIPE 2
@@ -21,6 +21,13 @@
 # define T_LLOWER 7
 # define T_GGREATER 8
 # define T_STRING 9
+
+typedef struct s_typage
+{
+	char	*token;
+	int		type;
+	struct s_typage *next;
+} t_typage;
 
 typedef struct		s_cmd
 {
@@ -46,6 +53,7 @@ typedef struct s_data // globale ?
     int     loop; // variable pour maintien de la boucle while
 }		t_data;
 
+
 int	ft_isvarphabet(char c);
 void    ft_parse(char *str);
 int ft_isspace(char c);
@@ -64,4 +72,7 @@ int ft_isdoubleredir(char *str, int i);
 char    *ft_handle_quote(char *str, int *i, int keepquote);
 void	ft_freeparsing(char **str, t_list **chain);
 int is_forbidden_char(char c);
+int ft_lexing(t_list *list);
+void    ft_addonetype(t_typage **typelist, t_typage *tmp);
+void    ft_printtype(t_list *elem);
 #endif

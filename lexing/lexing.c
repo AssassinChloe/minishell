@@ -10,21 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-
-#define T_ERR 1
-#define T_PIPE 2
-#define T_CMD 3
-#define T_FLAG 4
-#define T_LOWER 5
-#define T_GREATER 6
-#define T_LLOWER 7
-#define T_GGREATER 8
-#define T_STRING 9
-*/
 #include "minishell.h"
 
 int	ft_strcmp(char *s1, char *s2)
@@ -33,7 +18,7 @@ int	ft_strcmp(char *s1, char *s2)
 
 	i = 0;
 	if (!s1 || !s2)
-		return (0);
+		return (-1);
 	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
@@ -67,19 +52,41 @@ int get_token_type(char *str)
         tok = T_STRING;
     return (tok);
 }
-/*
-int main(void)
+
+void    ft_printtype(t_list *elem)
 {
-    char *str1=";";
-    char *str2="|";
-    char *str3="echo";
-    char *str4=">>";
-    char *str5="truc";
-    printf("token de %s : %d\n", str1, get_token_type(str1));
-    printf("token de %s : %d\n", str2, get_token_type(str2));
-    printf("token de %s : %d\n", str3, get_token_type(str3));
-    printf("token de %s : %d\n", str4, get_token_type(str4));
-    printf("token de %s : %d\n", str5, get_token_type(str5));
-    return (0);
+    t_list  *tmp;
+    t_typage *type;
+
+    tmp = elem;
+    while (tmp)
+    {
+        type = (t_typage *)tmp->content;
+        printf("type %d : %s\n", type->type, type->token);
+        tmp = tmp->next;
+    }
 }
-*/
+
+int ft_lexing(t_list *list)
+{
+    t_list *typelist;
+    t_typage *tmp;
+    t_list  *tmplist;
+
+    typelist = NULL;
+    tmplist = list;
+    while (tmplist)
+    {
+        tmp = malloc(sizeof(t_typage));
+        tmp->token = ft_strdup((char *)tmplist->content);
+        tmp->type = get_token_type((char*)tmplist->content);
+            if (typelist == NULL)
+                typelist = ft_lstnew(tmp);
+            else
+                ft_lstadd_back(&typelist, ft_lstnew(tmp));
+        tmplist = tmplist->next;
+    }
+    ft_printtype(typelist);
+    return (0);
+
+}
