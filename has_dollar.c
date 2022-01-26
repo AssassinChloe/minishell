@@ -35,58 +35,45 @@ int	ft_isvarphabet(char c)
 	return (0);
 }
 
-void	ft_extract_varquote(t_list **tokens, char *str)
+char	*ft_extract_var(char *str)
 	{
 		int i;
-		char *tmp;
+		char	*tmp;
+		char	*var;
+		char	*conv;
 	
 		tmp = NULL;
-		tmp = ft_strjoin_char(tmp, '"');
-		i = 1;
-		while (str[i] != '"')
+		var = NULL;
+		i = 0;
+		while (str[i])
 		{
-			while(str[i] != '"' && str[i] != '$')
+			while (str[i] && str[i] != '$')
 			{
 				tmp = ft_strjoin_char(tmp, str[i]);
 				i++;
 			}
 			if (str[i] == '$')
 			{
-				if (str[i + 1] == '"' || ft_isspace(str[i + 1]) == 1)
+				if (ft_isvarphabet(str[i + 1]) == 0)
 				{
 					tmp = ft_strjoin_char(tmp, str[i]);
 					i++;
 				}
 				else
 				{
-					ft_addone(tokens, &tmp);
-					tmp = ft_strjoin_char(tmp, str[i]);
 					i++;
-					if (ft_isdigit(str[i]) == 1 || str[i] == '$')
+					while (ft_isvarphabet(str[i]) == 1)
 					{
-						tmp = ft_strjoin_char(tmp, str[i]);
-						ft_addone(tokens, &tmp);
+						var = ft_strjoin_char(var, str[i]);
 						i++;
 					}
-					else
-					{
-						while (str[i] !='"' && ft_isspace(str[i]) == 0
-						&& ft_isvarphabet(str[i]) == 1)
-						{
-							tmp = ft_strjoin_char(tmp, str[i]);
-							i++;
-						}
-						ft_addone(tokens, &tmp);
-					}
+					conv = getenv(var);
+					tmp = ft_strjoin(tmp, ft_strdup(conv));
 				}
 				
 			}
 		}
-		tmp = ft_strjoin_char(tmp, str[i]);
-		ft_addone(tokens, &tmp);
+		free(str);
+		return (tmp);
 	}
 
-void	ft_extreact_var()
-{
-
-}

@@ -1,7 +1,7 @@
 NAME	=	minishell
 
 SRCS	=	minishell.c parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote.c handle_redir.c\
-			
+			cleanparsing.c
 
 OBJSD   =	.obj/
 

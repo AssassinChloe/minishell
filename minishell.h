@@ -58,10 +58,11 @@ void    ft_addone(t_list **tokens, char **tmp);
 int	has_dollar(char *str);
 int	ft_strcmp(char *s1, char *s2);
 int get_token_type(char *str);
-void	ft_extract_varquote(t_list **tokens, char *str);
+char	*ft_extract_var(char *str);
 int ft_isredir(char c);
 int ft_isdoubleredir(char *str, int i);
 char    *ft_handle_quote(char *str, int *i, int keepquote);
-void	ft_freeparsing(char *str, t_list **chain);
+void	ft_freeparsing(char **str, t_list **chain);
 int is_forbidden_char(char c);
+int	ft_isvarphabet(char c);
 #endif
