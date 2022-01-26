@@ -64,5 +64,4 @@ int ft_isdoubleredir(char *str, int i);
 char    *ft_handle_quote(char *str, int *i, int keepquote);
 void	ft_freeparsing(char **str, t_list **chain);
 int is_forbidden_char(char c);
-int	ft_isvarphabet(char c);
 #endif

@@ -68,6 +68,7 @@ char	*ft_extract_var(char *str)
 						i++;
 					}
 					conv = getenv(var);
+					free(var);
 					tmp = ft_strjoin(tmp, ft_strdup(conv));
 				}
 				
