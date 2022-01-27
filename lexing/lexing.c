@@ -183,7 +183,7 @@ int ft_lexing(t_list *list)
             ft_lstadd_back(&commandlist, ft_lstnew(tmp));
     }
     ft_printtype(commandlist);
-    i = 0;
+    ft_execution_test(commandlist);
     ft_free_commandlist(&commandlist);
     return (0);
 

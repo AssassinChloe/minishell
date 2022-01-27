@@ -1,6 +1,6 @@
 NAME	=	minishell
 
-SRCS	=	minishell.c $(addprefix $(PARSDIR), $(PARSING))\
+SRCS	=	minishell.c executiontest.c $(addprefix $(PARSDIR), $(PARSING))\
 			$(addprefix $(LEXDIR), $(LEXING))\
 			$(addprefix $(BUILDIR), $(BUILTIN))
 

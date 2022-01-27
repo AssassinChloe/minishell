@@ -78,4 +78,5 @@ int is_forbidden_char(char c);
 int ft_lexing(t_list *list);
 void    ft_addonetype(t_typage **typelist, t_typage *tmp);
 void    ft_printtype(t_list *elem);
+void	ft_execution_test(t_cmd *cmd);
 #endif
