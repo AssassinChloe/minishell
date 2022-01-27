@@ -54,7 +54,13 @@ char	*ft_extract_var(char *str)
 			}
 			if (str[i] == '$')
 			{
-				if (ft_isvarphabet(str[i + 1]) == 0)
+				if (str[i + 1] == '?')
+				{
+					conv = getenv("?");
+					tmp = ft_strjoin(tmp,ft_strdup(conv));
+					i = i + 2;
+				}
+				else if (ft_isvarphabet(str[i + 1]) == 0)
 				{
 					tmp = ft_strjoin_char(tmp, str[i]);
 					i++;

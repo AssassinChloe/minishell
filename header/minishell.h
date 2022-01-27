@@ -7,6 +7,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <fcntl.h>
 # include <errno.h>
 # include <signal.h>
@@ -21,6 +23,7 @@
 # define T_LLOWER 7
 # define T_GGREATER 8
 # define T_STRING 9
+# define T_BUILTIN 10
 
 typedef struct s_typage
 {
@@ -33,7 +36,7 @@ typedef struct		s_cmd
 {
 	char			**argv;
 	int				argc;
-	int				type;
+	int				*type;
 	int				pip[2];
 	int				fd_in;
 	int				fd_out;
@@ -65,7 +68,7 @@ void    ft_printchain(t_list *elem);
 void    ft_addone(t_list **tokens, char **tmp);
 int	has_dollar(char *str);
 int	ft_strcmp(char *s1, char *s2);
-int get_token_type(char *str);
+int get_token_type(char *str, int *multicmd);
 char	*ft_extract_var(char *str);
 int ft_isredir(char c);
 int ft_isdoubleredir(char *str, int i);

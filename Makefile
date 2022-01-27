@@ -33,7 +33,7 @@ all		:	$(NAME)
 
 $(NAME)	:	$(OBJS)
 				$(MAKE) -C libft
-				$(CC) -o $(NAME) $(OBJS) $(LIB) $(FLAG)
+				$(CC) -o $(NAME) $(FLAG) $(OBJS) $(LIB) 
 
 clean	:	
 				$(MAKE) clean -C libft
