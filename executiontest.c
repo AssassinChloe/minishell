@@ -1,5 +1,28 @@
 #include "minishell.h"
 
+void	exec_cmd(char **cmd)
+{
+	pid_t	pid = 0;
+	int		status = 0;
+
+	// On fork
+	pid = fork();
+	if (pid == -1)
+		perror("fork");
+	// Si le fork a reussit, le processus pere attend l'enfant (process fork)
+	else if (pid > 0) {
+		// On block le processus parent jusqu a ce que l'enfant termine puis
+		// on kill le processus enfant
+		waitpid(pid, &status, 0);
+		kill(pid, SIGTERM);
+	} else {
+		// Le processus enfant execute la commande ou exit si execve echoue
+		if (execve(cmd[0], cmd, NULL) == -1)
+			perror("shell");
+		exit(EXIT_FAILURE);
+	}
+}
+
 void ft_execution_test(t_cmd *cmd)
 {
     char *path;
@@ -37,7 +60,8 @@ void ft_execution_test(t_cmd *cmd)
             }
         }
     }
+    free(cmd->argv[0]);
     cmd->argv[0] = ft_strdup(bin);
-    if(execve(cmd->argv[0], cmd->argv, NULL) == -1)
-        perror("shell");
+    printf("path to binaire : %s\n", cmd->argv[0]);
+    exec_cmd(cmd->argv);
 }

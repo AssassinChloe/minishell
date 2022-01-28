@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cassassi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/28 14:43:36 by cassassi          #+#    #+#             */
+/*   Updated: 2022/01/28 14:44:29 by cassassi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char    *ft_handleis(char *str, int *i, int *multiple)
@@ -130,7 +142,7 @@ void    ft_parse(char *str)
             }
         }
         ft_addone(&tokens, &tmp);
-        while (str[i] && ft_isspace(str[i]) == 1 || ft_ispipe(str[i]) == 1 || ft_isredir(str[i]) > 0)
+        while (str[i] && (ft_isspace(str[i]) == 1 || ft_ispipe(str[i]) == 1 || ft_isredir(str[i]) > 0))
         {
             tmp = ft_handleis(str, &i, &multiple);
             if (tmp == NULL && i < 0)

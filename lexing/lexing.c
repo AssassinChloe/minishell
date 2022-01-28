@@ -6,7 +6,7 @@
 /*   By: vmercier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 09:51:02 by vmercier          #+#    #+#             */
-/*   Updated: 2022/01/21 09:51:18 by vmercier         ###   ########.fr       */
+/*   Updated: 2022/01/28 14:42:36 by cassassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ int ft_lexing(t_list *list)
             ft_lstadd_back(&commandlist, ft_lstnew(tmp));
     }
     ft_printtype(commandlist);
-    ft_execution_test(commandlist);
+    ft_execution_test((t_cmd *)commandlist->content);
     ft_free_commandlist(&commandlist);
     return (0);
 
