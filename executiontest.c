@@ -63,5 +63,12 @@ void ft_execution_test(t_cmd *cmd)
     free(cmd->argv[0]);
     cmd->argv[0] = ft_strdup(bin);
     printf("path to binaire : %s\n", cmd->argv[0]);
+    free(bin);
+    i = 0;
+    while (path_split[i])
+    {
+        free(path_split[i]);
+        i++;
+    }
     exec_cmd(cmd->argv);
 }

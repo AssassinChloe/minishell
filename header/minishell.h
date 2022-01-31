@@ -24,6 +24,7 @@
 # define T_GGREATER 8
 # define T_STRING 9
 # define T_BUILTIN 10
+# define T_FILENAME 11
 
 typedef struct s_typage
 {

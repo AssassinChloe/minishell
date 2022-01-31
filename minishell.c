@@ -10,7 +10,7 @@ int main()
     while (x > 0)
     {
         buffer = readline("$> ");
-        if (buffer)
+        if (buffer && ft_strcmp("exit", buffer) != 0)
         {
             printf("buffer : %s\n", buffer);
             if (*buffer)
