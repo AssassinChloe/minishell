@@ -39,26 +39,25 @@ typedef struct s_env //ajout
 {
 	char			*key;
 	char			*value;
-	int				with_value;
 	struct s_env	*next;
 }	t_env;
 
-typedef struct s_data
+typedef struct s_data // globale ?
 {
 	char	*line;
 	t_cmd	*cmd_lst;
-	t_env 	*env;      //ajout
-	t_env	*export_env;
 	char	**splited_line;
 	char	**args;
+	t_env	*env;
 	int		exit_value;
 	int		nb_pipe;
-	int		execution; // pour savoir si il y a une execution en cours (signaux)
+	int		execution; // pour dire si on est en cours d'execution ou non
     int     loop; // variable pour maintien de la boucle while
 }		t_data;
 
-extern t_data g_data;
+extern t_data	g_data;
 
+int	ft_isvarphabet(char c);
 void    ft_parse(char *str);
 int ft_isspace(char c);
 int ft_isquote(char c);
@@ -70,9 +69,10 @@ void    ft_addone(t_list **tokens, char **tmp);
 int	has_dollar(char *str);
 int	ft_strcmp(char *s1, char *s2);
 int get_token_type(char *str);
-void    handle_sig(int sig);
-void	init_data(char **envp);
-void	init_signal();
-int minishell();
-
+char	*ft_extract_var(char *str);
+int ft_isredir(char c);
+int ft_isdoubleredir(char *str, int i);
+char    *ft_handle_quote(char *str, int *i, int keepquote);
+void	ft_freeparsing(char **str, t_list **chain);
+int is_forbidden_char(char c);
 #endif

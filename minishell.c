@@ -1,20 +1,96 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <signal.h>
 #include "minishell.h"
 
-t_data	g_data;
+t_data g_data;
+
+
+void	destroy_var(t_env *var)
+{
+	if (var->key)
+		free(var->key);
+	if (var->value)
+		free(var->value);
+	free(var);
+}
+
+void	clear_list(t_env **list)
+{
+	t_env	*var;
+	t_env	*tmp;
+
+	if (!list || !(*list))
+		return ;
+	var = *list;
+	while (var)
+	{
+		tmp = var;
+		var = var->next;
+		destroy_var(tmp);
+	}
+	*list = NULL;
+}
+
+
+t_env	*record_var(char *key, char *value)
+{
+	t_env	*var;
+
+	var = malloc(sizeof(t_env));
+	if (!var)
+		return (NULL);
+	var->key = ft_strdup(key);
+	var->value = ft_strdup(value);
+	var->next = NULL;
+	if (!var->key || !var->value)
+	{
+		destroy_var(var);
+		var = NULL;
+	}
+	return (var);
+}
+
+t_env	*get_env(char **envp)
+{
+	t_env	*var_env;
+	t_env	*var;
+	char **tmp;
+	int		i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	var_env = NULL;
+	while (i--)
+	{
+		tmp = ft_split(envp[i], "=");
+		var = record_var(tmp[0], tmp[1]);
+		if (!var)
+		{
+			clear_list(&var_env);
+			break ;
+		}
+		var->next = var_env;
+		var_env = var;
+//		printf(" var %d : %s = %s\n", i, var_env->key, var_env->value); ligne pour verif si besoin
+	}
+	return (var_env);
+}
+
+
+void	init_data(char **envp)
+{
+	g_data.loop = 1;
+	g_data.line = NULL;
+	g_data.env = get_env(envp);
+//	g_data.export_env = NULL; //get_env(envp);
+	g_data.exit_value = 0;
+	g_data.cmd_lst = NULL;
+	g_data.nb_pipe = 0;
+	g_data.execution = 0;
+}
 
 void    handle_sig(int sig)
 {
-//(void)g_data;
-if (sig == SIGINT)
+    if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
@@ -23,28 +99,11 @@ if (sig == SIGINT)
 			rl_redisplay();
 		g_data.exit_value = 130;
 	}
-if (sig == SIGQUIT)
-{
-	write(1, "\b\b  \b\b", 6);
-	g_data.exit_value = 131;
-}
-}
-/*
-t_env	*get_env(char **envp)
-{
-	
-}
-*/
-void	init_data(char **envp)
-{
-	g_data.loop = 1;
-	g_data.line = NULL;
-	g_data.env = NULL; //get_env(envp);
-	g_data.export_env = NULL; //get_env(envp);
-	g_data.exit_value = 0;
-	g_data.cmd_lst = NULL;
-	g_data.nb_pipe = 0;
-	g_data.execution = 0;
+    if (sig == SIGQUIT)
+    {
+	    write(1, "\b\b  \b\b", 6);
+	    g_data.exit_value = 131;
+    }
 }
 
 void	init_signal()
@@ -54,6 +113,7 @@ void	init_signal()
 
 }
 
+
 int minishell()
 {
 	char	*buffer;
@@ -62,7 +122,6 @@ int minishell()
 
 	while (g_data.loop > 0) // remplacement de x = 1
 	{
-		init_signal();
 		buffer = readline("$> ");
 		if (buffer)
 		{
@@ -75,6 +134,7 @@ int minishell()
 		else
 		{
 			g_data.loop = -1;
+            rl_clear_history();
 		}
 	}
 	printf("end \n");
@@ -88,6 +148,6 @@ int main(int argc, char **argv, char **envp)
 	init_data(envp);
 	init_signal();
 	minishell();
-//	ft_free_all(); a faire
+//	ft_free_all(); a faire ?
 	return (0);
 }
