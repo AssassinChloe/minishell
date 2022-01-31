@@ -12,7 +12,6 @@ int main()
         buffer = readline("$> ");
         if (buffer && ft_strcmp("exit", buffer) != 0)
         {
-            printf("buffer : %s\n", buffer);
             if (*buffer)
                 add_history(buffer);
             ft_parse(buffer);

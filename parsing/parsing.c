@@ -6,7 +6,7 @@
 /*   By: cassassi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 14:43:36 by cassassi          #+#    #+#             */
-/*   Updated: 2022/01/28 14:44:29 by cassassi         ###   ########.fr       */
+/*   Updated: 2022/01/31 17:03:46 by cassassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void    ft_parse(char *str)
                 ft_addone(&tokens, &tmp);
         }
     }
-    ft_printchain(tokens);
+    //ft_printchain(tokens);
     ft_lexing(tokens);
     ft_lstclear(&tokens);
 }

@@ -6,7 +6,7 @@
 /*   By: vmercier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 09:51:02 by vmercier          #+#    #+#             */
-/*   Updated: 2022/01/31 14:20:55 by cassassi         ###   ########.fr       */
+/*   Updated: 2022/01/31 16:13:18 by cassassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int ft_lexing(t_list *list)
 
     commandlist = NULL;
     ft_divide_pipe(list, list, &commandlist);
-    ft_divide_redirection(list, &tmp, &commandlist);
+    ft_divide_redirection(commandlist);
     //ft_printtype(commandlist);
     //ft_execution_test((t_cmd *)commandlist->content);
     ft_free_commandlist(&commandlist);
