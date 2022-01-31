@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cassassi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/31 14:07:55 by cassassi          #+#    #+#             */
+/*   Updated: 2022/01/31 14:21:50 by cassassi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -80,4 +92,7 @@ int ft_lexing(t_list *list);
 void    ft_addonetype(t_typage **typelist, t_typage *tmp);
 void    ft_printtype(t_list *elem);
 void	ft_execution_test(t_cmd *cmd);
+void	ft_divide_redirection(t_list *list, t_cmd **tmp, t_list **commandlist);
+void    ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist);
+void    ft_free_commandlist(t_list **commandlist);
 #endif

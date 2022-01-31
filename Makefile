@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: cassassi <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/01/31 14:05:42 by cassassi          #+#    #+#              #
+#    Updated: 2022/01/31 14:06:58 by cassassi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME	=	minishell
 
 SRCS	=	minishell.c executiontest.c $(addprefix $(PARSDIR), $(PARSING))\
@@ -9,7 +21,7 @@ PARSING	=	parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote
 
 PARSDIR	=	parsing/
 
-LEXING	=	lexing.c
+LEXING	=	lexing.c command_list.c
 
 LEXDIR	=	lexing/
 
