@@ -67,9 +67,59 @@ void    ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
             ft_lstadd_back(commandlist, ft_lstnew(tmp));
     }
 }
-/*
-void ft_divide_redirection()
+
+void ft_divide_redirection(t_list **commandlist)
 {
+    t_cmd *tmp;
+    int i;
+    int fd;
+    int ret;
+    int fdout;
+
+    while (*commandlist)
+    {
+        i = 0;
+        tmp = (t_cmd *)*commandlist->content;
+        while (tmp->type[i] < T_LOWER || tmp->type[i] > T_GGREATER)
+            i++;
+        if (tmp->type[i] >= T_LOWER && tmp->type[i] <= T_GGREATER)
+        {
+            free(commandlist->content->argv[i]);
+            commandlist->content->argv[i] = NULL;
+        }
+        if (tmp->type[i] == T_GREATER)
+        {
+            fd = open(tmp->argv[i + 1], O_CREATE|O_TRUNC, 0777);
+            if (fd == -1)
+            {
+                printf("error open\n");
+                return ;
+            }
+        }
+        else if (tmp->type[i] == T_GGREATER)
+        {
+            fd = open(tmp->argv[i + 1], O_CREATE|O_APPEND, 0777);
+            if (fd == -1)
+            {
+                printf("error open\n");
+                return ;
+            }
+        }
+        fdout = dup(STDOUT_FILENO);
+        if (fdout == -1)
+            printf("error copie stout\n");
+        ret = dup2(fd, STDOUT_FILENO);
+        if (ret == -1)
+            printf("error redirection\n");
+        ft_printtype(commandlist);
+        ft_execution_test((t_cmd *)commandlist->content);
+        ret = (STDOUT_FILENO, fdout);
+        if (ret == -1)
+            printf("error reestablish stdout\n");
+        if (close(fdout) == -1 || close(fd) == -1)
+            printf ("error close\n")
+          
+    }
 
     
-}*/
+}
