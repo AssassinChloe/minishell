@@ -38,13 +38,6 @@
 # define T_BUILTIN 10
 # define T_FILENAME 11
 
-typedef struct s_typage
-{
-	char	*token;
-	int		type;
-	struct s_typage *next;
-} t_typage;
-
 typedef struct		s_cmd
 {
 	char			**argv;
@@ -58,17 +51,27 @@ typedef struct		s_cmd
 	struct s_cmd	*prev;
 }					t_cmd;
 
+typedef struct s_env //ajout
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_data // globale ?
 {
 	char	*line;
 	t_cmd	*cmd_lst;
 	char	**splited_line;
 	char	**args;
+	t_env	*env;
 	int		exit_value;
 	int		nb_pipe;
+	int		execution; // pour dire si on est en cours d'execution ou non
     int     loop; // variable pour maintien de la boucle while
 }		t_data;
 
+extern t_data	g_data;
 
 int	ft_isvarphabet(char c);
 void    ft_parse(char *str);

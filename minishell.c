@@ -61,7 +61,7 @@ t_env	*get_env(char **envp)
 	var_env = NULL;
 	while (i--)
 	{
-		tmp = ft_split(envp[i], "=");
+		tmp = ft_split(envp[i], "="); // faire split_once au cas ou il pourrait y avoir des = dans la value ( cf $XMODIFIERS)
 		var = record_var(tmp[0], tmp[1]);
 		if (!var)
 		{
@@ -70,10 +70,12 @@ t_env	*get_env(char **envp)
 		}
 		var->next = var_env;
 		var_env = var;
+		// rajouter un free tmp
 //		printf(" var %d : %s = %s\n", i, var_env->key, var_env->value); ligne pour verif si besoin
 	}
 	return (var_env);
 }
+
 
 void	init_data(char **envp)
 {
@@ -122,6 +124,52 @@ int minishell()
 	{
 		buffer = readline("$> ");
 		if (buffer && ft_strcmp(buffer, "exit") != 0)
+		{
+			printf("buffer : %s\n", buffer);
+			if (*buffer)
+				add_history(buffer);
+ 			ft_parse(buffer);
+			free(buffer);
+		}
+		else
+		{
+			g_data.loop = -1;
+            rl_clear_history();
+		}
+	}
+	printf("end \n");
+	return (0);
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	if (argc != 1)
+		exit(EXIT_FAILURE);
+	init_data(envp);
+	init_signal();
+	minishell();
+//	ft_free_all(); a faire ?
+	return (0);
+}
+
+void	init_signal()
+{
+	signal(SIGINT, handle_sig);
+	signal(SIGQUIT, handle_sig);
+
+}
+
+
+int minishell()
+{
+	char	*buffer;
+	int		buffer_size;
+	
+
+	while (g_data.loop > 0) // remplacement de x = 1
+	{
+		buffer = readline("$> ");
+		if (buffer)
 		{
 			printf("buffer : %s\n", buffer);
 			if (*buffer)
