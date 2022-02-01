@@ -129,6 +129,8 @@ int minishell()
 				add_history(buffer);
  			ft_parse(buffer);
 			free(buffer);
+			buffer = NULL;
+			g_data.loop = 1;
 		}
 		else
 		{
