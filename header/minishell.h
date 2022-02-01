@@ -97,4 +97,18 @@ void	ft_execution_test(t_cmd *cmd);
 void	ft_divide_redirection(t_list *commandlist);
 void    ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist);
 void    ft_free_commandlist(t_list **commandlist);
+
+int	ft_env(void);
+void	destroy_var(t_env *var);
+void	clear_list(t_env **list);
+t_env	*record_var(char *key, char *value);
+t_env	*get_env(char **envp);
+void	init_data(char **envp);
+void    handle_sig(int sig);
+void	init_signal();
+int minishell();
+int	ft_echo(char **args);
+int		ft_pwd(void);
+int	launch__builtin(t_cmd *cmd);
+
 #endif

@@ -25,7 +25,7 @@ LEXING	=	lexing.c command_list.c
 
 LEXDIR	=	lexing/
 
-BUILTIN	=	echo.c pwd.c
+BUILTIN	=	echo.c pwd.c env.c launch_builtin.c
 
 BUILDIR	=	builtin/
 

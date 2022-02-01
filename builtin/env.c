@@ -10,21 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_env(char **args, t_env *var_list)
+#include "minishell.h"
+
+int	ft_env(void)
 {
 	t_env	*var;
 
-	if (var_list)
+	var = g_data.env;
+	while (var)
 	{
-		(void)args;
-		var = var_list;
-		while (var)
-		{
-			ft_putstr_fd(var->key, STDOUT_FILENO);
-			ft_putchar_fd('=', STDOUT_FILENO);
-			ft_putendl_fd(var->value, STDOUT_FILENO);
-			var = var->next;
-		}
+		ft_putstr_fd(var->key, STDOUT_FILENO);
+		ft_putchar_fd('=', STDOUT_FILENO);
+		ft_putendl_fd(var->value, STDOUT_FILENO);
+		var = var->next;
 	}
 	return (0);
 }
