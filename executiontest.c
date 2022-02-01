@@ -66,5 +66,6 @@ void ft_execution_test(t_cmd *cmd)
         free(path_split[i]);
         i++;
     }
+    free(path_split);
     exec_cmd(cmd->argv);
 }

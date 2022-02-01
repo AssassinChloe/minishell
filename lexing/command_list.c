@@ -86,7 +86,9 @@ void ft_divide_redirection(t_list *commandlist)
 	int i;
 	int fd;
 	int ret;
-	int fdout;
+	int fdsave;
+	char *buffer;
+	char	*heredoc;
 
 	while (commandlist)
 	{
@@ -94,7 +96,7 @@ void ft_divide_redirection(t_list *commandlist)
 		tmp = (t_cmd *)commandlist->content;
 		while (i < tmp->argc && (tmp->type[i] < T_LOWER || tmp->type[i] > T_GGREATER))
 			i++;
-		if (i < tmp->argc && (tmp->type[i] >= T_LOWER && tmp->type[i] <= T_GGREATER))
+		if (i < tmp->argc && (tmp->type[i] == T_GREATER || tmp->type[i] == T_GGREATER))
 		{
 			free(tmp->argv[i]);
 			tmp->argv[i] = NULL;
@@ -116,20 +118,63 @@ void ft_divide_redirection(t_list *commandlist)
 					return ;
 				}
 			}
-			fdout = dup(STDOUT_FILENO);
-			if (fdout == -1)
+			fdsave = dup(STDOUT_FILENO);
+			if (fdsave == -1)
 				printf("error copie stout\n");
 			ret = dup2(fd, STDOUT_FILENO);
 			if (ret == -1)
 				printf("error redirection\n");
 		}
-		ft_execution_test(tmp);
-		if (i < tmp->argc && (tmp->type[i] >= T_LOWER && tmp->type[i] <= T_GGREATER))
+		else if (i < tmp->argc && (tmp->type[i] == T_LOWER || tmp->type[i] == T_LLOWER))
 		{
-			ret = dup2(fdout, STDOUT_FILENO);
+			free(tmp->argv[i]);
+			if (tmp->type[i] == T_LOWER)
+			{
+				tmp->argv[i] = NULL;
+				fd = open(tmp->argv[i + 1], O_RDONLY);
+				if (fd == -1)
+				{
+					printf("error open\n");
+					return ;
+				}
+				fdsave = dup(STDIN_FILENO);
+				if (fdsave == -1)
+					printf("error copie stdin\n");
+				ret = dup2(fd, STDIN_FILENO);
+				if (ret == -1)
+					printf("error redirection\n");
+			}
+			else if (tmp->type[i] == T_LLOWER)
+			{
+				heredoc = NULL;
+				buffer = readline("heredoc> ");
+				while (buffer && ft_strcmp(buffer, tmp->argv[i + 1]) != 0)
+				{
+					heredoc = ft_strjoin(heredoc, buffer);
+					heredoc = ft_strjoin_char(heredoc, '\n');
+					buffer = readline("heredoc>");
+				}
+				tmp->argv[i] = ft_strdup(heredoc);
+				free(heredoc);
+				free(tmp->argv[i + 1]);
+				tmp->argv[i + 1] = NULL;				
+			}
+		}
+		ft_execution_test(tmp);
+		if (i < tmp->argc && (tmp->type[i] == T_GREATER || tmp->type[i] <= T_GGREATER))
+		{
+			ret = dup2(fdsave, STDOUT_FILENO);
 			if (ret == -1)
 				printf("error reestablish stdout\n");
-			if (close(fdout) == -1 || close(fd) == -1)
+			if (close(fdsave) == -1 || close(fd) == -1)
+				printf ("error close\n");
+		}
+		else if (i < tmp->argc && tmp->type[i] == T_LOWER)
+		{	
+			ret = dup2(fdsave, STDIN_FILENO);
+			if (ret == -1)
+				printf("error reestablish stdin\n");
+			if (close(fdsave) == -1 || close(fd) == -1)
 				printf ("error close\n");
 		}
 		commandlist = commandlist->next;
