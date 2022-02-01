@@ -56,7 +56,7 @@ char	*ft_extract_var(char *str)
 			{
 				if (str[i + 1] == '?')
 				{
-					conv = ft_itoa(g_data->exit_value);
+					conv = ft_itoa(g_data.exit_value);
 					tmp = ft_strjoin(tmp,ft_strdup(conv));
 					i = i + 2;
 				}
