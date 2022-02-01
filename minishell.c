@@ -61,7 +61,7 @@ t_env	*get_env(char **envp)
 	var_env = NULL;
 	while (i--)
 	{
-		tmp = ft_split(envp[i], "="); // faire split_once au cas ou il pourrait y avoir des = dans la value ( cf $XMODIFIERS)
+		tmp = ft_split_env(envp[i]); // faire split_once au cas ou il pourrait y avoir des = dans la value ( cf $XMODIFIERS)
 		var = record_var(tmp[0], tmp[1]);
 		if (!var)
 		{
@@ -70,7 +70,7 @@ t_env	*get_env(char **envp)
 		}
 		var->next = var_env;
 		var_env = var;
-		// rajouter un free tmp
+		free_tab2(tmp);
 //		printf(" var %d : %s = %s\n", i, var_env->key, var_env->value); ligne pour verif si besoin
 	}
 	return (var_env);
