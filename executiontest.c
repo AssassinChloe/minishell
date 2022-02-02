@@ -16,7 +16,12 @@ void	exec_cmd(char **cmd)
        	else 
 	{
 		if (execve(cmd[0], cmd, NULL) == -1)
+        {
 			perror("shell");
+            printf("oops\n");
+        }
+        else
+            printf("yeay\n");
 	}
 }
 
@@ -66,5 +71,6 @@ void ft_execution_test(t_cmd *cmd)
         free(path_split[i]);
         i++;
     }
+    free(path_split);
     exec_cmd(cmd->argv);
 }

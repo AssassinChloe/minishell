@@ -125,11 +125,12 @@ int minishell()
 		buffer = readline("$> ");
 		if (buffer && ft_strcmp(buffer, "exit") != 0)
 		{
-			printf("buffer : %s\n", buffer);
 			if (*buffer)
 				add_history(buffer);
  			ft_parse(buffer);
 			free(buffer);
+			buffer = NULL;
+			g_data.loop = 1;
 		}
 		else
 		{
