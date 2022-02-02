@@ -23,11 +23,11 @@ char    *ft_handleis(char *str, int *i, int *multiple)
         while(str[*i] && ft_isspace(str[*i]) == 1)
             *i = *i + 1;
     }
-    else if (ft_isdoublequote(str[*i]) == 2 || ft_issimplequote(str[*i]) == 1)
+   /* else if (ft_isdoublequote(str[*i]) == 2 || ft_issimplequote(str[*i]) == 1)
     {
         *multiple = 0;
         return (ft_handle_quote(str, i, 1));
-    }
+    }*/
     else if (ft_ispipe(str[*i]) == 1)
     {
         if (*multiple == 0)
@@ -126,7 +126,7 @@ void    ft_parse(char *str)
             if (str[i] && ft_isquote(str[i]) > 0)
             {
                 ret = ft_isquote(str[i]);
-                tmp2 = ft_handle_quote(str, &i, 0), 0;
+                tmp2 = ft_handle_quote(str, &i, 0);
                 if (tmp2 == NULL && i < 0)
                 {
                     ft_freeparsing(&tmp, &tokens);
@@ -149,7 +149,16 @@ void    ft_parse(char *str)
             {
                     ft_freeparsing(&tmp, &tokens);
                     return ;
-            }     
+            }
+            else if ((ft_strcmp(tmp, "<<") == 0))
+            {
+                ft_addone(&tokens, &tmp);
+                while(str[i] && ft_isspace(str[i]) == 1)
+                    i++;
+                if (ft_isquote(str[i]) > 0)
+                    tmp = ft_handle_quote(str, &i, 1);
+                ft_addone(&tokens, &tmp);
+            }   
             else
                 ft_addone(&tokens, &tmp);
         }
