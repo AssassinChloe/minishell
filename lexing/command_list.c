@@ -81,104 +81,56 @@ void    ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 	}
 }
 
+void	ft_endredir(t_cmd *tmp, int i, t_redir *redir)
+{
+	if (tmp->type[i] == T_GREATER || tmp->type[i] == T_GGREATER)
+	{
+		if (dup2(redir->fdsave, STDOUT_FILENO) == -1)
+			printf("error reestablish stdout\n");
+	}
+	else if (tmp->type[i] == T_LOWER || tmp->type[i] == T_LLOWER)
+	{
+		if (dup2(redir->fdsave, STDIN_FILENO) == -1)
+			printf("error reestablish stdin\n");
+		if (tmp->type[i] == T_LLOWER)
+		{
+			if (unlink(".heredoc") == -1)
+				printf("erreur unlink\n");
+		}
+	}
+	if (close(redir->fdsave) == -1 || close(redir->fd) == -1)
+		printf ("error close\n");
+}
+
 void ft_divide_redirection(t_list *commandlist)
 {
 	t_cmd *tmp;
 	int i;
-	int fd;
-	int ret;
-	int fdsave;
-	char	*buffer;
-	char	*heredoc;
+	t_redir *redir;
 
+	redir = malloc(sizeof(t_redir) * 1);
 	while (commandlist)
 	{
 		i = 0;
 		tmp = (t_cmd *)commandlist->content;
 		while (i < tmp->argc && (tmp->type[i] < T_LOWER || tmp->type[i] > T_GGREATER))
 			i++;
-		if (i < tmp->argc && (tmp->type[i] == T_GREATER || tmp->type[i] == T_GGREATER))
+		if (i < tmp->argc && (tmp->type[i] >= T_LOWER && tmp->type[i] <= T_GGREATER))
 		{
 			free(tmp->argv[i]);
 			tmp->argv[i] = NULL;
 			if (tmp->type[i] == T_GREATER)
-			{
-				fd = open(tmp->argv[i + 1], O_RDWR|O_CREAT|O_TRUNC, 0777);
-				if (fd == -1)
-				{
-					printf("error open\n");
-					return ;
-				}
-			}
+				ft_greaterstart(tmp, i, redir);
 			else if (tmp->type[i] == T_GGREATER)
-			{
-				fd = open(tmp->argv[i + 1], O_RDWR|O_CREAT|O_APPEND, 0777);
-				if (fd == -1)
-				{
-					printf("error open\n");
-					return ;
-				}
-			}
-			fdsave = dup(STDOUT_FILENO);
-			if (fdsave == -1)
-				printf("error copie stout\n");
-			ret = dup2(fd, STDOUT_FILENO);
-			if (ret == -1)
-				printf("error redirection\n");
-		}
-		else if (i < tmp->argc && (tmp->type[i] == T_LOWER || tmp->type[i] == T_LLOWER))
-		{
-			free(tmp->argv[i]);
-			tmp->argv[i] = NULL;
-			if (tmp->type[i] == T_LOWER)
-			{
-				fd = open(tmp->argv[i + 1], O_RDONLY);
-				if (fd == -1)
-				{
-					printf("error open\n");
-					return ;
-				}
-			}
+				ft_ggreaterstart(tmp, i, redir);
+			else if (tmp->type[i] == T_LOWER)
+				ft_lowerstart(tmp, i, redir);
 			else if (tmp->type[i] == T_LLOWER)
-			{
-				heredoc = NULL;
-				buffer = readline("heredoc> ");
-				fd = open(".heredoc", O_CREAT|O_RDWR|O_APPEND, 0666);
-				if (fd == -1)
-				{
-					printf("error open\n");
-					return ;
-				}
-				while (buffer && ft_strcmp(buffer, tmp->argv[i + 1]) != 0)
-				{
-					write(fd, buffer, ft_strlen(buffer));
-					write(fd, "\n", 2);
-					free(buffer);
-					buffer = readline("heredoc>");
-				}
-				free(buffer);
-				tmp->argv[i] = ft_strdup(".heredoc");
-				free(tmp->argv[i + 1]);
-				tmp->argv[i + 1] = NULL;
-			}
+				ft_llowerstart(tmp, i, redir);
 		}
 		ft_execution_test(tmp);
-		if (i < tmp->argc && (tmp->type[i] == T_GREATER || tmp->type[i] <= T_GGREATER))
-		{
-			ret = dup2(fdsave, STDOUT_FILENO);
-			if (ret == -1)
-				printf("error reestablish stdout\n");
-			if (close(fdsave) == -1 || close(fd) == -1)
-				printf ("error close\n");
-		}
-		else if (i < tmp->argc && (tmp->type[i] == T_LOWER || tmp->type[i] == T_LLOWER))
-		{	
-			if (tmp->type[i] == T_LLOWER)
-			{
-				if (unlink(".heredoc") == -1)
-					printf("erreur unlink\n");
-			}
-		}
+		if (i < tmp->argc && (tmp->type[i] >= T_LOWER && tmp->type[i] <= T_GGREATER))
+			ft_endredir(tmp, i, redir);
 		commandlist = commandlist->next;
 		/*if (commandlist)
 		 * ==> il faut ouvrir un pipe voir même avant l'execution?*/

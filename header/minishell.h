@@ -38,6 +38,12 @@
 # define T_BUILTIN 10
 # define T_FILENAME 11
 
+typedef struct 		s_redir
+{
+	int	fd;
+	int	fdsave;
+}	t_redir;
+
 typedef struct		s_cmd
 {
 	char			**argv;
@@ -97,6 +103,10 @@ void	ft_execution_test(t_cmd *cmd);
 void	ft_divide_redirection(t_list *commandlist);
 void    ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist);
 void    ft_free_commandlist(t_list **commandlist);
+void	ft_lowerstart(t_cmd *tmp, int i, t_redir *redir);
+void    ft_llowerstart(t_cmd *tmp, int i, t_redir *redir);
+void    ft_greaterstart(t_cmd *tmp, int i, t_redir *redir);
+void    ft_ggreaterstart(t_cmd *tmp, int i, t_redir *redir);
 
 int	ft_env(void);
 void	destroy_var(t_env *var);
