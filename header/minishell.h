@@ -92,7 +92,7 @@ int	has_dollar(char *str);
 int	ft_strcmp(char *s1, char *s2);
 int get_token_type(char *str, int *multicmd);
 char	*ft_extract_var(char *str);
-int ft_isredir(char c);
+int ft_isredir(char c,char *str, int i);
 int ft_isdoubleredir(char *str, int i);
 char    *ft_handle_quote(char *str, int *i, int keepquote);
 void	ft_freeparsing(char **str, t_list **chain);
