@@ -2,6 +2,7 @@
 
 int ft_isredir(char c)
 {
+    
     if (c == '<')
         return (1);
     if (c == '>')

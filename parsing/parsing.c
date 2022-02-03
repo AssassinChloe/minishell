@@ -123,6 +123,7 @@ void    ft_parse(char *str)
             }
             if (has_dollar(tmp) == 1)
                 tmp = ft_extract_var(tmp);
+            printf("tmp %s\n", tmp);
             if (str[i] && ft_isquote(str[i]) > 0)
             {
                 ret = ft_isquote(str[i]);
@@ -163,7 +164,7 @@ void    ft_parse(char *str)
                 ft_addone(&tokens, &tmp);
         }
     }
-    //ft_printchain(tokens);
+    ft_printchain(tokens);
     ft_lexing(tokens);
     ft_lstclear(&tokens);
 }

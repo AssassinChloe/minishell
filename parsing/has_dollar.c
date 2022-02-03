@@ -75,9 +75,9 @@ char	*ft_extract_var(char *str)
 					}
 					conv = getenv(var);
 					free(var);
+					var = NULL;
 					tmp = ft_strjoin(tmp, ft_strdup(conv));
 				}
-				
 			}
 		}
 		free(str);
