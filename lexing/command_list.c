@@ -82,58 +82,71 @@ void    ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 	}
 }
 
-void	ft_endredir(t_cmd *tmp, t_redir *redir)
+void	ft_endredir(t_cmd *cmd)
 {
-	if (tmp->redir == T_GREATER || tmp->redir == T_GGREATER)
+	int i;
+
+	i = 0;
+	while (i < cmd->redir_nb)
 	{
-		if (dup2(redir->fdsave, STDOUT_FILENO) == -1)
-			printf("error reestablish stdout\n");
-	}
-	else if (tmp->redir == T_LOWER || tmp->redir == T_LLOWER)
-	{
-		if (dup2(redir->fdsave, STDIN_FILENO) == -1)
-			printf("error reestablish stdin\n");
-		if (tmp->redir == T_LLOWER)
+		if (cmd->redir[i].type == T_GREATER || cmd->redir[i].type == T_GGREATER)
 		{
-			if (unlink(".heredoc") == -1)
-				printf("erreur unlink\n");
+			if (dup2(cmd->redir[i].fdsave, STDOUT_FILENO) == -1)
+				printf("error reestablish stdout\n");
 		}
+		else if (cmd->redir[i].type == T_LOWER || cmd->redir[i].type == T_LLOWER)
+		{
+			if (dup2(cmd->redir[i].fdsave, STDIN_FILENO) == -1)
+				printf("error reestablish stdin\n");
+			if (cmd->redir[i].type == T_LLOWER)
+			{
+				if (unlink(".heredoc") == -1)
+					printf("erreur unlink\n");
+			}
+		}
+		if (close(cmd->redir[i].fdsave) == -1 || close(cmd->redir[i].fd) == -1)
+			printf ("error close\n");
+		i++;
 	}
-	if (close(redir->fdsave) == -1 || close(redir->fd) == -1)
-		printf ("error close\n");
 }
 
 void ft_divide_redirection(t_list *commandlist)
 {
 	t_cmd *cmd;
 	int i;
-	t_redir *redir;
+	int j;
 	
-	redir = malloc(sizeof(t_redir) * 1);
 	while (commandlist)
 	{
 		i = 0;
+		j = 0;
 		cmd = (t_cmd *)commandlist->content;
-		cmd->redir = 0;
-		while (i < cmd->argc && (cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER))
-			i++;
-		if (i < cmd->argc && (cmd->type[i] >= T_LOWER && cmd->type[i] <= T_GGREATER))
-		{
-			cmd->redir = cmd->type[i];
-			if (cmd->redir == T_GREATER)
-				ft_greaterstart(cmd, i, redir);
-			else if (cmd->redir == T_GGREATER)
-				ft_ggreaterstart(cmd, i, redir);
-			else if (cmd->redir == T_LOWER)
-				ft_lowerstart(cmd, i, redir);
-			else if (cmd->redir == T_LLOWER)
-				ft_llowerstart(cmd, i, redir);
+		cmd->redir_nb = ft_countredir(cmd);
+		printf("nb_redir %d \n", cmd->redir_nb);
+		cmd->redir = malloc(sizeof(t_redir) * cmd->redir_nb);
+		while (i < cmd->argc)
+		{	
+			while ((cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER))
+				i++;
+			if (j < cmd->redir_nb && (cmd->type[i] >= T_LOWER && cmd->type[i] <= T_GGREATER))
+			{
+				cmd->redir[j].type = cmd->type[i];
+				if (cmd->redir[j].type == T_GREATER)
+					ft_greaterstart(cmd, i, j);
+				else if (cmd->redir[j].type == T_GGREATER)
+					ft_ggreaterstart(cmd, i, j);
+				else if (cmd->redir[j].type == T_LOWER)
+					ft_lowerstart(cmd, i, j);
+				else if (cmd->redir[j].type == T_LLOWER)
+					ft_llowerstart(cmd, i, j);
+				j++;
+				printf("redir no %d \n", j);
+			}
 		}
 		ft_execution_test(cmd);
-		if (cmd->redir >= T_LOWER && cmd->redir <= T_GGREATER)
-			ft_endredir(cmd, redir);
+		if (cmd->redir_nb > 0)
+			ft_endredir(cmd);
 		commandlist = commandlist->next;
-		free(redir);
 		/*if (commandlist)
 		 * ==> il faut ouvrir un pipe voir même avant l'execution?*/
 	}

@@ -112,7 +112,6 @@ void    ft_printtype(t_list *elem)
     }
 }
 
-
 int ft_lexing(t_list *list)
 {
     t_list  *commandlist;

@@ -21,7 +21,7 @@ PARSING	=	parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote
 
 PARSDIR	=	parsing/
 
-LEXING	=	lexing.c command_list.c redirection.c
+LEXING	=	lexing.c command_list.c redirection.c redirection_2.c
 
 LEXDIR	=	lexing/
 

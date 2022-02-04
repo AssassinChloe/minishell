@@ -42,6 +42,7 @@ typedef struct 		s_redir
 {
 	int	fd;
 	int	fdsave;
+	int	type;
 }	t_redir;
 
 typedef struct		s_cmd
@@ -49,10 +50,10 @@ typedef struct		s_cmd
 	char			**argv;
 	int				argc;
 	int				*type;
-	int				redir;
+	t_redir			*redir;
+	int				redir_nb;
 	int				pip[2];
-	int				fd_in;
-	int				fd_out;
+	int				fd_in;int jt;
     int             order; // voir si besoin order ou si liste chainee
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
@@ -104,11 +105,12 @@ void	ft_execution_test(t_cmd *cmd);
 void	ft_divide_redirection(t_list *commandlist);
 void    ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist);
 void    ft_free_commandlist(t_list **commandlist);
-void	ft_lowerstart(t_cmd *tmp, int i, t_redir *redir);
-void    ft_llowerstart(t_cmd *tmp, int i, t_redir *redir);
-void    ft_greaterstart(t_cmd *tmp, int i, t_redir *redir);
-void    ft_ggreaterstart(t_cmd *tmp, int i, t_redir *redir);
-void modif_arg(t_cmd **cmd);
+void	ft_lowerstart(t_cmd *tmp, int i, int j);
+void    ft_llowerstart(t_cmd *tmp, int i, int j);
+void    ft_greaterstart(t_cmd *tmp, int i, int j);
+void    ft_ggreaterstart(t_cmd *tmp, int i, int j);
+void	modif_arg(t_cmd **cmd);
+int ft_countredir(t_cmd *cmd);
 
 int	ft_env(void);
 void	destroy_var(t_env *var);
