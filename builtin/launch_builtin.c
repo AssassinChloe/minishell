@@ -28,5 +28,5 @@ int	launch__builtin(t_cmd *cmd)
 		return (ft_pwd());
 //	if (ft_strcmp(cmd->argv[0], "unset") == 0)
 //		return (ft_unset(cmd->argv));
-	return (-2);
+	return (1);
 }
