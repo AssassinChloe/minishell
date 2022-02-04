@@ -9,6 +9,35 @@ void    ft_redirstd(t_redir *redir, int std)
 		printf("error redirection\n");
 }
 
+void modif_arg(t_cmd **cmd)
+{
+	int j;
+	int i;
+
+	j = 0;
+	i = 0;
+	while ((*cmd)->argv[j] && ((*cmd)->type[j] < T_LOWER || (*cmd)->type[j] > T_GGREATER))
+	{
+		j++;
+		i++;
+	}
+	j = j + 2;
+	while ((*cmd)->argv[j])
+	{
+		(*cmd)->argv[i] = ft_strdup((*cmd)->argv[j]);
+		(*cmd)->type[i] = (*cmd)->type[j];
+		j++;
+		i++;
+	}
+	while ((*cmd)->argv[i])
+	{
+		free((*cmd)->argv[i]);
+		(*cmd)->argv[i] = NULL;
+	}
+	(*cmd)->argc = (*cmd)->argc - 2;
+	return ;	
+}
+
 void ft_lowerstart(t_cmd *tmp, int i, t_redir *redir)
 {
 	if (tmp->type[i] == T_LOWER)
@@ -20,7 +49,9 @@ void ft_lowerstart(t_cmd *tmp, int i, t_redir *redir)
 			return ;
 		}
 	}
+	modif_arg(&tmp);
     ft_redirstd(redir, STDIN_FILENO);
+
 }
 
 void    ft_llowerstart(t_cmd *tmp, int i, t_redir *redir)
@@ -36,7 +67,7 @@ void    ft_llowerstart(t_cmd *tmp, int i, t_redir *redir)
 		delimiter = ft_strdup(tmp->argv[i + 1]);
 	
 	buffer = readline("heredoc> ");
-	redir->fd = open(".heredoc", O_CREAT|O_RDWR|O_APPEND, 0666);
+	redir->fd = open(".heredoc", O_CREAT|O_RDWR|O_APPEND, 0650);
 	if (redir->fd == -1)
 	{
 		printf("error open\n");
@@ -62,21 +93,23 @@ void    ft_llowerstart(t_cmd *tmp, int i, t_redir *redir)
 
 void    ft_greaterstart(t_cmd *tmp, int i, t_redir *redir)
 {
-    redir->fd = open(tmp->argv[i + 1], O_RDWR|O_CREAT|O_TRUNC, 0666);
+    redir->fd = open(tmp->argv[i + 1], O_RDWR|O_CREAT|O_TRUNC, 0650);
 	if (redir->fd == -1)
 	{
 		printf("error open\n");
 		return ;
 	}
+	modif_arg(&tmp);
     ft_redirstd(redir, STDOUT_FILENO);
 }
 void    ft_ggreaterstart(t_cmd *tmp, int i, t_redir *redir)
 {
-    redir->fd = open(tmp->argv[i + 1], O_RDWR|O_CREAT|O_APPEND, 0666);
+    redir->fd = open(tmp->argv[i + 1], O_RDWR|O_CREAT|O_APPEND, 0650);
 	if (redir->fd == -1)
 	{
 		printf("error open\n");
 		return ;
 	}
+	modif_arg(&tmp);
     ft_redirstd(redir, STDOUT_FILENO);
 }

@@ -108,6 +108,7 @@ tail
 tar
 tcpdump
 tee
+test
 time
 top
 touch

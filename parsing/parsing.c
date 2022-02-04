@@ -23,11 +23,6 @@ char    *ft_handleis(char *str, int *i, int *multiple)
         while(str[*i] && ft_isspace(str[*i]) == 1)
             *i = *i + 1;
     }
-   /* else if (ft_isdoublequote(str[*i]) == 2 || ft_issimplequote(str[*i]) == 1)
-    {
-        *multiple = 0;
-        return (ft_handle_quote(str, i, 1));
-    }*/
     else if (ft_ispipe(str[*i]) == 1)
     {
         if (*multiple == 0)
@@ -47,7 +42,7 @@ char    *ft_handleis(char *str, int *i, int *multiple)
             return (NULL);
         }
     }
-    else if (ft_isredir(str[*i], str, i) > 0)
+    else if (ft_isredir(str[*i]) > 0)
     {
         if (*multiple == 0)
         {
@@ -66,11 +61,6 @@ char    *ft_handleis(char *str, int *i, int *multiple)
                 }
                 quote[j] = '\0';
                 return (quote);
-            }
-            else if (ret == 3)
-            {
-                j = *i;
-                while (ft_isdigit(str[j] == 1) &&)
             }
             else if (ret == 0)
             {
@@ -115,11 +105,11 @@ void    ft_parse(char *str)
     multiple = 0;
     while(str[i])
     {
-        while (str[i] && ft_isspace(str[i]) == 0 && ft_isredir(str[i], str, i) == 0 && ft_ispipe(str[i]) == 0)
+        while (str[i] && ft_isspace(str[i]) == 0 && ft_isredir(str[i]) == 0 && ft_ispipe(str[i]) == 0)
         {
             multiple = 0;
             while (str[i] && ft_isspace(str[i]) == 0 && ft_isquote(str[i]) == 0
-            && ft_ispipe(str[i]) == 0 && ft_isredir(str[i], str, i) == 0)
+            && ft_ispipe(str[i]) == 0 && ft_isredir(str[i]) == 0)
             {   
                 if (is_forbidden_char(str[i]) == 1)
                     return (ft_freeparsing(&tmp, &tokens));    
@@ -147,7 +137,7 @@ void    ft_parse(char *str)
             }
         }
         ft_addone(&tokens, &tmp);
-        while (str[i] && (ft_isspace(str[i]) == 1 || ft_ispipe(str[i]) == 1 || ft_isredir(str[i], str, i) > 0))
+        while (str[i] && (ft_isspace(str[i]) == 1 || ft_ispipe(str[i]) == 1 || ft_isredir(str[i]) > 0))
         {
             tmp = ft_handleis(str, &i, &multiple);
             if (tmp == NULL && i < 0)

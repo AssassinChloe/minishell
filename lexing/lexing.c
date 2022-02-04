@@ -119,8 +119,8 @@ int ft_lexing(t_list *list)
 
     commandlist = NULL;
     ft_divide_pipe(list, list, &commandlist);
-    ft_divide_redirection(commandlist);
     //ft_printtype(commandlist);
+    ft_divide_redirection(commandlist);
     //ft_execution_test((t_cmd *)commandlist->content);
     ft_free_commandlist(&commandlist);
     return (0);

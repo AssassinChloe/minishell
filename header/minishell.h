@@ -49,6 +49,7 @@ typedef struct		s_cmd
 	char			**argv;
 	int				argc;
 	int				*type;
+	int				redir;
 	int				pip[2];
 	int				fd_in;
 	int				fd_out;
@@ -92,7 +93,7 @@ int	has_dollar(char *str);
 int	ft_strcmp(char *s1, char *s2);
 int get_token_type(char *str, int *multicmd);
 char	*ft_extract_var(char *str);
-int ft_isredir(char c,char *str, int i);
+int ft_isredir(char c);
 int ft_isdoubleredir(char *str, int i);
 char    *ft_handle_quote(char *str, int *i, int keepquote);
 void	ft_freeparsing(char **str, t_list **chain);
@@ -107,6 +108,7 @@ void	ft_lowerstart(t_cmd *tmp, int i, t_redir *redir);
 void    ft_llowerstart(t_cmd *tmp, int i, t_redir *redir);
 void    ft_greaterstart(t_cmd *tmp, int i, t_redir *redir);
 void    ft_ggreaterstart(t_cmd *tmp, int i, t_redir *redir);
+void modif_arg(t_cmd **cmd);
 
 int	ft_env(void);
 void	destroy_var(t_env *var);
