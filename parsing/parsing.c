@@ -159,6 +159,6 @@ void    ft_parse(char *str)
         }
     }
     //ft_printchain(tokens);
-    ft_lexing(tokens);
+    ft_lexing(&tokens);
     ft_lstclear(&tokens);
 }

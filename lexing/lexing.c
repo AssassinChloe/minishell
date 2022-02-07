@@ -112,12 +112,12 @@ void    ft_printtype(t_list *elem)
     }
 }
 
-int ft_lexing(t_list *list)
+int ft_lexing(t_list **list)
 {
     t_list  *commandlist;
 
     commandlist = NULL;
-    ft_divide_pipe(list, list, &commandlist);
+    ft_divide_pipe(*list, *list, &commandlist);
     //ft_printtype(commandlist);
     ft_divide_redirection(commandlist);
     //ft_execution_test((t_cmd *)commandlist->content);

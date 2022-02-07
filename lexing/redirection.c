@@ -21,7 +21,12 @@ void modif_arg(t_cmd **cmd)
 		j++;
 		i++;
 	}
+	free((*cmd)->argv[j]);
+	(*cmd)->argv[j] = NULL;
+	free((*cmd)->argv[j + 1]);
+	(*cmd)->argv[j + 1] = NULL;
 	j = j + 2;
+	
 	while ((*cmd)->argv[j])
 	{
 		(*cmd)->argv[i] = ft_strdup((*cmd)->argv[j]);

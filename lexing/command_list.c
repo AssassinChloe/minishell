@@ -23,7 +23,7 @@ void    ft_free_commandlist(t_list **commandlist)
 	{
 		type = (t_cmd *)tmp->content;
 		i = 0;
-		while (i < (type->argc))
+		while (i < (type->argc_init))
 		{
 			if (type->argv[i])
 				free(type->argv[i]);
@@ -57,11 +57,11 @@ void    ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 		if (tmplist && ft_strcmp((char*)tmplist->content, "|") == 0)
 			tmplist = tmplist->next;
 		tmp->argc = i;
+		tmp->argc_init = i;
 		tmp->argv = malloc(sizeof(char *) * (i + 1));
 		tmp->type = malloc(sizeof(int) * i);
 		while (tmplist2 && i > j)
 		{
-
 			tmp->argv[j] = ft_strdup((char *)tmplist2->content);
 			tmp->type[j] = get_token_type((char*)tmplist2->content, &multicmd);
 			if (j == 0 && (tmp->type[j] != T_CMD && tmp->type[j] != T_BUILTIN))
@@ -86,8 +86,8 @@ void	ft_endredir(t_cmd *cmd)
 {
 	int i;
 
-	i = 0;
-	while (i < cmd->redir_nb)
+	i = cmd->redir_nb - 1;
+	while (i >= 0)
 	{
 		if (cmd->redir[i].type == T_GREATER || cmd->redir[i].type == T_GGREATER)
 		{
@@ -106,8 +106,9 @@ void	ft_endredir(t_cmd *cmd)
 		}
 		if (close(cmd->redir[i].fdsave) == -1 || close(cmd->redir[i].fd) == -1)
 			printf ("error close\n");
-		i++;
+		i--;
 	}
+	free(cmd->redir);
 }
 
 void ft_divide_redirection(t_list *commandlist)
@@ -122,25 +123,26 @@ void ft_divide_redirection(t_list *commandlist)
 		j = 0;
 		cmd = (t_cmd *)commandlist->content;
 		cmd->redir_nb = ft_countredir(cmd);
-		printf("nb_redir %d \n", cmd->redir_nb);
-		cmd->redir = malloc(sizeof(t_redir) * cmd->redir_nb);
-		while (i < cmd->argc)
-		{	
-			while ((cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER))
-				i++;
-			if (j < cmd->redir_nb && (cmd->type[i] >= T_LOWER && cmd->type[i] <= T_GGREATER))
-			{
-				cmd->redir[j].type = cmd->type[i];
-				if (cmd->redir[j].type == T_GREATER)
-					ft_greaterstart(cmd, i, j);
-				else if (cmd->redir[j].type == T_GGREATER)
-					ft_ggreaterstart(cmd, i, j);
-				else if (cmd->redir[j].type == T_LOWER)
-					ft_lowerstart(cmd, i, j);
-				else if (cmd->redir[j].type == T_LLOWER)
-					ft_llowerstart(cmd, i, j);
-				j++;
-				printf("redir no %d \n", j);
+		if (cmd->redir_nb > 0)
+		{
+			cmd->redir = malloc(sizeof(t_redir) * cmd->redir_nb);
+			while (i < cmd->argc)
+			{	
+				while ((cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER))
+					i++;
+				if (j < cmd->redir_nb && (cmd->type[i] >= T_LOWER && cmd->type[i] <= T_GGREATER))
+				{
+					cmd->redir[j].type = cmd->type[i];
+					if (cmd->redir[j].type == T_GREATER)
+						ft_greaterstart(cmd, i, j);
+					else if (cmd->redir[j].type == T_GGREATER)
+						ft_ggreaterstart(cmd, i, j);
+					else if (cmd->redir[j].type == T_LOWER)
+						ft_lowerstart(cmd, i, j);
+					else if (cmd->redir[j].type == T_LLOWER)
+						ft_llowerstart(cmd, i, j);
+					j++;
+				}
 			}
 		}
 		ft_execution_test(cmd);
