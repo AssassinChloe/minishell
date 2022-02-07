@@ -112,6 +112,9 @@ void    ft_greaterstart(t_cmd *tmp, int i, int j);
 void    ft_ggreaterstart(t_cmd *tmp, int i, int j);
 void	modif_arg(t_cmd **cmd);
 int ft_countredir(t_cmd *cmd);
+void	ft_pipe(t_list *commandlist);
+void	ft_endredir(t_cmd *cmd);
+void    ft_redirstd(t_redir *redir, int std);
 
 int	ft_env(void);
 void	destroy_var(t_env *var);

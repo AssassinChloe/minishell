@@ -12,7 +12,8 @@
 
 NAME	=	minishell
 
-SRCS	=	minishell.c executiontest.c split_env.c $(addprefix $(PARSDIR), $(PARSING))\
+SRCS	=	minishell.c executiontest.c split_env.c pipe_test.c\
+			$(addprefix $(PARSDIR), $(PARSING))\
 			$(addprefix $(LEXDIR), $(LEXING))\
 			$(addprefix $(BUILDIR), $(BUILTIN))
 
@@ -37,7 +38,7 @@ INC		=	-I header/
 
 LIB		=	libft/libft.a
 
-FLAG	=	-Wall -Wextra -Werror -lreadline
+FLAG	=	-Wall -Wextra -Werror 
 
 CC		=	clang
 
@@ -45,7 +46,7 @@ all		:	$(NAME)
 
 $(NAME)	:	$(OBJS)
 				$(MAKE) -C libft
-				$(CC) -o $(NAME) $(FLAG) $(OBJS) $(LIB) 
+				$(CC) -o $(NAME) $(FLAG) -lreadline $(OBJS) $(LIB) 
 
 clean	:	
 				$(MAKE) clean -C libft
@@ -62,4 +63,4 @@ $(OBJSD)%.o:%.c
 			@mkdir -p $(OBJSD)$(PARSDIR)
 			@mkdir -p $(OBJSD)$(LEXDIR)
 			@mkdir -p $(OBJSD)$(BUILDIR)
-			$(CC) $(INC) -o $@ -c $<
+			$(CC) $(INC) $(FLAG) -o $@ -c $<

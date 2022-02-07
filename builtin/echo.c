@@ -62,18 +62,21 @@ static int	is_flag_n(char *arg)
 int	ft_echo(char **args)
 {
 	int	flag_n;
+	int i;
 
 	flag_n = 0;
-	*args++; //si le premier arg est echo, on ne veut pa sl'imprimer
+	i = 1;
+	//*args++; //si le premier arg est echo, on ne veut pas l'imprimer
 	if (is_flag_n(args[1])) // marche si le -n ne peut etre qu'au debut
 	{
 		flag_n = 1;
-		*args++;
+	//	*args++;
+		i++;
 	}
-	while (*args)
+	while (/**args*/args[i])
 	{
 		ft_putstr_fd(*args, STDOUT_FILENO);
-		if (*(++args))
+		if (/**(++args)*/args[++i])
 		{
 			ft_putchar_fd(' ', STDOUT_FILENO);
 		}

@@ -55,7 +55,10 @@ void    ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 			tmplist = tmplist->next;
 		}
 		if (tmplist && ft_strcmp((char*)tmplist->content, "|") == 0)
+		{
 			tmplist = tmplist->next;
+			g_data.nb_pipe++;
+		}
 		tmp->argc = i;
 		tmp->argc_init = i;
 		tmp->argv = malloc(sizeof(char *) * (i + 1));
@@ -117,39 +120,39 @@ void ft_divide_redirection(t_list *commandlist)
 	int i;
 	int j;
 	
-	while (commandlist)
+	i = 0;
+	j = 0;
+	cmd = (t_cmd *)commandlist->content;
+	cmd->redir_nb = ft_countredir(cmd);
+	if (cmd->redir_nb > 0)
 	{
-		i = 0;
-		j = 0;
-		cmd = (t_cmd *)commandlist->content;
-		cmd->redir_nb = ft_countredir(cmd);
-		if (cmd->redir_nb > 0)
-		{
-			cmd->redir = malloc(sizeof(t_redir) * cmd->redir_nb);
-			while (i < cmd->argc)
-			{	
-				while ((cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER))
-					i++;
-				if (j < cmd->redir_nb && (cmd->type[i] >= T_LOWER && cmd->type[i] <= T_GGREATER))
+		cmd->redir = malloc(sizeof(t_redir) * cmd->redir_nb);
+		while (i < cmd->argc)
+		{	
+			while ((cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER))
+				i++;
+			if (j < cmd->redir_nb && (cmd->type[i] >= T_LOWER && cmd->type[i] <= T_GGREATER))
+			{
+				cmd->redir[j].type = cmd->type[i];
+				if (cmd->redir[j].type == T_GREATER)
+					ft_greaterstart(cmd, i, j);
+				else if (cmd->redir[j].type == T_GGREATER)
+					ft_ggreaterstart(cmd, i, j);
+				else if (cmd->redir[j].type == T_LOWER)
+					ft_lowerstart(cmd, i, j);
+				else if (cmd->redir[j].type == T_LLOWER)
 				{
-					cmd->redir[j].type = cmd->type[i];
-					if (cmd->redir[j].type == T_GREATER)
-						ft_greaterstart(cmd, i, j);
-					else if (cmd->redir[j].type == T_GGREATER)
-						ft_ggreaterstart(cmd, i, j);
-					else if (cmd->redir[j].type == T_LOWER)
-						ft_lowerstart(cmd, i, j);
-					else if (cmd->redir[j].type == T_LLOWER)
-						ft_llowerstart(cmd, i, j);
-					j++;
+					ft_llowerstart(cmd, i, j);
+					i--;
 				}
+				j++;
 			}
 		}
+	}
+	if (g_data.nb_pipe == 0)
+	{
 		ft_execution_test(cmd);
 		if (cmd->redir_nb > 0)
 			ft_endredir(cmd);
-		commandlist = commandlist->next;
-		/*if (commandlist)
-		 * ==> il faut ouvrir un pipe voir même avant l'execution?*/
 	}
 }

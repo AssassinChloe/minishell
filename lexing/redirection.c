@@ -45,6 +45,43 @@ void modif_arg(t_cmd **cmd)
 	return ;	
 }
 
+void modif_arg_heredoc(t_cmd **cmd, char *filename)
+{
+	int j;
+	int i;
+
+	j = 0;
+	i = 0;
+	while ((*cmd)->argv[j] && ((*cmd)->type[j] < T_LOWER || (*cmd)->type[j] > T_GGREATER))
+	{
+		j++;
+		i++;
+	}
+	free((*cmd)->argv[j]);
+	(*cmd)->argv[i] = ft_strdup(filename);
+	(*cmd)->type[i] = T_FILENAME;
+	i++;
+	free((*cmd)->argv[j + 1]);
+	(*cmd)->argv[j + 1] = NULL;
+	(*cmd)->type[i] = 0;
+	j = j + 2;
+		while ((*cmd)->argv[j])
+	{
+		(*cmd)->argv[i] = ft_strdup((*cmd)->argv[j]);
+		(*cmd)->type[i] = (*cmd)->type[j];
+		j++;
+		i++;
+	}
+	while ((*cmd)->argv[i])
+	{
+		free((*cmd)->argv[i]);
+		(*cmd)->argv[i] = NULL;
+		(*cmd)->type[i] = 0;
+		i++;
+	}
+	(*cmd)->argc = (*cmd)->argc - 2;
+	return ;	
+}
 void ft_lowerstart(t_cmd *cmd, int i, int j)
 {
 	if (cmd->type[i] == T_LOWER)
@@ -65,7 +102,7 @@ void    ft_llowerstart(t_cmd *cmd, int i, int j)
 {
     char    *buffer;
 	char	*delimiter;
-
+	
 	if (ft_isquote(cmd->argv[i + 1][0]) > 0)
 		delimiter = ft_handle_quote(cmd->argv[i + 1], &j, 0);
 	else
@@ -90,9 +127,7 @@ void    ft_llowerstart(t_cmd *cmd, int i, int j)
 	}
 	free(buffer);
 	free(delimiter);
-	cmd->argv[i] = ft_strdup(".heredoc");
-	free(cmd->argv[i + 1]);
-	cmd->argv[i + 1] = NULL;
+	modif_arg_heredoc(&cmd, ".heredoc");
 	ft_redirstd(&cmd->redir[j], STDIN_FILENO);
 }
 

@@ -117,8 +117,6 @@ void	init_signal()
 int minishell()
 {
 	char	*buffer;
-	int		buffer_size;
-	
 
 	while (g_data.loop > 0) // remplacement de x = 1
 	{
@@ -126,8 +124,10 @@ int minishell()
 		if (buffer && ft_strcmp(buffer, "exit") != 0)
 		{
 			if (*buffer)
+			{
 				add_history(buffer);
- 			ft_parse(buffer);
+ 				ft_parse(buffer);
+			}
 			free(buffer);
 			buffer = NULL;
 			g_data.loop = 1;
@@ -144,6 +144,7 @@ int minishell()
 
 int main(int argc, char **argv, char **envp)
 {
+	(void)argv;
 	if (argc != 1)
 		exit(EXIT_FAILURE);
 	init_data(envp);
