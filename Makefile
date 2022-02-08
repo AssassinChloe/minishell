@@ -26,7 +26,7 @@ LEXING	=	lexing.c command_list.c redirection.c redirection_2.c
 
 LEXDIR	=	lexing/
 
-BUILTIN	=	echo.c pwd.c env.c launch_builtin.c
+BUILTIN	=	echo.c pwd.c env.c launch_builtin.c export.c ft_cd.c ft_exit.c unset.c
 
 BUILDIR	=	builtin/
 

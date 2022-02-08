@@ -150,6 +150,6 @@ int main(int argc, char **argv, char **envp)
 	init_data(envp);
 	init_signal();
 	minishell();
-//	ft_free_all(); a faire ?
+//	destroy_all(); a faire 
 	return (0);
 }

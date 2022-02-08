@@ -116,7 +116,6 @@ void	ft_pipe(t_list *commandlist);
 void	ft_endredir(t_cmd *cmd);
 void    ft_redirstd(t_redir *redir, int std);
 
-int	ft_env(void);
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);
 t_env	*record_var(char *key, char *value);
@@ -129,6 +128,18 @@ void	init_signal();
 int minishell();
 int	ft_echo(char **args);
 int		ft_pwd(void);
-int	launch__builtin(t_cmd *cmd);
+int	launch__builtin(t_cmd cmd);
+t_env   *search_var(char *str);
+char    *get_env_value(char *str);
+int ft_cd(t_cmd cmd);
+int	ft_echo(char **args);
+int	ft_env(t_cmd cmd);
+int	ft_atoi_exit(const char *str);
+int ft_exit(t_cmd cmd);
+int	already_in_env(char *arg, t_env *env);
+int	format_key_ok(char *str);
+int	has_equal(char *str);
+int	print_exp_list(void);
+int ft_export(t_cmd cmd);
 
 #endif

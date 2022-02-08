@@ -17,5 +17,6 @@ traite tous les arguments les uns a la suite des autres, s'arrte si erreur
 
 int ft_unset(t_cmd cmd)
 {
+    printf(" pour utilisation param et compil %d", cmd.argc);
     return (0);
 }
