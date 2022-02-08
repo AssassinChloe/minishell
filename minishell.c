@@ -127,6 +127,7 @@ int minishell()
 			{
 				add_history(buffer);
  				ft_parse(buffer);
+				g_data.nb_pipe = 0;
 			}
 			free(buffer);
 			buffer = NULL;

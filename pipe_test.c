@@ -4,65 +4,122 @@ void    ft_pipe(t_list *commandlist)
 {
     int pid;
     t_cmd *command;
-    t_redir *tuyau;
+    int fd_in;
+    int fd_out;
     int		status = 0;
+    int     pip[g_data.nb_pipe][2];
+    int     savestd[2];
+    int     i;
+    int     j;
 
+    savestd[0] = dup(STDIN_FILENO);
+    savestd[1] = dup(STDOUT_FILENO);
+    i = 0;
+    j = 0;
     command = (t_cmd *)commandlist->content;
-
     if (g_data.nb_pipe == 0)
     {
         ft_divide_redirection(commandlist);
         return ;
     }
-    else 
+    else if (g_data.nb_pipe > 0)
     {
-        tuyau = malloc(sizeof(t_redir));
-        if (pipe(command->pip) < 0)
-            printf("error pipe\n");
-        pid = fork();
-        if (pid == 0)
+        while (j <= g_data.nb_pipe && commandlist)
         {
-            if (close(command->pip[0]) == -1)
-                printf ("error close\n");
-            tuyau->fd = command->pip[1];
 
-        /*    ft_divide_redirection(commandlist);
-            if (command->redir_nb > 0)
-                ft_redirstd(tuyau, command->redir->fd);
-            else*/
-                ft_redirstd(tuyau, STDOUT_FILENO);
-            ft_execution_test(command);
-            if (dup2(tuyau->fdsave, STDOUT_FILENO) == -1)
-                printf("error reestablish stdin\n");
-          /*  if (command->redir_nb > 0)
-                ft_endredir(command);*/
-            if (close(command->pip[1]) == -1)
-                printf ("error close\n");
-        }
-        else 
-        {
-            waitpid(pid, &status, 0);
-            if (close(command->pip[1]) == -1)
-                printf ("error close\n");
-            tuyau->fd = command->pip[0];
-            commandlist = commandlist->next;
             command = (t_cmd *)commandlist->content;
-            /*ft_divide_redirection(commandlist);
-            if (command->redir_nb > 0)
-                ft_redirstd(tuyau, command->redir->fd);
-            else*/
-                ft_redirstd(tuyau, STDIN_FILENO);
-            ft_execution_test(command);
-            if (dup2(tuyau->fdsave, STDIN_FILENO) == -1)
-                printf("error reestablish stdout\n");
-            if (command->redir_nb > 0)
-                ft_endredir(command);
-            if (close(command->pip[0]) == -1)
-                printf ("error close\n");
-		    kill(pid, SIGTERM);
+            if (i > 0)
+                pid = fork();
+            else if (i == 0)
+            {
+                if (pipe(pip[i]) < 0)
+                    printf("error pipe\n");
+                pid = fork();
+            }
+            if (pid < 0)
+                printf("error fork\n");
+            if (pid == 0)
+            {  
+                printf("child test plop\n");     
+
+                fd_out = pip[i][1];
+                if (i > 0)
+                {
+                    fd_in = pip[i - 1][0];
+                    dup2(fd_in, STDIN_FILENO);
+                }
+                if (commandlist->next == NULL)
+                {
+                    if (dup2(savestd[1], STDOUT_FILENO) == -1)
+                        printf("error reestablish stdout\n");
+                }
+                else
+                {
+                    if (dup2(fd_out, STDOUT_FILENO) == -1)
+                        printf("errror chnging stdout\n");
+                }
+
+                ft_execution_test(command);
+
+                if (close(pip[i][1]) == -1)
+                    printf ("error close\n");               
+                if (close(pip[i][0]) == -1)
+                    printf ("error close\n");
+                printf("end child test plop\n");
+                if (command->next == NULL)
+                {
+                    if (dup2(savestd[0], STDIN_FILENO) == -1)
+                        printf("error reestablish stdin\n");
+                    if (dup2(savestd[1], STDOUT_FILENO) == -1)
+                        printf("error reestablish stdout\n");
+                }
+                exit(EXIT_SUCCESS);
+            }
+            else
+            {
+                waitpid(pid, &status, 0);
+                printf("end waiting\n");
+                commandlist = commandlist->next;
+                if (commandlist)
+                {
+                if (commandlist->next != NULL)
+                {
+                    if (pipe(pip[i + 1]) < 0)
+                        printf("error pipe\n");
+                    fd_out = pip[i + 1][1];
+                    dup2(fd_out, STDOUT_FILENO);
+                } 
+                command = (t_cmd *)commandlist->content;  
+                fd_in = pip[i][0];
+                dup2(fd_in, STDIN_FILENO);
+                if (commandlist->next == NULL)
+                {
+                    if (dup2(savestd[1], STDOUT_FILENO) == -1)
+                        printf("error reestablish stdout\n");
+                }
+                ft_execution_test(command);
+                }
+                if (close(pip[i][0]) == -1)
+                    printf("error close\n");
+                if (close(pip[i][1]) == -1)
+                    printf ("error close\n");
+                               if (command->next == NULL)
+                {
+                    if (dup2(savestd[0], STDIN_FILENO) == -1)
+                        printf("error reestablish stdin\n");
+                    if (dup2(savestd[1], STDOUT_FILENO) == -1)
+                        printf("error reestablish stdout\n");
+                }     
+            }
+    
+            printf("parent test plop\n");
+
+            i++;
+            j = j + 2;
+            if (commandlist)
+                commandlist = commandlist->next;
         }
-        free(tuyau);
-        tuyau = NULL;
+
     }
     return ;
 }
