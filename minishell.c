@@ -61,7 +61,7 @@ t_env	*get_env(char **envp)
 	var_env = NULL;
 	while (i--)
 	{
-		tmp = ft_split_env(envp[i]); // faire split_once au cas ou il pourrait y avoir des = dans la value ( cf $XMODIFIERS)
+		tmp = ft_split_env(envp[i]); // 1 seul split au premier =
 		var = record_var(tmp[0], tmp[1]);
 		if (!var)
 		{
@@ -82,7 +82,7 @@ void	init_data(char **envp)
 	g_data.loop = 1;
 	g_data.line = NULL;
 	g_data.env = get_env(envp);
-//	g_data.export_env = NULL; //get_env(envp);
+//	g_data.export_env = NULL; //get_env(envp); pas utile a mon avis si on ne lance pas de shell
 	g_data.exit_value = 0;
 	g_data.cmd_lst = NULL;
 	g_data.nb_pipe = 0;
@@ -96,13 +96,14 @@ void    handle_sig(int sig)
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		if (g_data.execution == 0)
+		if (g_data.execution == 0) // si execution en cours (genre cat, il faut == 1)
 			rl_redisplay();
 		g_data.exit_value = 130;
 	}
-    if (sig == SIGQUIT)
+    if (sig == SIGQUIT && g_data.execution !=0)
     {
-	    write(1, "\b\b  \b\b", 6);
+//	    write(1, "\b\b  \b\b", 6);
+		printf("Quit (core dumped)\n");
 	    g_data.exit_value = 131;
     }
 }
@@ -138,7 +139,7 @@ int minishell()
             rl_clear_history();
 		}
 	}
-	printf("end \n");
+	printf("exit\n");
 	return (0);
 }
 

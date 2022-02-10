@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../header/minishell.h"
 /*
 fonction echo marche en prenant une serie d'args 
 le premier arg[0] sera echo et ne sera pas ecrit
-arg[1] peut etre -n ou pas
-si le pflag peut etre inscrit plus loin dans les rgs, voir a deplacer
-cette partie dan la boucle
+les premiers args peuvent etre -n ou -nnnnn ou pas
+
 voir pour les protections
+voir pour mise a jour de g_data.exit_value
 */
 
 /*
@@ -50,13 +50,26 @@ void	ft_putstr_fd(char *s, int fd)
 	write(fd, s, i);
 }
 */
-static int	is_flag_n(char *arg)
+static int	is_flag_n(char *arg) // modifie pour integer les nnn possibles
 {
+	int i;
+
+	i = 0;
 	if (ft_strlen(arg) < 2)
 		return (0);
-	if (arg[0] == '-' || arg[1] == 'n')
+	if (arg[0] != '-')
+		return (0);
+	else
+	{
+	 	i++;
+		while (arg[i])
+		{
+			if (arg[i] != 'n')
+				return (0);
+			i++;
+		}
 		return (1);
-	return (0);
+	}
 }
 
 int	ft_echo(char **args)
@@ -65,21 +78,17 @@ int	ft_echo(char **args)
 	int i;
 
 	flag_n = 0;
-	i = 1;
-	//*args++; //si le premier arg est echo, on ne veut pas l'imprimer
-	if (is_flag_n(args[1])) // marche si le -n ne peut etre qu'au debut
+	i = 1; //le premier arg est echo, on ne veut pas l'imprimer
+	while (is_flag_n(args[i])) // le -n ne peut etre qu'au debut, sur n args
 	{
 		flag_n = 1;
-	//	*args++;
 		i++;
 	}
-	while (/**args*/args[i])
+	while (args[i])
 	{
-		ft_putstr_fd(*args, STDOUT_FILENO);
-		if (/**(++args)*/args[++i])
-		{
+		ft_putstr_fd(args[i], STDOUT_FILENO);
+		if (args[++i])
 			ft_putchar_fd(' ', STDOUT_FILENO);
-		}
 	}
 	if (flag_n == 0)
 		ft_putchar_fd('\n', STDOUT_FILENO);
