@@ -1,12 +1,93 @@
 #include "minishell.h"
 
+void    ft_closepipe_end(int pip[g_data.nb_pipe][2], int i)
+{
+    if (i == 0)
+    {
+        if (close(pip[i][1]) < 0)
+            printf("error close\n");
+    }
+    else if (i > 0 && i < g_data.nb_pipe)
+    {
+        if (close(pip[i - 1][0]) < 0)
+            printf("error close\n");
+        if (close(pip[i][1]) < 0)
+            printf("error close\n");
+    }
+    else if (i == g_data.nb_pipe)
+    {
+        if (close(pip[i - 1][0]) < 0)
+            printf("error close\n");
+    }
+}
+
+void    ft_closepipe(int pip[g_data.nb_pipe][2], int i)
+{
+    int j;
+
+    j = 0;
+    if (i == 0)
+    {
+        while (j < g_data.nb_pipe)
+        {
+            if (close(pip[j][0]) < 0)
+                printf("error close\n");
+            if (j != i)
+            {            
+                if (close(pip[j][1]) < 0)
+                    printf("error close\n");
+            }
+            j++;
+        }
+    }
+    else if (i > 0 && i < g_data.nb_pipe)
+    {
+        while (j < g_data.nb_pipe)
+        {
+            if (j != (i - 1))
+            {
+                if (close(pip[j][0]) < 0)
+                    printf("error close\n");
+            }
+            if (j != i)
+            {           
+                if (close(pip[j][1]) < 0)
+                    printf("error close\n");
+            }
+            j++;
+        }
+    }
+    else if (i == g_data.nb_pipe)
+    {
+        while (j < g_data.nb_pipe)
+        {
+            if (j != (i - 1))
+            {
+                if (close(pip[j][0]) < 0)
+                    printf("error close\n");
+            }            
+            if (close(pip[j][1]) < 0)
+                printf("error close\n");
+            j++;
+        }
+    }
+    else if (i > g_data.nb_pipe)
+    {
+        while (j < g_data.nb_pipe)
+        {
+            if (close(pip[j][0]) < 0)
+                printf("error close\n");
+            if (close(pip[j][1]) < 0)
+                printf("error close\n");
+            j++;
+        }   
+    }
+}
+
 void    ft_pipe(t_list *commandlist)
 {
-    int pid;
+    int pid[g_data.nb_pipe + 1];
     t_cmd *command;
-    int fd_in;
-    int fd_out;
-    int		status = 0;
     int     pip[g_data.nb_pipe][2];
     int     savestd[2];
     int     i;
@@ -24,102 +105,42 @@ void    ft_pipe(t_list *commandlist)
     }
     else if (g_data.nb_pipe > 0)
     {
-        while (j <= g_data.nb_pipe && commandlist)
+        while (i < g_data.nb_pipe)
         {
-
-            command = (t_cmd *)commandlist->content;
-            if (i > 0)
-                pid = fork();
-            else if (i == 0)
-            {
-                if (pipe(pip[i]) < 0)
-                    printf("error pipe\n");
-                pid = fork();
-            }
-            if (pid < 0)
-                printf("error fork\n");
-            if (pid == 0)
-            {  
-                printf("child test plop\n");     
-
-                fd_out = pip[i][1];
-                if (i > 0)
-                {
-                    fd_in = pip[i - 1][0];
-                    dup2(fd_in, STDIN_FILENO);
-                }
-                if (commandlist->next == NULL)
-                {
-                    if (dup2(savestd[1], STDOUT_FILENO) == -1)
-                        printf("error reestablish stdout\n");
-                }
-                else
-                {
-                    if (dup2(fd_out, STDOUT_FILENO) == -1)
-                        printf("errror chnging stdout\n");
-                }
-
-                ft_execution_test(command);
-
-                if (close(pip[i][1]) == -1)
-                    printf ("error close\n");               
-                if (close(pip[i][0]) == -1)
-                    printf ("error close\n");
-                printf("end child test plop\n");
-                if (command->next == NULL)
-                {
-                    if (dup2(savestd[0], STDIN_FILENO) == -1)
-                        printf("error reestablish stdin\n");
-                    if (dup2(savestd[1], STDOUT_FILENO) == -1)
-                        printf("error reestablish stdout\n");
-                }
-                exit(EXIT_SUCCESS);
-            }
-            else
-            {
-                waitpid(pid, &status, 0);
-                printf("end waiting\n");
-                commandlist = commandlist->next;
-                if (commandlist)
-                {
-                if (commandlist->next != NULL)
-                {
-                    if (pipe(pip[i + 1]) < 0)
-                        printf("error pipe\n");
-                    fd_out = pip[i + 1][1];
-                    dup2(fd_out, STDOUT_FILENO);
-                } 
-                command = (t_cmd *)commandlist->content;  
-                fd_in = pip[i][0];
-                dup2(fd_in, STDIN_FILENO);
-                if (commandlist->next == NULL)
-                {
-                    if (dup2(savestd[1], STDOUT_FILENO) == -1)
-                        printf("error reestablish stdout\n");
-                }
-                ft_execution_test(command);
-                }
-                if (close(pip[i][0]) == -1)
-                    printf("error close\n");
-                if (close(pip[i][1]) == -1)
-                    printf ("error close\n");
-                               if (command->next == NULL)
-                {
-                    if (dup2(savestd[0], STDIN_FILENO) == -1)
-                        printf("error reestablish stdin\n");
-                    if (dup2(savestd[1], STDOUT_FILENO) == -1)
-                        printf("error reestablish stdout\n");
-                }     
-            }
-    
-            printf("parent test plop\n");
-
+            if (pipe(pip[i]) < 0)
+                printf("error pipe\n");
             i++;
-            j = j + 2;
-            if (commandlist)
-                commandlist = commandlist->next;
         }
-
+        i = 0;
+        pid[i] = fork();
+        if (pid[i] < 0)
+            printf("error fork\n");
+        while (pid[i] != 0 && (i + 1) <= g_data.nb_pipe)
+        {
+            i++;
+            commandlist = commandlist->next;
+            command = (t_cmd *)commandlist->content;
+            pid[i] = fork();
+        }
+        if (pid[i] == 0)
+        {  
+            ft_closepipe(pip, i);
+            if (i < g_data.nb_pipe)
+                dup2(pip[i][1], STDOUT_FILENO);
+            if (i > 0)
+                dup2(pip[i - 1][0], STDIN_FILENO);
+            ft_execution_test(command);
+            ft_closepipe_end(pip, i);
+            exit(EXIT_SUCCESS);
+        }
+        else
+        {
+            ft_closepipe(pip, (i + 1));
+            while (wait(NULL) != -1 || errno != ECHILD)
+            {
+                j++;
+            }
+        }
     }
     return ;
 }
