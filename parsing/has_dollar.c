@@ -68,7 +68,7 @@ char	*ft_extract_var(char *str)
 				else
 				{
 					i++;
-					while (ft_isvarphabet(str[i]) == 1)
+					while (str[i] && ft_isvarphabet(str[i]) == 1)
 					{
 						var = ft_strjoin_char(var, str[i]);
 						i++;
