@@ -149,10 +149,4 @@ void ft_divide_redirection(t_list *commandlist)
 			}
 		}
 	}
-	if (g_data.nb_pipe == 0)
-	{
-		ft_execution_test(cmd);
-		if (cmd->redir_nb > 0)
-			ft_endredir(cmd);
-	}
 }

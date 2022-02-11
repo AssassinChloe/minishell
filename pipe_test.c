@@ -101,6 +101,9 @@ void    ft_pipe(t_list *commandlist)
     if (g_data.nb_pipe == 0)
     {
         ft_divide_redirection(commandlist);
+        ft_execution_test(command);
+		if (command->redir_nb > 0)
+			ft_endredir(command);
         return ;
     }
     else if (g_data.nb_pipe > 0)
@@ -125,11 +128,14 @@ void    ft_pipe(t_list *commandlist)
         if (pid[i] == 0)
         {  
             ft_closepipe(pip, i);
+            ft_divide_redirection(commandlist);
             if (i < g_data.nb_pipe)
                 dup2(pip[i][1], STDOUT_FILENO);
             if (i > 0)
                 dup2(pip[i - 1][0], STDIN_FILENO);
             ft_execution_test(command);
+            		if (command->redir_nb > 0)
+			ft_endredir(command);
             ft_closepipe_end(pip, i);
             exit(EXIT_SUCCESS);
         }
