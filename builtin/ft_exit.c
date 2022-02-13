@@ -45,16 +45,16 @@ int ft_exit(t_cmd cmd)
     }
     if (cmd.argc == 2)
     {
-        valid = check_format_exit(cmd.argv[1]);
+        valid = check_format_exit(cmd.av[1]);
         if (!valid)
         {
             ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-            ft_putstr_fd(cmd.argv[1], STDERR_FILENO);
+            ft_putstr_fd(cmd.av[1], STDERR_FILENO);
             ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
             g_data.exit_value = 2;
             return (2);
         }
-        number = ft_atoi(cmd.argv[1]); 
+        number = ft_atoi(cmd.av[1]); 
         if (number  < 0)
         {
             while (number >= 0 && number <= 255)
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     int exitvalue;
     t_cmd cmd;
     cmd.argc = argc;
-    cmd.argv = argv;
+    cmd.av = argv;
     exitvalue = ft_exit(cmd);
     printf("exit_value = %d\n", exitvalue);
 

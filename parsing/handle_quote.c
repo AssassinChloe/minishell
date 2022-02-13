@@ -1,75 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_quote.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cassassi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 18:12:29 by cassassi          #+#    #+#             */
+/*   Updated: 2022/02/13 19:03:39 by cassassi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int ft_isquote(char c)
+int	ft_isclosed(char *str, int i)
 {
-    if (ft_issimplequote(c) == 1)
-        return (1);
-    else if (ft_isdoublequote(c) == 2)
-        return (2);
-    return (0);
+	char	c;
+
+	c = str[i];
+	i++;
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
-int ft_issimplequote(char c)
+char	*ft_copyquote(int *i, char *str, int ret)
 {
-    if (c == 39)
-        return (1);
-    return (0);
+	int		j;
+	char	*quote;
+
+	j = 0;
+	quote = malloc(sizeof(char) * (ret - *i) + 2);
+	while (*i <= ret)
+	{
+		quote[j] = str[*i];
+		j++;
+		*i = *i + 1;
+	}
+	quote[j] = '\0';
+	return (quote);
 }
 
-int ft_isdoublequote(char c)
+char	*ft_handle_quote(char *str, int *i, int keepquote)
 {
-    if (c == 34)
-        return (2);
-    return (0);
+	int		ret;
+	char	*quote;
+
+	quote = NULL;
+	ret = ft_isclosed(str, *i);
+	if (ret < 0)
+	{
+		*i = -1;
+		printf("the quote is not closed\n");
+		return (NULL);
+	}
+	else
+	{
+		if (keepquote == 0)
+		{
+			*i = *i + 1;
+			ret--;
+		}
+		quote = ft_copyquote(i, str, ret);
+		if (keepquote == 0)
+			*i = *i + 1;
+	}
+	return (quote);
 }
 
-int ft_isclosed(char *str, int i)
+void	ft_concatquote(char *str, char **tmp, int *i)
 {
-    char    c;
-    
-    c = str[i];
-    i++;
-    while (str[i])
-    {
-        if (str[i] == c)
-            return (i);
-        i++;
-    }
-    return (-1);
-}
+	int		ret;
+	char	*tmp2;
 
-char    *ft_handle_quote(char *str, int *i, int keepquote)
-{
-    int ret;
-    int j;
-    char *quote;
-
-    quote = NULL;
-    ret = ft_isclosed(str, *i);
-    if (ret < 0)
-    {
-        *i = -1;
-        printf("the quote is not closed\n");
-        return (NULL);
-    }
-    else
-    {
-        if (keepquote == 0)
-        {
-            *i = *i + 1;
-            ret--;
-        }
-        j = 0;
-        quote = malloc(sizeof(char) * (ret - *i) + 2);
-        while (*i <= ret)
-        {
-            quote[j] = str[*i];
-            j++;
-            *i = *i + 1;
-        }
-        quote[j] = '\0';
-        if (keepquote == 0)
-            *i = *i + 1;
-    }
-    return (quote);
+	tmp2 = NULL;
+	ret = ft_isquote(str[*i]);
+	tmp2 = ft_handle_quote(str, i, 0);
+	if (tmp2 == NULL && *i < 0)
+		return ;
+	if (ret == 2 && has_dollar(tmp2) == 1)
+		tmp2 = ft_extract_var(tmp2);
+	if (*tmp != NULL)
+		*tmp = ft_strjoin(*tmp, tmp2);
+	else
+		*tmp = ft_strdup(tmp2);
+	free(tmp2);
 }

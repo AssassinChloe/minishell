@@ -19,7 +19,7 @@ int	ft_env(t_cmd cmd)
 	if (cmd.argc != 1)
 	{
 		ft_putstr_fd("env : ", STDOUT_FILENO);
-		ft_putstr_fd(cmd.argv[1], STDOUT_FILENO);
+		ft_putstr_fd(cmd.av[1], STDOUT_FILENO);
 		ft_putendl_fd(": No such file or directory", STDOUT_FILENO);
 		g_data.exit_value = 127;
 	}

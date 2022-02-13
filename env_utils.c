@@ -14,7 +14,7 @@ t_env	*search_env(char *str, t_env *env) // je met env en parame au cas ou besoi
 	return (NULL);
 }
 
-char    *get_env_value(vhar *str, t_env *env)
+char    *get_env_value(char *str, t_env *env)
 {
     char *env_value;
     t_env *tmp;

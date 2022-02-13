@@ -6,7 +6,7 @@
 /*   By: cassassi <cassassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:06:08 by cassassi          #+#    #+#             */
-/*   Updated: 2020/11/30 12:34:15 by cassassi         ###   ########.fr       */
+/*   Updated: 2022/02/13 20:07:13 by cassassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,12 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!(s3))
 		return (NULL);
 	while (s1[i])
-	{
 		s3[j++] = s1[i++];
-	}
-	free(s1);
 	i = 0;
+	free(s1);
+	s1 = NULL;
 	while (s2[i])
-	{
-		s3[j] = s2[i];
-		i++;
-		j++;
-	}
+		s3[j++] = s2[i++];
 	s3[j] = '\0';
 	return (s3);
 }

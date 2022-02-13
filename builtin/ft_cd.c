@@ -49,7 +49,7 @@ int ft_cd(t_cmd cmd)
         if (cmd.argc == 1)
             dest_path = get_env_value("HOME");
         else
-            dest_path = cmd.argv[1];
+            dest_path = cmd.av[1];
         if (chdir(dest_path)) // si chemin non valide -> error
         {
             free(src_path);
@@ -74,7 +74,7 @@ int	main(int ac, char **av, char **envp)
 {
     t_cmd cmd;
     cmd.argc = ac;
-    cmd.argv = av;
+    cmd.av = av;
 
     init_data(envp);
     ft_cd(cmd);

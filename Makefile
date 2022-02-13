@@ -12,19 +12,24 @@
 
 NAME	=	minishell
 
-SRCS	=	minishell.c executiontest.c split_env.c pipe_test.c\
+SRCS	=	minishell.c split_env.c\
 			$(addprefix $(PARSDIR), $(PARSING))\
 			$(addprefix $(LEXDIR), $(LEXING))\
-			$(addprefix $(BUILDIR), $(BUILTIN))
+			$(addprefix $(BUILDIR), $(BUILTIN))\
+			$(addprefix $(EXECDIR), $(EXEC))\
 
 PARSING	=	parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote.c handle_redir.c\
 			cleanparsing.c
 
 PARSDIR	=	parsing/
 
-LEXING	=	lexing.c command_list.c redirection.c redirection_2.c
+LEXING	=	lexing.c build_command_list.c redirection.c redirection_2.c modif_command_list.c
 
 LEXDIR	=	lexing/
+
+EXEC	=	execution.c pipe.c closing_pipe.c get_path.c
+
+EXECDIR	=	execution/
 
 BUILTIN	=	echo.c pwd.c env.c launch_builtin.c export.c ft_cd.c ft_exit.c unset.c
 
@@ -63,4 +68,5 @@ $(OBJSD)%.o:%.c
 			@mkdir -p $(OBJSD)$(PARSDIR)
 			@mkdir -p $(OBJSD)$(LEXDIR)
 			@mkdir -p $(OBJSD)$(BUILDIR)
+			@mkdir -p $(OBJSD)$(EXECDIR)
 			$(CC) $(INC) $(FLAG) -o $@ -c $<

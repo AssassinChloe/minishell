@@ -6,11 +6,20 @@
 /*   By: cassassi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 09:59:52 by cassassi          #+#    #+#             */
-/*   Updated: 2021/11/23 16:12:08 by cassassi         ###   ########.fr       */
+/*   Updated: 2022/02/13 22:52:30 by cassassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+static void	ft_copy(char *newstr, char *str, int *i)
+{
+	while (str[*i])
+	{
+		newstr[*i] = str[*i];
+		*i = *i + 1;
+	}
+}
 
 char	*ft_strjoin_char(char *str, char c)
 {
@@ -30,11 +39,7 @@ char	*ft_strjoin_char(char *str, char c)
 	}
 	if (str != NULL)
 	{
-		while (str[i])
-		{
-			newstr[i] = str[i];
-			i++;
-		}
+		ft_copy(newstr, str, &i);
 		free(str);
 	}
 	newstr[i] = c;
