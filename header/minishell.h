@@ -53,8 +53,6 @@ typedef struct s_cmd
 	int				*type;
 	t_redir			*redir;
 	int				redir_nb;
-	int				pip[2];
-	int				fd_in;
 	int				order; // voir si besoin order ou si liste chainee
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
@@ -116,8 +114,8 @@ void	modif_arg_heredoc(t_cmd **cmd, char *filename);
 int		ft_countredir(t_cmd *cmd);
 void	ft_handleredir(int j, t_cmd *cmd, int *i);
 void	ft_pipe(t_list *commandlist);
-void	ft_closepipe(int pip[g_data.nb_pipe][2], int i);
-void	ft_closepipe_end(int pip[g_data.nb_pipe][2], int i);
+void	ft_closepipe(int **pip, int i);
+void	ft_closepipe_end(int **pip, int i);
 void	ft_endredir(t_cmd *cmd);
 void	ft_redirstd(t_redir *redir, int std);
 char	*is_forbidden_redir(int *i, int *multiple);
@@ -126,7 +124,6 @@ char	*extract_redir(char *str, int *i, int *multiple);
 void	ft_get_cmd_path(t_cmd *cmd);
 void	execute_command(t_list *commandlist);
 void	exec_cmd(char **cmd);
-
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);

@@ -6,7 +6,7 @@
 /*   By: cassassi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 23:27:03 by cassassi          #+#    #+#             */
-/*   Updated: 2022/02/13 23:30:01 by cassassi         ###   ########.fr       */
+/*   Updated: 2022/02/14 09:40:29 by cassassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,17 @@ void	exec_cmd(char **cmd)
 
 void	execute_command(t_list *commandlist)
 {
-	t_cmd *command;
+	t_cmd	*command;
 
 	command = (t_cmd *)commandlist->content;
 	if (g_data.nb_pipe == 0)
-    {
-		
+	{
 		ft_divide_redirection(commandlist);
 		ft_get_cmd_path(command);
 		if (command->redir_nb > 0)
 			ft_endredir(command);
-	    return ;
-    }
-	else
-	{
-		ft_pipe(commandlist);
+		return ;
 	}
-	
+	else
+		ft_pipe(commandlist);
 }

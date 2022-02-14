@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	ft_close_first(int pip[g_data.nb_pipe][2], int i)
+void	ft_close_first(int **pip, int i)
 {
 	int	j;
 
@@ -30,7 +30,7 @@ void	ft_close_first(int pip[g_data.nb_pipe][2], int i)
 	}
 }
 
-void	ft_close_middle(int pip[g_data.nb_pipe][2], int i)
+void	ft_close_middle(int **pip, int i)
 {
 	int	j;
 
@@ -51,7 +51,7 @@ void	ft_close_middle(int pip[g_data.nb_pipe][2], int i)
 	}
 }
 
-void	ft_close_last(int pip[g_data.nb_pipe][2], int i)
+void	ft_close_last(int **pip, int i)
 {
 	int	j;
 
@@ -69,7 +69,7 @@ void	ft_close_last(int pip[g_data.nb_pipe][2], int i)
 	}
 }
 
-void	ft_closepipe_end(int pip[g_data.nb_pipe][2], int i)
+void	ft_closepipe_end(int **pip, int i)
 {
 	if (i == 0)
 	{
@@ -90,7 +90,7 @@ void	ft_closepipe_end(int pip[g_data.nb_pipe][2], int i)
 	}
 }
 
-void	ft_closepipe(int pip[g_data.nb_pipe][2], int i)
+void	ft_closepipe(int **pip, int i)
 {
 	int	j;
 
