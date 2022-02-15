@@ -55,11 +55,25 @@ t_env *modify_env_value(t_env *var, char *new_value)
 	return(var);
 }
 */
-int	already_in_env(char *arg, t_env *env)
+
+t_env	*find_last_env(void)
+{
+	t_env	*env;
+
+	env = g_data.env;
+
+	if (!env)
+		return (NULL);
+	while (env->next != NULL)
+		env = env->next;
+	return (env);
+}
+
+int	already_in_env(char *arg)
 {
 	t_env	*tmp;
 
-	tmp = env;
+	tmp = g_data.env;
 	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, arg))
@@ -102,6 +116,19 @@ int	has_equal(char *str)
 	return (0);
 }
 
+void	add_env_value(char *newkey, char *newvalue)
+{
+	t_env	*last;
+	t_env	*new;
+	
+	new = malloc(sizeof(char*) * 3);
+	new->key = ft_strdup(newkey);
+	new->value = ft_strdup(newvalue);
+	new->next = NULL;
+	last = find_last_env();
+	last->next = new;
+}
+
 int	print_exp_list(void)
 {
 	t_env	*var;
@@ -112,50 +139,67 @@ int	print_exp_list(void)
 	{
 		ft_putstr_fd("Export ", STDOUT_FILENO);
     	ft_putstr_fd(var->key, STDOUT_FILENO);
-		ft_putstr_fd("= \"", STDOUT_FILENO);
-		ft_putstr_fd(var->value, STDOUT_FILENO);
-		ft_putendl_fd("\"", STDOUT_FILENO);
+		if (var->value)
+		{
+			ft_putstr_fd("=\"", STDOUT_FILENO);
+			ft_putstr_fd(var->value, STDOUT_FILENO);
+			ft_putstr_fd("\"", STDOUT_FILENO);
+		}
+		ft_putchar_fd('\n', STDOUT_FILENO);
 		var = var->next;
 	}
 	return (0);
 }
-/* trop grand 
+// trop grand : a couper + ajouter +=
 
 int ft_export(t_cmd cmd)
 {
-	var = g_data.env;
+	t_env	*env;
+	t_env	*tmp;
+
+	env = g_data.env;
 	int i;
 	char **split_var;
 
-	if (cmd.argc == 1)
-		return (print_export_list());
-    if (argc > 1)
+	if (cmd.argc == 1)// changement value
+		return (print_exp_list());
+    if (cmd.argc > 1)
     {
     	i = 1;
-		while (cmd.argv[i])
+		while (cmd.av[i])
 		{
-			if (has_equal(cmd.argv[i])
+			if (has_equal(cmd.av[i]))
 			{
-				split_var=ft_split_env(cmd.argv[i]);
-				if (!already_in_env(split_var[0])
+				split_var=ft_split_env(cmd.av[i]);
+				if (!already_in_env(split_var[0]))
 				{
-					if (format_key_ok(split_var[0])// verification validite key
-					// erooeur ou creation key +value
+					if (format_key_ok(split_var[0]))// verification validite key
+						add_env_value(split_var[0], split_var[1]);// erooeur ou creation key +value
 					else
 					{
-						//print error "export: « xx,xx » : identifiant non valable"
+						printf("export: « %s » : identifiant non valable\n", cmd.av[i]);
 						g_data.exit_value = 1;
 					}
 				}
 				else
-					// changement value
-				// split var[0] et split_var[1] (free tab2)
+				{
+					tmp = g_data.env;
+					while (ft_strcmp(tmp->key, split_var[0]))
+						tmp = tmp->next;
+					free(tmp->value);
+					tmp->value = ft_strdup(split_var[1]);
+					printf("%s %s\n",tmp->key, tmp->value);// test changement value
+				}
+			 	free(split_var[0]); //free tab2
+				free(split_var[1]);
 			}
 			else
 			{
-				if (!already_in_env(cmd.argv[i]))
-					if (format_key_ok(cmd.argv[i])// verification validite de key
-				// creer new env value avec NULL en value
+				if (!already_in_env(cmd.av[i]))
+					if (format_key_ok(cmd.av[i]))// verification validite de key
+					{
+						add_env_value(cmd.av[i], NULL);// creer new env value avec NULL en value
+					}
 			}
 			i++;
 		}
@@ -163,4 +207,3 @@ int ft_export(t_cmd cmd)
     }
     return (0);
 }
-*/

@@ -55,7 +55,7 @@ int	get_token_type(char *str, int *multicmd)
 {
 	if (ft_strcmp(str, "|") == 0)
 		return (T_PIPE);
-	else if (ft_strcmp(str, "-n") == 0)
+	else if (is_flag_n(str) == 1)
 		return (T_FLAG);
 	else if (ft_strcmp(str, "<") == 0)
 		return (T_LOWER);

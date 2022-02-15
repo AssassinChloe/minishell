@@ -63,6 +63,7 @@ typedef struct s_env //ajout
 	char			*key;
 	char			*value;
 	struct s_env	*next;
+	struct s_env	*prev;
 }	t_env;
 
 typedef struct s_data // globale ?
@@ -137,17 +138,19 @@ void	init_signal(void);
 int		minishell(void);
 int		ft_echo(char **args);
 int		ft_pwd(void);
-int		launch__builtin(t_cmd cmd);
+int		launch_builtin(t_cmd cmd);
 t_env	*search_var(char *str);
 char	*get_env_value(char *str);
 int		ft_cd(t_cmd cmd);
-int		ft_echo(char **args);
 int		ft_env(t_cmd cmd);
 int		ft_atoi_exit(const char *str);
 int		ft_exit(t_cmd cmd);
-int		already_in_env(char *arg, t_env *env);
+int		already_in_env(char *arg);
 int		format_key_ok(char *str);
 int		has_equal(char *str);
 int		print_exp_list(void);
 int		ft_export(t_cmd cmd);
+t_env	*find_last_env(void);
+void	add_env_value(char *newkey, char *newvalue);
+int	is_flag_n(char *arg);
 #endif

@@ -71,7 +71,7 @@ t_env	*get_env(char **envp)
 		var->next = var_env;
 		var_env = var;
 		free_tab2(tmp);
-//		printf(" var %d : %s = %s\n", i, var_env->key, var_env->value); ligne pour verif si besoin
+//		printf(" var %d : %s = %s\n", i, var_env->key, var_env->value); //ligne pour verif si besoin
 	}
 	return (var_env);
 }
@@ -147,9 +147,26 @@ int minishell()
 int main(int argc, char **argv, char **envp)
 {
 	(void)argv;
+
+//	t_env *last; //pour test
+//	t_cmd cmd; //pour test
+//	char *str1 = "0val=boss"; //
+//	char *str2 = "Valerie"; //
+//	int ret; //
 	if (argc != 1)
 		exit(EXIT_FAILURE);
 	init_data(envp);
+//	add_env_value("key", "newvalue");// ajout pour test
+//	last = find_last_env(); //pour test
+//	printf("lastkey = "); // pour test
+//	print_exp_list();// ajout pour test
+//	cmd.argc=1; //pour test
+//	ft_env(cmd); //pour test
+//	cmd.argc=3; //
+//	cmd.av[1]=str1; //
+//	cmd.av[2]=str2; //
+//	ret = ft_export(cmd); //
+//	print_exp_list(); //
 	init_signal();
 	minishell();
 //	destroy_all(); a faire 

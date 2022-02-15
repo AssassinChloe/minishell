@@ -14,9 +14,34 @@ si plusieurs arguments :
 traite tous les arguments les uns a la suite des autres, s'arrte si erreur
 */
 
-
-int ft_unset(t_cmd cmd)
+t_env	*get_prev(char *key)
 {
-    printf(" pour utilisation param et compil %d", cmd.argc);
-    return (0);
+	t_env	*tmp;
+
+	tmp = g_data.env;
+	while (tmp->next)
+	{
+		if (!ft_strcmp(tmp->next->key, key))
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+
+void	ft_unset(char *arg)
+{
+	t_env	*prev;
+	t_env	*tmp;
+
+	tmp = NULL;
+	if (!get_env_value(arg)) // already in env ?
+		return ;
+	prev = get_prev(arg);
+	tmp = prev->next->next;
+	if (prev->next->value)
+		free(prev->next->value);
+	if (prev->next->key)
+		free(prev->next->key);
+	free(prev->next);
+	prev->next = tmp;
 }

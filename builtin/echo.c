@@ -50,7 +50,7 @@ void	ft_putstr_fd(char *s, int fd)
 	write(fd, s, i);
 }
 */
-static int	is_flag_n(char *arg) // modifie pour integer les nnn possibles
+int	is_flag_n(char *arg) // modifie pour integer les nnn possibles
 {
 	int i;
 

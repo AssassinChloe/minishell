@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	launch__builtin(t_cmd cmd)
+int	launch_builtin(t_cmd cmd)
 {
 	if (ft_strcmp(cmd.av[0], "cd") == 0)
 		return (ft_cd(cmd));
