@@ -72,6 +72,7 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2)
 	j = 0;
 	tmp->argc = i;
 	tmp->argc_init = i;
+	tmp->redir_nb = 0;
 	tmp->av = malloc(sizeof(char *) * (i + 1));
 	tmp->type = malloc(sizeof(int) * i);
 	while (tmplist2 && i > j)

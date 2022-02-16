@@ -31,6 +31,7 @@ int	ft_countredir(t_cmd *cmd)
 void	ft_handleredir(int j, t_cmd *cmd, int *i)
 {
 	cmd->redir[j].type = cmd->type[*i];
+	cmd->redir_nb++;
 	if (cmd->redir[j].type == T_GREATER)
 		ft_greaterstart(cmd, *i, j);
 	else if (cmd->redir[j].type == T_GGREATER)
@@ -38,10 +39,7 @@ void	ft_handleredir(int j, t_cmd *cmd, int *i)
 	else if (cmd->redir[j].type == T_LOWER)
 		ft_lowerstart(cmd, *i, j);
 	else if (cmd->redir[j].type == T_LLOWER)
-	{
 		ft_llowerstart(cmd, *i, j);
-		*i = *i - 1;
-	}
 }
 
 void	ft_endredir(t_cmd *cmd)

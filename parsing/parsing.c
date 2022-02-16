@@ -86,7 +86,7 @@ char *ft_extract_limit(char *str, int *i, int *hasquote)
 	return (tmp);
 }
 
-int	ft_parsespecial(char *str, int *i, char	**tmp, t_list **tokens)
+int	ft_parsespecial(char *str, int *i, char	**tmp, t_list **tokens, int *multiple)
 {
 	int hasquote;
 
@@ -104,6 +104,7 @@ int	ft_parsespecial(char *str, int *i, char	**tmp, t_list **tokens)
 		if (hasquote == 1)
 			*tmp = ft_addquote(*tmp);
 		ft_addone(tokens, tmp);
+		*multiple = 0;
 	}
 	else
 		ft_addone(tokens, tmp);
@@ -129,11 +130,11 @@ void	ft_parse(char *str)
 		while (str[i] && ft_special(str[i]) == 1)
 		{
 			tmp = ft_handleis(str, &i, &multiple);
-			if (ft_parsespecial(str, &i, &tmp, &tokens) < 0)
+			if (ft_parsespecial(str, &i, &tmp, &tokens, &multiple) < 0)
 				return (ft_freeparsing(&tmp, &tokens));
 		}
 	}
-	ft_printchain(tokens);
+	// ft_printchain(tokens);
 	ft_lexing(&tokens);
 	ft_lstclear(&tokens);
 }

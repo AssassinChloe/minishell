@@ -28,7 +28,6 @@ void	copy_and_free_end(t_cmd **cmd, int j, int i)
 		(*cmd)->type[i] = 0;
 		i++;
 	}
-	(*cmd)->argc = (*cmd)->argc - 2;
 }
 
 void	modif_arg(t_cmd **cmd)
@@ -50,6 +49,7 @@ void	modif_arg(t_cmd **cmd)
 	(*cmd)->av[j + 1] = NULL;
 	j = j + 2;
 	copy_and_free_end(cmd, j, i);
+	(*cmd)->argc = (*cmd)->argc - 2;
 	return ;
 }
 
@@ -75,5 +75,6 @@ void	modif_arg_heredoc(t_cmd **cmd, char *filename)
 	(*cmd)->type[i] = 0;
 	j = j + 2;
 	copy_and_free_end(cmd, j, i);
+		(*cmd)->argc = (*cmd)->argc - 1;
 	return ;
 }

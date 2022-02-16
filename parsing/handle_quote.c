@@ -12,6 +12,17 @@
 
 #include "minishell.h"
 
+char *ft_addquote(char *str)
+{
+	char *tmp;
+
+	tmp = NULL;
+	tmp = ft_strjoin_char(tmp, '"');
+	tmp = ft_strjoin(tmp, str);
+	tmp = ft_strjoin_char(tmp, '"');
+	return (tmp);
+}
+
 int	ft_isclosed(char *str, int i)
 {
 	char	c;
