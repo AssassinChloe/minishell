@@ -159,4 +159,5 @@ int		ft_export(t_cmd cmd);
 t_env	*find_last_env(void);
 void	add_env_value(char *newkey, char *newvalue);
 int	is_flag_n(char *arg);
+int	ft_unset(char **arg);
 #endif

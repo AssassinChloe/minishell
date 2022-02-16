@@ -40,20 +40,27 @@ t_env	*get_prev(char *key)
 	return (NULL);
 }
 
-void	ft_unset(char *arg)
+int	ft_unset(char **arg)
 {
 	t_env	*prev;
 	t_env	*tmp;
+	int i;
 
-	tmp = NULL;
-	if (!already_in_env(arg))
-		return ;
-	prev = get_prev(arg);
-	tmp = prev->next->next;
-	if (prev->next->value)
-		free(prev->next->value);
-	if (prev->next->key)
-		free(prev->next->key);
-	free(prev->next);
-	prev->next = tmp;
+	i = 1;
+	while(arg[i])
+	{
+		tmp = NULL;
+		if (!already_in_env(arg[i]))
+			return (0);
+		prev = get_prev(arg[i]);
+		tmp = prev->next->next;
+		if (prev->next->value)
+			free(prev->next->value);
+		if (prev->next->key)
+			free(prev->next->key);
+		free(prev->next);
+		prev->next = tmp;
+		i++;
+	}
+	return (0);
 }

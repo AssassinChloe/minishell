@@ -74,6 +74,7 @@ int	ft_exit(t_cmd cmd)
 			number = number % 256;
 		printf ("number = %d\n", number); //pour test
 		g_data.exit_value = number;
+		g_data.loop = 0;
 		// destroy_all(); fonction a faire
 		return (number);
 	}

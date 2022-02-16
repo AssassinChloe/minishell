@@ -19,9 +19,12 @@ void	ft_child(int **pip, int i, t_list *cmdlist, t_cmd *cmd)
 	ft_divide_redirection(cmdlist);
 	if (g_data.nb_pipe > 0 && i < g_data.nb_pipe)
 		dup2(pip[i][1], STDOUT_FILENO);
-	if (i > 0)
+	if (g_data.nb_pipe > 0 && i > 0)
 		dup2(pip[i - 1][0], STDIN_FILENO);
-	ft_get_cmd_path(cmd);
+	if (!ft_isbuiltin(cmd->av[0]))
+		launch_builtin(cmd);
+	else
+		ft_get_cmd_path(cmd);
 	if (cmd->redir_nb > 0)
 		ft_endredir(cmd);
 	if (g_data.nb_pipe > 0)
