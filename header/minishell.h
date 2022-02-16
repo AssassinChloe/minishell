@@ -125,6 +125,10 @@ char	*extract_redir(char *str, int *i, int *multiple);
 void	ft_get_cmd_path(t_cmd *cmd);
 void	execute_command(t_list *commandlist);
 void	exec_cmd(char **cmd);
+void	ft_child(int **pip, int i, t_list *cmdlist, t_cmd *cmd);
+void	ft_parent(int **pip, int i);
+void	ft_free_pipe(int **pip);
+void	ft_open_pipes(int **pip);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);
