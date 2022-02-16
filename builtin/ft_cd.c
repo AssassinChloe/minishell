@@ -49,6 +49,7 @@ int ft_cd(t_cmd cmd)
 {
     char *src_path;
     char *dest_path;
+    t_env   *tmp; //
 
     if (cmd.argc > 2)
         {
@@ -76,11 +77,27 @@ int ft_cd(t_cmd cmd)
                 return(1);
             }
         }
-     //   dest_path = getcwd(NULL, 0);
-     //   printf("dest_path = %s\n", dest_path); // pour test
-     //   printf("src_path = %s\n", src_path); //opur test
-        search_var("OLDPWD")->value = ft_strdup(src_path);
-        search_var("PWD")->value = ft_strdup(dest_path);
+   //     dest_path = getcwd(NULL, 0);
+   //     printf("dest_path = %s\n", dest_path); // pour test
+    //    printf("src_path = %s\n", src_path); //opur test
+    
+        tmp = g_data.env; //
+		while (ft_strcmp(tmp->key, "PWD")) //
+			tmp = tmp->next; //
+		free(tmp->value); //
+		tmp->value = ft_strdup(dest_path); //
+		printf("%s %s\n",tmp->key, tmp->value);// test changement value
+
+        tmp = g_data.env; //
+		while (ft_strcmp(tmp->key, "OLDPWD")) //
+			tmp = tmp->next; //
+		free(tmp->value); //
+		tmp->value = ft_strdup(src_path); //
+		printf("%s %s\n",tmp->key, tmp->value);// test changement value
+        
+
+     //   search_var("OLDPWD")->value = ft_strdup(src_path);
+      //  search_var("PWD")->value = ft_strdup(dest_path);
         free(src_path);
         free(dest_path);
     }
