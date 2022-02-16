@@ -14,36 +14,39 @@
 
 void	exec_cmd(char **cmd)
 {
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-		perror("fork");
-	else if (pid > 0)
-	{
-		waitpid(pid, NULL, 0);
-		kill(pid, SIGTERM);
-	}
-	else
-	{
-		if (execve(cmd[0], cmd, NULL) == -1)
-			perror("shell");
-	}
+	if (execve(cmd[0], cmd, NULL) == -1)
+		perror("shell");
 }
 
 void	execute_command(t_list *commandlist)
 {
+	int		pid;
 	t_cmd	*command;
+	int		**pip;
+	int		i;
 
+	i = 0;
 	command = (t_cmd *)commandlist->content;
-	if (g_data.nb_pipe == 0)
+	if (g_data.nb_pipe != 0)
 	{
-		ft_divide_redirection(commandlist);
-		ft_get_cmd_path(command);
-		if (command->redir_nb > 0)
-			ft_endredir(command);
-		return ;
+		pip = malloc(sizeof(int) * g_data.nb_pipe * 2);
+		ft_open_pipes(pip);
 	}
+	pid = fork();
+	if (pid < 0)
+		printf("error fork\n");
+	while (pid != 0 && (i + 1) <= g_data.nb_pipe)
+	{
+		i++;
+		commandlist = commandlist->next;
+		command = (t_cmd *)commandlist->content;
+		pid = fork();
+	}
+	if (pid == 0)
+		ft_child(pip, i, commandlist, command);
 	else
-		ft_pipe(commandlist);
+		ft_parent(pip, i);
+	if (g_data.nb_pipe != 0)
+		ft_free_pipe(pip);
+	return ;
 }
