@@ -125,6 +125,7 @@ char	*extract_redir(char *str, int *i, int *multiple);
 void	ft_get_cmd_path(t_cmd *cmd);
 void	execute_command(t_list *commandlist);
 void	exec_cmd(char **cmd);
+int	ft_isbuiltin(char *str);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);
@@ -139,7 +140,7 @@ void	init_signal(void);
 int		minishell(void);
 int		ft_echo(char **args);
 int		ft_pwd(void);
-int		launch_builtin(t_cmd cmd);
+int		launch_builtin(t_cmd *cmd);
 t_env	*search_var(char *str);
 char	*get_env_value(char *str);
 int		ft_cd(t_cmd cmd);
