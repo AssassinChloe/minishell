@@ -57,9 +57,9 @@ void	ft_get_cmd_path(t_cmd *cmd)
 	int		i;
 	int		j;
 
-	printf("builtin in get_path ? %d", ft_isbuiltin(cmd->av[0])); //
-	if (ft_isbuiltin(cmd->av[0])) //
-		launch_builtin(cmd); //
+	printf("builtin in get_path ? %d", ft_isbuiltin(cmd->av[0]));
+	if (!ft_isbuiltin(cmd->av[0]))
+		launch_builtin(cmd);
 	else
 	{
 		if (access(cmd->av[0], F_OK | X_OK) != 0)
