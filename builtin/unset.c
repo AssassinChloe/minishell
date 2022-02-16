@@ -34,7 +34,7 @@ void	ft_unset(char *arg)
 	t_env	*tmp;
 
 	tmp = NULL;
-	if (!get_env_value(arg)) // already in env ?
+	if (!already_in_env(arg))
 		return ;
 	prev = get_prev(arg);
 	tmp = prev->next->next;

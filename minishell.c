@@ -148,10 +148,25 @@ int main(int argc, char **argv, char **envp)
 {
 	(void)argv;
 
+	if (argc != 1)
+		exit(EXIT_FAILURE);
+	init_data(envp);
+	init_signal();
+	minishell();
+//	destroy_all(); a faire 
+	return (0);
+}
+
+/*
+int main(int argc, char **argv, char **envp) //main de test
+{
+	(void)argv;
+
 //	t_env *last; //pour test
-//	t_cmd cmd; //pour test
+	t_cmd cmd; //pour test
 //	char *str1 = "0val=boss"; //
-//	char *str2 = "Valerie"; //
+//	char *str2 = "Valerie"; 
+//	char *str3 = "USER+=_the_boss";//
 //	int ret; //
 	if (argc != 1)
 		exit(EXIT_FAILURE);
@@ -159,16 +174,18 @@ int main(int argc, char **argv, char **envp)
 //	add_env_value("key", "newvalue");// ajout pour test
 //	last = find_last_env(); //pour test
 //	printf("lastkey = "); // pour test
-//	print_exp_list();// ajout pour test
-//	cmd.argc=1; //pour test
-//	ft_env(cmd); //pour test
-//	cmd.argc=3; //
+	print_exp_list();// ajout pour test
+	cmd.argc=1; //pour test
+	ft_env(cmd); //pour test
+	cmd.argc=4; //
 //	cmd.av[1]=str1; //
 //	cmd.av[2]=str2; //
+//	cmd.av[3]=str3; //
 //	ret = ft_export(cmd); //
-//	print_exp_list(); //
+	print_exp_list(); //
 	init_signal();
 	minishell();
 //	destroy_all(); a faire 
 	return (0);
 }
+*/

@@ -131,6 +131,7 @@ void	clear_list(t_env **list);
 t_env	*record_var(char *key, char *value);
 t_env	*get_env(char **envp);
 char	**ft_split_env(char *s);
+char **ft_split_env_plus(char *s);
 char	**free_tab2(char **tmp);
 void	init_data(char **envp);
 void	handle_sig(int sig);

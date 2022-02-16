@@ -50,14 +50,19 @@ int ft_cd(t_cmd cmd)
             dest_path = get_env_value("HOME");
         else
             dest_path = cmd.av[1];
-        if (chdir(dest_path)) // si chemin non valide -> error
+        if (chdir(dest_path)) // si chemin non valide -> error faire chemin strjoin src_path + / av[1]
         {
-            free(src_path);
-            ft_putstr_fd("minishell: cd:", STDOUT_FILENO);
-            ft_putstr_fd(dest_path, STDOUT_FILENO);
-            ft_putstr_fd("No such file or directory", STDOUT_FILENO);//error No such file or directory + 
-            g_data.exit_value = 1;
-            return(1);
+            dest_path = ft_strjoin(src_path, "/");
+            dest_path = ft_strjoin(src_path, cmd.av[1]);
+            if (chdir(dest_path))
+            {
+                free(src_path);
+                ft_putstr_fd("minishell: cd:", STDOUT_FILENO);
+                ft_putstr_fd(dest_path, STDOUT_FILENO);
+                ft_putstr_fd("No such file or directory", STDOUT_FILENO);//error No such file or directory + 
+                g_data.exit_value = 1;
+                return(1);
+            }
         }
      //   dest_path = getcwd(NULL, 0);
      //   printf("dest_path = %s\n", dest_path); // pour test

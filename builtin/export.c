@@ -18,7 +18,7 @@ ou changement de la VALUE si la variable existait deja
 n'affiche rien
 
 - si plusieurs arguments, traire successivemet chaque arguments selon les regles ci-dessus 
-en fonction de la presence de = ou pas
+en fonction de la presence de = ou pas ->OK
 
 -identifiant valide : lettres ou chifres ou _, pas autre chose 
 memes regles d'extension des $x que pour le parsing sauf qu'il ne doit pas rester de $ dans le nom
@@ -116,6 +116,22 @@ int	has_equal(char *str)
 	return (0);
 }
 
+int	has_plus_equal(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i] && str[i + 1])
+	{
+		if (str[i] == '+' && str[i + 1] == '=')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 void	add_env_value(char *newkey, char *newvalue)
 {
 	t_env	*last;
@@ -128,6 +144,7 @@ void	add_env_value(char *newkey, char *newvalue)
 	last = find_last_env();
 	last->next = new;
 }
+
 
 int	print_exp_list(void)
 {
@@ -150,7 +167,7 @@ int	print_exp_list(void)
 	}
 	return (0);
 }
-// trop grand : a couper + ajouter +=
+// trop grand : a couper 
 
 int ft_export(t_cmd cmd)
 {
@@ -168,7 +185,33 @@ int ft_export(t_cmd cmd)
     	i = 1;
 		while (cmd.av[i])
 		{
-			if (has_equal(cmd.av[i]))
+			if (has_plus_equal(cmd.av[i])) //gestion des +=
+			{
+				split_var=ft_split_env_plus(cmd.av[i]);
+				if (!already_in_env(split_var[0]))
+				{
+					if (format_key_ok(split_var[0]))// verification validite key
+						add_env_value(split_var[0], split_var[1]);// erooeur ou creation key +value
+					else
+					{
+						printf("export: « %s » : identifiant non valable\n", cmd.av[i]);
+						g_data.exit_value = 1;
+					}
+				}
+				else
+				{
+					tmp = g_data.env;
+					while (ft_strcmp(tmp->key, split_var[0]))
+						tmp = tmp->next;
+					free(tmp->value);
+					tmp->value = ft_strjoin(tmp->value, split_var[1]);
+					printf("%s %s\n",tmp->key, tmp->value);// test changement value
+				}
+			 	free(split_var[0]); //free tab2
+				free(split_var[1]);
+			
+			}
+			else if (has_equal(cmd.av[i]))
 			{
 				split_var=ft_split_env(cmd.av[i]);
 				if (!already_in_env(split_var[0]))
