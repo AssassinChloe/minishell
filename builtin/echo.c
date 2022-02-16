@@ -52,7 +52,7 @@ void	ft_putstr_fd(char *s, int fd)
 */
 int	is_flag_n(char *arg) // modifie pour integer les nnn possibles
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (ft_strlen(arg) < 2)
@@ -61,7 +61,7 @@ int	is_flag_n(char *arg) // modifie pour integer les nnn possibles
 		return (0);
 	else
 	{
-	 	i++;
+		i++;
 		while (arg[i])
 		{
 			if (arg[i] != 'n')
@@ -75,7 +75,7 @@ int	is_flag_n(char *arg) // modifie pour integer les nnn possibles
 int	ft_echo(char **args)
 {
 	int	flag_n;
-	int i;
+	int	i;
 
 	flag_n = 0;
 	i = 1; //le premier arg est echo, on ne veut pas l'imprimer

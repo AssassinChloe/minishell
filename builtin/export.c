@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmercier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/16 13:45:41 by vmercier          #+#    #+#             */
+/*   Updated: 2022/02/16 13:45:45 by vmercier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
@@ -61,7 +73,6 @@ t_env	*find_last_env(void)
 	t_env	*env;
 
 	env = g_data.env;
-
 	if (!env)
 		return (NULL);
 	while (env->next != NULL)
@@ -85,9 +96,9 @@ int	already_in_env(char *arg)
 
 int	format_key_ok(char *str)
 {
-	int i;
+	int	i;
 
-	i= 0;
+	i = 0;
 	if (!ft_isalpha(str[i]) && str[i] != '_')
 		return (0);
 	i++;
@@ -136,8 +147,8 @@ void	add_env_value(char *newkey, char *newvalue)
 {
 	t_env	*last;
 	t_env	*new;
-	
-	new = malloc(sizeof(char*) * 3);
+
+	new = malloc(sizeof(char *) * 3);
 	new->key = ft_strdup(newkey);
 	new->value = ft_strdup(newvalue);
 	new->next = NULL;
@@ -145,17 +156,15 @@ void	add_env_value(char *newkey, char *newvalue)
 	last->next = new;
 }
 
-
 int	print_exp_list(void)
 {
 	t_env	*var;
 
 	var = g_data.env;
-
 	while (var)
 	{
 		ft_putstr_fd("Export ", STDOUT_FILENO);
-    	ft_putstr_fd(var->key, STDOUT_FILENO);
+		ft_putstr_fd(var->key, STDOUT_FILENO);
 		if (var->value)
 		{
 			ft_putstr_fd("=\"", STDOUT_FILENO);
@@ -169,20 +178,19 @@ int	print_exp_list(void)
 }
 // trop grand : a couper 
 
-int ft_export(t_cmd cmd)
+int	ft_export(t_cmd cmd)
 {
 	t_env	*env;
 	t_env	*tmp;
+	int		i;
+	char	**split_var;
 
 	env = g_data.env;
-	int i;
-	char **split_var;
-
 	if (cmd.argc == 1)// changement value
 		return (print_exp_list());
-    if (cmd.argc > 1)
-    {
-    	i = 1;
+	if (cmd.argc > 1)
+	{
+		i = 1;
 		while (cmd.av[i])
 		{
 			if (has_plus_equal(cmd.av[i])) //gestion des +=
@@ -207,7 +215,7 @@ int ft_export(t_cmd cmd)
 					tmp->value = ft_strjoin(tmp->value, split_var[1]);
 					printf("%s %s\n",tmp->key, tmp->value);// test changement value
 				}
-			 	free(split_var[0]); //free tab2
+				free(split_var[0]); //free tab2
 				free(split_var[1]);
 			
 			}
@@ -247,6 +255,6 @@ int ft_export(t_cmd cmd)
 			i++;
 		}
 
-    }
-    return (0);
+	}
+	return (0);
 }

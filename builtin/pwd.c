@@ -25,7 +25,7 @@ void	ft_putstr_fd(char *s, int fd)
 	write(fd, s, i);
 }
 */
-int		ft_pwd(void)
+int	ft_pwd(void)
 {
 	char	*pwd;
 
