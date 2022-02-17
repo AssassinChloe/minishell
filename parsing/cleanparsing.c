@@ -21,7 +21,7 @@ void	ft_freeparsing(char **str, t_list **chain)
 
 int	is_forbidden_char(char c)
 {
-	if (c == ';' || c == 92 || c == '!' || c == ':')
+	if (c == ';' || c == 92 || c == '!' || c == ':' || c == '&')
 		return (1);
 	return (0);
 }

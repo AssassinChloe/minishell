@@ -56,7 +56,11 @@ void	ft_get_cmd_path(t_cmd *cmd)
 	char	**path_split;
 	int		i;
 	int		j;
+	// struct stat *isdir;
 
+	// stat(cmd->av[0], isdir);
+	// if (S_ISDIR(isdir->st_mode))
+	
 	if (access(cmd->av[0], F_OK | X_OK) != 0)
 	{
 		i = 0;
@@ -77,4 +81,6 @@ void	ft_get_cmd_path(t_cmd *cmd)
 		ft_free_tab(path_split);
 		ft_lauch_cmd(cmd, path);
 	}
+
+
 }

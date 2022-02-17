@@ -123,7 +123,7 @@ void	ft_parse(char *str)
 	i = 0;
 	tmp = NULL;
 	tokens = NULL;
-	multiple = 0;
+	multiple = 1;
 	while (str[i])
 	{
 		if (ft_parsetxt(str, &i, &tmp, &multiple) < 0)
