@@ -35,10 +35,11 @@ int	check_format_exit(char *str)
 	}
 	return (1);
 }
-
+/*
 void	free_env(void)
 {
 	t_env	*tmp;
+	t_env	*env
 
 	tmp = g_data.env;
 	while (tmp)
@@ -55,7 +56,7 @@ void	free_env(void)
 	free(g_data.env);
 	g_data.env = NULL;
 }
-
+*/
 int	ft_exit(t_cmd cmd)
 {
 	int	number;
