@@ -130,6 +130,7 @@ void	ft_child(int **pip, int i, t_list *cmdlist, t_cmd *cmd);
 void	ft_parent(int **pip, int i);
 void	ft_free_pipe(int **pip);
 void	ft_open_pipes(int **pip);
+char *ft_addquote(char *str);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);

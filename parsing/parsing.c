@@ -60,8 +60,37 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 	return (0);
 }
 
-int	ft_parsespecial(char *str, int *i, char	**tmp, t_list **tokens)
+char *ft_extract_limit(char *str, int *i, int *hasquote)
 {
+	char *tmp;
+	char *tmp2;
+
+	tmp = NULL;
+	tmp2= NULL;
+	while (str[*i] && ft_special(str[*i]) == 0)
+	{
+		if (ft_isquote(str[*i]) > 0)
+		{
+			*hasquote = 1;
+			tmp2 = ft_handle_quote(str, i, 0);
+			if (*i < 0)
+				return (NULL);
+			tmp = ft_strjoin(tmp, tmp2);
+		}
+		else
+		{
+			tmp = ft_strjoin_char(tmp, str[*i]);
+			*i = *i + 1;
+		}
+	}
+	return (tmp);
+}
+
+int	ft_parsespecial(char *str, int *i, char	**tmp, t_list **tokens, int *multiple)
+{
+	int hasquote;
+
+	hasquote = 0;
 	if (*tmp == NULL && *i < 0)
 		return (-1);
 	else if ((ft_strcmp(*tmp, "<<") == 0))
@@ -69,9 +98,13 @@ int	ft_parsespecial(char *str, int *i, char	**tmp, t_list **tokens)
 		ft_addone(tokens, tmp);
 		while (str[*i] && ft_isspace(str[*i]) == 1)
 			*i = *i + 1;
-		if (ft_isquote(str[*i]) > 0)
-			*tmp = ft_handle_quote(str, i, 1);
+		*tmp = ft_extract_limit(str, i, &hasquote);
+		if (*tmp == NULL && *i < 0)
+			return (-1);
+		if (hasquote == 1)
+			*tmp = ft_addquote(*tmp);
 		ft_addone(tokens, tmp);
+		*multiple = 0;
 	}
 	else
 		ft_addone(tokens, tmp);
@@ -97,10 +130,11 @@ void	ft_parse(char *str)
 		while (str[i] && ft_special(str[i]) == 1)
 		{
 			tmp = ft_handleis(str, &i, &multiple);
-			if (ft_parsespecial(str, &i, &tmp, &tokens) < 0)
+			if (ft_parsespecial(str, &i, &tmp, &tokens, &multiple) < 0)
 				return (ft_freeparsing(&tmp, &tokens));
 		}
 	}
+	// ft_printchain(tokens);
 	ft_lexing(&tokens);
 	ft_lstclear(&tokens);
 }

@@ -51,10 +51,14 @@ void	ft_divide_redirection(t_list *commandlist)
 		cmd->redir = malloc(sizeof(t_redir) * cmd->redir_nb);
 		while (i < cmd->argc)
 		{	
-			while ((cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER))
+			if (cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER)
 				i++;
-			ft_handleredir(j, cmd, &i);
-			j++;
+			if (j <= cmd->redir_nb && (cmd->type[i] >= T_LOWER
+			&& cmd->type[i] <= T_GGREATER))
+			{
+				ft_handleredir(j, cmd, &i);
+				j++;
+			}
 		}
 	}
 }
@@ -68,6 +72,7 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2)
 	j = 0;
 	tmp->argc = i;
 	tmp->argc_init = i;
+	tmp->redir_nb = 0;
 	tmp->av = malloc(sizeof(char *) * (i + 1));
 	tmp->type = malloc(sizeof(int) * i);
 	while (tmplist2 && i > j)

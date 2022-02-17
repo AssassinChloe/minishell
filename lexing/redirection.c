@@ -40,13 +40,15 @@ void	ft_llowerstart(t_cmd *cmd, int i, int j)
 {
 	char	*buffer;
 	char	*delimiter;
+	int 	start;
 
+	start = 0;
 	if (ft_isquote(cmd->av[i + 1][0]) > 0)
-		delimiter = ft_handle_quote(cmd->av[i + 1], &j, 0);
+		delimiter = ft_handle_quote(cmd->av[i + 1], &start, 0);
 	else
 		delimiter = ft_strdup(cmd->av[i + 1]);
 	buffer = readline("heredoc> ");
-	cmd->redir[j].fd = open(".heredoc", O_CREAT | O_RDWR | O_APPEND, 0650);
+	cmd->redir[j].fd = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC, 0650);
 	if (cmd->redir->fd == -1)
 	{
 		printf("error open\n");
