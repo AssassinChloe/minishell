@@ -148,7 +148,7 @@ int		ft_pwd(void);
 int		launch_builtin(t_cmd *cmd);
 t_env	*search_var(char *str);
 char	*get_env_value(char *str);
-int		ft_cd(t_cmd cmd);
+int	ft_cd(t_cmd cmd);
 int		ft_env(t_cmd cmd);
 int		ft_atoi_exit(const char *str);
 int		ft_exit(t_cmd cmd);
@@ -161,4 +161,5 @@ t_env	*find_last_env(void);
 void	add_env_value(char *newkey, char *newvalue);
 int	is_flag_n(char *arg);
 int	ft_unset(char **arg);
+void	free_env(void);
 #endif

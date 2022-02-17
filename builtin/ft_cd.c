@@ -49,7 +49,7 @@ int ft_cd(t_cmd cmd)
 {
     char *src_path;
     char *dest_path;
-    t_env   *tmp; //
+    t_env   *tmp; 
 
     if (cmd.argc > 2)
         {
@@ -74,7 +74,7 @@ int ft_cd(t_cmd cmd)
                 ft_putstr_fd(dest_path, STDOUT_FILENO);
                 ft_putstr_fd("No such file or directory", STDOUT_FILENO);//error No such file or directory + 
                 g_data.exit_value = 1;
-                return(1);
+                return(0); //
             }
         }
    //     dest_path = getcwd(NULL, 0);
@@ -95,12 +95,14 @@ int ft_cd(t_cmd cmd)
 		tmp->value = ft_strdup(src_path); //
 		printf("%s %s\n",tmp->key, tmp->value);// test changement value
         
-
-     //   search_var("OLDPWD")->value = ft_strdup(src_path);
-      //  search_var("PWD")->value = ft_strdup(dest_path);
+/*
+        search_var("OLDPWD")->value = ft_strdup(src_path);
+        search_var("PWD")->value = ft_strdup(dest_path); */
         free(src_path);
         free(dest_path);
     }
+  //  free_env(); //test
+   // print_exp_list(); //pour test
     return (0);
 }
 /*

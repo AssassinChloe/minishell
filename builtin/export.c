@@ -148,12 +148,15 @@ void	add_env_value(char *newkey, char *newvalue)
 	t_env	*last;
 	t_env	*new;
 
+	last = g_data.env;
 	new = malloc(sizeof(char *) * 3);
 	new->key = ft_strdup(newkey);
 	new->value = ft_strdup(newvalue);
 	new->next = NULL;
+	printf("New value : key = %s, value = %s\n", new->key, new->value); //
 	last = find_last_env();
 	last->next = new;
+	printf("Last value : key = %s, value = %s, next key = %s\n", last->key, last->value, last->next->key); //
 }
 
 int	print_exp_list(void)
@@ -186,16 +189,18 @@ int	ft_export(t_cmd cmd)
 	char	**split_var;
 
 	env = g_data.env;
+	i = 1;
 	if (cmd.argc == 1)// changement value
 		return (print_exp_list());
-	if (cmd.argc > 1)
+	else //if (cmd.argc > 1)
 	{
-		i = 1;
 		while (cmd.av[i])
 		{
+			printf("av[%d] : %s\n", i, cmd.av[i]); //test
 			if (has_plus_equal(cmd.av[i])) //gestion des +=
 			{
 				split_var=ft_split_env_plus(cmd.av[i]);
+				printf("splitvar de cmd.av[%d][0] : %s, splitvar de cmd.av[%d][1] : %s\n", i, split_var[0], i, split_var[1]); //test
 				if (!already_in_env(split_var[0]))
 				{
 					if (format_key_ok(split_var[0]))// verification validite key
@@ -222,10 +227,12 @@ int	ft_export(t_cmd cmd)
 			else if (has_equal(cmd.av[i]))
 			{
 				split_var=ft_split_env(cmd.av[i]);
+				printf("splitvar= de cmd.av[%d][0] : %s, splitvar de cmd.av[%d][1] : %s\n", i, split_var[0], i, split_var[1]); //test
+				printf("alreadyinenv ? :%d\n", already_in_env(split_var[0])); //test
 				if (!already_in_env(split_var[0]))
 				{
 					if (format_key_ok(split_var[0]))// verification validite key
-						add_env_value(split_var[0], split_var[1]);// erooeur ou creation key +value
+						add_env_value(split_var[0], split_var[1]);// creation key +value
 					else
 					{
 						printf("export: « %s » : identifiant non valable\n", cmd.av[i]);

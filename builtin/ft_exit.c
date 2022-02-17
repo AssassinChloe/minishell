@@ -36,6 +36,26 @@ int	check_format_exit(char *str)
 	return (1);
 }
 
+void	free_env(void)
+{
+	t_env	*tmp;
+
+	tmp = g_data.env;
+	while (tmp)
+	{
+		env = env->next;
+		if (tmp->key)
+			free(tmp->key);
+		if (tmp->value)
+			free(tmp->value);
+		free(tmp);
+		tmp = NULL;
+		tmp = env;
+	}
+	free(g_data.env);
+	g_data.env = NULL;
+}
+
 int	ft_exit(t_cmd cmd)
 {
 	int	number;
@@ -75,7 +95,8 @@ int	ft_exit(t_cmd cmd)
 		printf ("number = %d\n", number); //pour test
 		g_data.exit_value = number;
 		g_data.loop = 0;
-		// destroy_all(); fonction a faire
+		free_env();
+		print_exp_list(); //pour test
 		return (number);
 	}
 	return (0);
