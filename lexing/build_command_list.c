@@ -52,7 +52,7 @@ void	ft_divide_redirection(t_cmd *cmd)
 			if (cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER)
 				i++;
 			if (j <= cmd->redir_nb && (cmd->type[i] >= T_LOWER
-			&& cmd->type[i] <= T_GGREATER))
+					&& cmd->type[i] <= T_GGREATER))
 			{
 				ft_handleredir(j, cmd, &i);
 				j++;
@@ -77,8 +77,6 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2)
 	{
 		tmp->av[j] = ft_strdup((char *)tmplist2->content);
 		tmp->type[j] = get_token_type((char *)tmplist2->content, &multicmd);
-		if (j == 0 && (tmp->type[j] != T_CMD && tmp->type[j] != T_BUILTIN))
-			printf("%s : command not in THE LIST\n", tmp->av[j]);
 		if (j > 0 && (tmp->type[j - 1] >= T_LOWER
 				&& tmp->type[j - 1] <= T_GGREATER))
 			tmp->type[j] = T_FILENAME;

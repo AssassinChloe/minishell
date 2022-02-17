@@ -12,35 +12,6 @@
 
 #include "minishell.h"
 
-int	ft_is_command(char *str)
-{
-	int		fd;
-	char	*line;
-	int		ret;
-	int		isvalid;
-
-	line = NULL;
-	isvalid = 0;
-	fd = open("lexing/commandes.txt", O_RDONLY);
-	if (fd < 0)
-		printf("erreur open\n");
-	ret = get_next_line(fd, &line);
-	while (ret > 0)
-	{
-		if (ft_strcmp(str, line) == 0)
-			isvalid = 1;
-		free(line);
-		line = NULL;
-		ret = get_next_line(fd, &line);
-	}
-	if (ret < 0)
-		printf("erreur gnl \n");
-	free(line);
-	line = NULL;
-	close(fd);
-	return (isvalid);
-}
-
 int	ft_isbuiltin(char *str)
 {
 	if (ft_strcmp(str, "cd") == 0 || ft_strcmp(str, "pwd") == 0
@@ -70,7 +41,7 @@ int	get_token_type(char *str, int *multicmd)
 		*multicmd = 1;
 		return (T_BUILTIN);
 	}
-	else if (*multicmd == 0 && ft_is_command(str) == 1)
+	else if (*multicmd == 0)
 	{
 		*multicmd = 1;
 		return (T_CMD);

@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-char *ft_addquote(char *str)
+char	*ft_addquote(char *str)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = NULL;
 	tmp = ft_strjoin_char(tmp, '"');
