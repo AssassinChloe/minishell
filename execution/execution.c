@@ -32,21 +32,26 @@ void	execute_command(t_list *commandlist)
 		pip = malloc(sizeof(int) * g_data.nb_pipe * 2);
 		ft_open_pipes(pip);
 	}
-	pid = fork();
-	if (pid < 0)
-		printf("error fork\n");
-	while (pid != 0 && (i + 1) <= g_data.nb_pipe)
-	{
-		i++;
-		commandlist = commandlist->next;
-		command = (t_cmd *)commandlist->content;
-		pid = fork();
-	}
-	if (pid == 0)
-		ft_child(pip, i, commandlist, command);
+	if (g_data.nb_pipe == 0 && !ft_isbuiltin(command->av[0]))
+		launch_builtin(command);
 	else
-		ft_parent(pip, i);
-	if (g_data.nb_pipe != 0)
-		ft_free_pipe(pip);
+	{
+		pid = fork();
+		if (pid < 0)
+			printf("error fork\n");
+		while (pid != 0 && (i + 1) <= g_data.nb_pipe)
+		{
+			i++;
+			commandlist = commandlist->next;
+			command = (t_cmd *)commandlist->content;
+			pid = fork();
+		}
+		if (pid == 0)
+			ft_child(pip, i, commandlist, command);
+		else
+			ft_parent(pip, i);
+		if (g_data.nb_pipe != 0)
+			ft_free_pipe(pip);
+	}
 	return ;
 }
