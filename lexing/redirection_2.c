@@ -68,7 +68,7 @@ void	ft_write_heredoc(char **buffer, t_cmd *cmd, int j)
 	if (has_dollar(*buffer) > 0)
 		*buffer = ft_extract_var(*buffer);
 	write(cmd->redir[j].fd, *buffer, ft_strlen(*buffer));
-	write(cmd->redir[j].fd, "\n", 2);
+	write(cmd->redir[j].fd, "\n", 1);
 	free(*buffer);
 	*buffer = readline("heredoc>");
 }
