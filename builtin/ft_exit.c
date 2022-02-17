@@ -96,7 +96,7 @@ int	ft_exit(t_cmd cmd)
 		printf ("number = %d\n", number); //pour test
 		g_data.exit_value = number;
 		g_data.loop = 0;
-		free_env();
+//		free_env();
 		print_exp_list(); //pour test
 		return (number);
 	}
