@@ -36,7 +36,7 @@ void	ft_free_commandlist(t_list **commandlist)
 	ft_lstclear(commandlist);
 }
 
-void	ft_divide_redirection(t_list *commandlist)
+t_cmd	*ft_divide_redirection(t_list *commandlist)
 {
 	t_cmd	*cmd;
 	int		i;
@@ -45,7 +45,7 @@ void	ft_divide_redirection(t_list *commandlist)
 	i = 0;
 	j = 0;
 	cmd = (t_cmd *)commandlist->content;
-	cmd->redir_nb = ft_countredir(cmd);
+	ft_countredir(cmd);
 	if (cmd->redir_nb > 0)
 	{
 		cmd->redir = malloc(sizeof(t_redir) * cmd->redir_nb);
@@ -56,11 +56,13 @@ void	ft_divide_redirection(t_list *commandlist)
 			if (j <= cmd->redir_nb && (cmd->type[i] >= T_LOWER
 			&& cmd->type[i] <= T_GGREATER))
 			{
+				printf("plop\n");
 				ft_handleredir(j, cmd, &i);
 				j++;
 			}
 		}
 	}
+	return (cmd);
 }
 
 t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2)

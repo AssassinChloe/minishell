@@ -43,7 +43,7 @@ void	execute_command(t_list *commandlist)
 		pid = fork();
 	}
 	if (pid == 0)
-		ft_child(pip, i, commandlist, command);
+		ft_child(pip, i, commandlist);
 	else
 		ft_parent(pip, i);
 	if (g_data.nb_pipe != 0)

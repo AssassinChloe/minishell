@@ -12,11 +12,13 @@
 
 #include "minishell.h"
 
-void	ft_child(int **pip, int i, t_list *cmdlist, t_cmd *cmd)
+void	ft_child(int **pip, int i, t_list *cmdlist)
 {
+	t_cmd *cmd;
+
 	if (g_data.nb_pipe > 0)
 		ft_closepipe(pip, i);
-	ft_divide_redirection(cmdlist);
+	cmd = ft_divide_redirection(cmdlist);
 	if (g_data.nb_pipe > 0 && i < g_data.nb_pipe)
 		dup2(pip[i][1], STDOUT_FILENO);
 	if (g_data.nb_pipe > 0 && i > 0)

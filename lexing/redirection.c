@@ -48,7 +48,7 @@ void	ft_llowerstart(t_cmd *cmd, int i, int j)
 	else
 		delimiter = ft_strdup(cmd->av[i + 1]);
 	buffer = readline("heredoc> ");
-	cmd->redir[j].fd = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC, 0650);
+	cmd->redir[j].fd = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC, 0755);
 	if (cmd->redir->fd == -1)
 	{
 		printf("error open\n");
@@ -64,7 +64,7 @@ void	ft_llowerstart(t_cmd *cmd, int i, int j)
 
 void	ft_greaterstart(t_cmd *cmd, int i, int j)
 {
-	cmd->redir[j].fd = open(cmd->av[i + 1], O_RDWR | O_CREAT | O_TRUNC, 0650);
+	cmd->redir[j].fd = open(cmd->av[i + 1], O_RDWR | O_CREAT | O_TRUNC, 0655);
 	if (cmd->redir[j].fd == -1)
 	{
 		printf("error open\n");
@@ -76,7 +76,7 @@ void	ft_greaterstart(t_cmd *cmd, int i, int j)
 
 void	ft_ggreaterstart(t_cmd *cmd, int i, int j)
 {
-	cmd->redir[j].fd = open(cmd->av[i + 1], O_RDWR | O_CREAT | O_APPEND, 0650);
+	cmd->redir[j].fd = open(cmd->av[i + 1], O_RDWR | O_CREAT | O_APPEND, 0655);
 	if (cmd->redir[j].fd == -1)
 	{
 		printf("error open\n");

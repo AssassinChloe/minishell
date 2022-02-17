@@ -57,30 +57,24 @@ void	ft_get_cmd_path(t_cmd *cmd)
 	int		i;
 	int		j;
 
-	printf("builtin in get_path ? %d", ft_isbuiltin(cmd->av[0]));
-	if (!ft_isbuiltin(cmd->av[0]))
-		launch_builtin(cmd);
-	else
+	if (access(cmd->av[0], F_OK | X_OK) != 0)
 	{
-		if (access(cmd->av[0], F_OK | X_OK) != 0)
+		i = 0;
+		j = 0;
+		path = NULL;
+		path_split = ft_split(getenv("PATH"), ":");
+		while (path_split[i])
+			i++;
+		ft_concat_path(path_split[j], &path, cmd->av[0]);
+		while (j < i && access(path, F_OK | X_OK) != 0)
 		{
-			i = 0;
-			j = 0;
+			free(path);
 			path = NULL;
-			path_split = ft_split(getenv("PATH"), ":");
-			while (path_split[i])
-				i++;
-			ft_concat_path(path_split[j], &path, cmd->av[0]);
-			while (j < i && access(path, F_OK | X_OK) != 0)
-			{
-				free(path);
-				path = NULL;
-				j++;
-				if (j < i)
-					ft_concat_path(path_split[j], &path, cmd->av[0]);
-			}
-			ft_free_tab(path_split);
-			ft_lauch_cmd(cmd, path);
+			j++;
+			if (j < i)
+				ft_concat_path(path_split[j], &path, cmd->av[0]);
 		}
+		ft_free_tab(path_split);
+		ft_lauch_cmd(cmd, path);
 	}
 }

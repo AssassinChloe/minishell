@@ -12,26 +12,22 @@
 
 #include "minishell.h"
 
-int	ft_countredir(t_cmd *cmd)
+void	ft_countredir(t_cmd *cmd)
 {
 	int	i;
-	int	ret;
 
 	i = 0;
-	ret = 0;
 	while (i < cmd->argc)
 	{
 		if (cmd->type[i] >= T_LOWER && cmd->type[i] <= T_GGREATER)
-			ret++;
+			cmd->redir_nb++;
 		i++;
 	}
-	return (ret);
 }
 
 void	ft_handleredir(int j, t_cmd *cmd, int *i)
 {
 	cmd->redir[j].type = cmd->type[*i];
-	cmd->redir_nb++;
 	if (cmd->redir[j].type == T_GREATER)
 		ft_greaterstart(cmd, *i, j);
 	else if (cmd->redir[j].type == T_GGREATER)
@@ -59,8 +55,6 @@ void	ft_endredir(t_cmd *cmd)
 		{
 			if (dup2(cmd->redir[i].fdsave, STDIN_FILENO) == -1)
 				printf("error reestablish stdin\n");
-			if (cmd->redir[i].type == T_LLOWER)
-				unlink(".heredoc");
 		}
 		if (close(cmd->redir[i].fdsave) == -1 || close(cmd->redir[i].fd) == -1)
 			printf ("error close\n");
