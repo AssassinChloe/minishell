@@ -44,26 +44,26 @@ int	ft_unset(char **arg)
 {
 	t_env	*prev;
 	t_env	*tmp;
-	int i;
+	int		i;
 
 	i = 1;
-	while(arg[i])
+	while (arg[i])
 	{
 		tmp = NULL;
 		printf("already_in_env ? %d\n", already_in_env(arg[i]));
 		if (!already_in_env(arg[i]))
 			return (0);
 		prev = get_prev(arg[i]);
-		printf("prev : key = %s, value = %s, next = %s\n",prev->key, prev->value, prev->next->key);
+		printf("prev : key = %s, value = %s, next = %s\n", prev->key, prev->value, prev->next->key);
 		tmp = prev->next->next;
 		if (prev->next->value)
 			free(prev->next->value);
 		if (prev->next->key)
 			free(prev->next->key);
-		printf("prev apres : key = %s, value = %s, next = %s\n",prev->key, prev->value, prev->next->key);
+		printf("prev apres : key = %s, value = %s, next = %s\n", prev->key, prev->value, prev->next->key);
 		free(prev->next);
 		prev->next = tmp;
-		printf("prev final : key = %s, value = %s, next = %s\n",prev->key, prev->value, prev->next->key);
+		printf("prev final : key = %s, value = %s, next = %s\n", prev->key, prev->value, prev->next->key);
 		i++;
 	}
 	return (0);

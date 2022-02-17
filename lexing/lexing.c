@@ -108,6 +108,6 @@ int	ft_lexing(t_list **list)
 	commandlist = NULL;
 	ft_divide_pipe(*list, *list, &commandlist);
 	execute_command(commandlist);
-	ft_free_commandlist(&commandlist);
+//	ft_free_commandlist(&commandlist);
 	return (0);
 }

@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vmercier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/17 16:31:49 by vmercier          #+#    #+#             */
+/*   Updated: 2022/02/17 16:31:56 by vmercier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-t_data g_data;
-
+t_data	g_data;
 
 void	destroy_var(t_env *var)
 {
@@ -29,7 +40,6 @@ void	clear_list(t_env **list)
 	*list = NULL;
 }
 
-
 t_env	*record_var(char *key, char *value)
 {
 	t_env	*var;
@@ -52,7 +62,7 @@ t_env	*get_env(char **envp)
 {
 	t_env	*var_env;
 	t_env	*var;
-	char **tmp;
+	char	**tmp;
 	int		i;
 
 	i = 0;
@@ -76,7 +86,6 @@ t_env	*get_env(char **envp)
 	return (var_env);
 }
 
-
 void	init_data(char **envp)
 {
 	g_data.loop = 1;
@@ -89,9 +98,9 @@ void	init_data(char **envp)
 	g_data.execution = 0;
 }
 
-void    handle_sig(int sig)
+void	handle_sig(int sig)
 {
-    if (sig == SIGINT)
+	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
@@ -100,22 +109,21 @@ void    handle_sig(int sig)
 			rl_redisplay();
 		g_data.exit_value = 130;
 	}
-    if (sig == SIGQUIT && g_data.execution !=0)
-    {
+	if (sig == SIGQUIT && g_data.execution != 0)
+	{
 //	    write(1, "\b\b  \b\b", 6);
 		printf("Quit (core dumped)\n");
-	    g_data.exit_value = 131;
-    }
+		g_data.exit_value = 131;
+	}
 }
 
-void	init_signal()
+void	init_signal(void)
 {
 	signal(SIGINT, handle_sig);
 	signal(SIGQUIT, handle_sig);
-
 }
 
-int minishell()
+int	minishell(void)
 {
 	char	*buffer;
 
@@ -127,7 +135,7 @@ int minishell()
 			if (*buffer)
 			{
 				add_history(buffer);
- 				ft_parse(buffer);
+				ft_parse(buffer);
 				unlink(".heredoc");
 				g_data.nb_pipe = 0;
 			}
@@ -138,17 +146,16 @@ int minishell()
 		else
 		{
 			g_data.loop = -1;
-            rl_clear_history();
+			rl_clear_history();
 		}
 	}
 	printf("exit\n");
 	return (0);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	(void)argv;
-
 	if (argc != 1)
 		exit(EXIT_FAILURE);
 	init_data(envp);

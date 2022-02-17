@@ -190,7 +190,7 @@ int	ft_export(t_cmd cmd)
 
 	env = g_data.env;
 	i = 1;
-	if (cmd.argc == 1)// changement value
+	if (cmd.argc == 1) // changement value
 		return (print_exp_list());
 	else //if (cmd.argc > 1)
 	{
@@ -199,11 +199,11 @@ int	ft_export(t_cmd cmd)
 			printf("av[%d] : %s\n", i, cmd.av[i]); //test
 			if (has_plus_equal(cmd.av[i])) //gestion des +=
 			{
-				split_var=ft_split_env_plus(cmd.av[i]);
+				split_var = ft_split_env_plus(cmd.av[i]);
 				printf("splitvar de cmd.av[%d][0] : %s, splitvar de cmd.av[%d][1] : %s\n", i, split_var[0], i, split_var[1]); //test
 				if (!already_in_env(split_var[0]))
 				{
-					if (format_key_ok(split_var[0]))// verification validite key
+					if (format_key_ok(split_var[0])) // verification validite key
 						add_env_value(split_var[0], split_var[1]);// erooeur ou creation key +value
 					else
 					{
@@ -222,16 +222,15 @@ int	ft_export(t_cmd cmd)
 				}
 				free(split_var[0]); //free tab2
 				free(split_var[1]);
-			
 			}
 			else if (has_equal(cmd.av[i]))
 			{
-				split_var=ft_split_env(cmd.av[i]);
+				split_var = ft_split_env(cmd.av[i]);
 				printf("splitvar= de cmd.av[%d][0] : %s, splitvar de cmd.av[%d][1] : %s\n", i, split_var[0], i, split_var[1]); //test
 				printf("alreadyinenv ? :%d\n", already_in_env(split_var[0])); //test
 				if (!already_in_env(split_var[0]))
 				{
-					if (format_key_ok(split_var[0]))// verification validite key
+					if (format_key_ok(split_var[0])) // verification validite key
 						add_env_value(split_var[0], split_var[1]);// creation key +value
 					else
 					{
@@ -246,22 +245,23 @@ int	ft_export(t_cmd cmd)
 						tmp = tmp->next;
 					free(tmp->value);
 					tmp->value = ft_strdup(split_var[1]);
-					printf("%s %s\n",tmp->key, tmp->value);// test changement value
+					printf("%s %s\n", tmp->key, tmp->value);// test changement value
 				}
-			 	free(split_var[0]); //free tab2
+				free(split_var[0]); //free tab2
 				free(split_var[1]);
 			}
 			else
 			{
 				if (!already_in_env(cmd.av[i]))
-					if (format_key_ok(cmd.av[i]))// verification validite de key
+				{
+					if (format_key_ok(cmd.av[i])) // verification validite de key
 					{
-						add_env_value(cmd.av[i], NULL);// creer new env value avec NULL en value
+						add_env_value(cmd.av[i], NULL); // creer new env value avec NULL en value
 					}
+				}
 			}
 			i++;
 		}
-
 	}
 	return (0);
 }
