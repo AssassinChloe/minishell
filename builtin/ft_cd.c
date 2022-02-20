@@ -36,12 +36,12 @@ char    *get_env_value(char *str) // renvoi la str VALUE de la var STR (voir si 
 	t_env *tmp;
 
 	tmp = search_var(str);
-	printf("tmp dans get_env_value %s = key %s, value %s\n", str, tmp->key, tmp->value); // test
+//	printf("tmp dans get_env_value %s = key %s, value %s\n", str, tmp->key, tmp->value); // test
 	if (!tmp)
 		return (NULL);
-	env_value = tmp->value;
-	printf("value de %s : %s\n", str, env_value); // uniquement pour test
-	printf("tmp dans get_env_value %s = key %s, value %s\n", str, tmp->key, tmp->value);//tst
+	env_value = ft_strdup(tmp->value);
+//	printf("value de %s : %s\n", str, env_value); // uniquement pour test
+//	printf("tmp dans get_env_value %s = key %s, value %s\n", str, tmp->key, tmp->value);//tst
 
 	return (env_value);
 }
@@ -51,21 +51,22 @@ int ft_cd(t_cmd cmd)
 {
     char *src_path;
     char *dest_path;
-    //t_env   *tmp; 
 
     if (cmd.argc > 2)
         {
-        ft_putstr_fd("minishell: cd: too many arguments", STDOUT_FILENO);// reeor two many arguments
+        ft_putstr_fd("minishell: cd: too many arguments", STDOUT_FILENO);
         g_data.exit_value = 1;
         }
     else
     {
-        src_path = getcwd(NULL, 0);
-        if (cmd.argc == 1)
-            dest_path = get_env_value("HOME");
-        else
-            dest_path = cmd.av[1];
-        if (chdir(dest_path)) // si chemin non valide -> error faire chemin strjoin src_path + / av[1]
+		src_path = getcwd(NULL, 0);
+		if (cmd.argc == 1)
+			dest_path = get_env_value("HOME");
+		else if (!ft_strcmp(cmd.av[1], "-"))
+			dest_path = get_env_value("OLDPWD");
+		else
+			dest_path = cmd.av[1];
+		if (chdir(dest_path)) // si chemin non valide -> error faire chemin strjoin src_path + / av[1]
         {
  //           printf("chdir = %d\n", chdir(dest_path));
  //           dest_path = ft_strjoin(src_path, "/");
@@ -73,7 +74,7 @@ int ft_cd(t_cmd cmd)
  //           printf("dest_path apres 1 chdir : %s\n", dest_path);
   //          if (chdir(dest_path))
   //          {
-            printf("erreur chdir\n");
+   //         printf("erreur chdir\n");
    //             free(src_path);
    //         printf("a fait un 1er free\n");
             ft_putstr_fd("minishell: cd: ", STDOUT_FILENO);
