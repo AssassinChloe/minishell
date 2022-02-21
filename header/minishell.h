@@ -122,7 +122,7 @@ void	ft_redirstd(t_redir *redir, int std);
 char	*is_forbidden_redir(int *i, int *multiple);
 char	*ft_extract_pipe(char *str, int *i, int *multiple);
 char	*extract_redir(char *str, int *i, int *multiple);
-void	ft_get_cmd_path(t_cmd *cmd);
+int		ft_get_cmd_path(t_cmd *cmd);
 void	execute_command(t_list *commandlist);
 void	exec_cmd(char **cmd);
 int		ft_isbuiltin(char *str);

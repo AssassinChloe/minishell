@@ -72,12 +72,50 @@ void	ft_printtype(t_list *elem)
 	}
 }
 
+int	test_iscmd(t_list *cmdlist)
+{
+	struct stat	*test;
+	t_cmd	*cmd;
+	t_list	*command;
+	int i;
+
+	i = 0;
+	command = cmdlist;
+	cmd = NULL;
+	test = NULL;
+	while (command)
+	{
+		cmd = (t_cmd *)command->content;
+		test = malloc(sizeof(struct stat));
+		if (stat(cmd->av[0], test) >= 0 && S_ISDIR(test->st_mode) == 1)
+		{
+			printf("%s is a directory\n", cmd->av[0]);
+			free(test);
+			test = NULL;
+			return (126);
+		}
+		free(test);
+		test = NULL;
+		if (ft_get_cmd_path(cmd) > 0)
+				return (127);
+		command = command->next;
+		printf("%d\n", i++);
+	}
+	return (0);
+}
+
 int	ft_lexing(t_list **list)
 {
 	t_list	*commandlist;
 
 	commandlist = NULL;
 	ft_divide_pipe(*list, *list, &commandlist);
+	g_data.exit_value = test_iscmd(commandlist);
+	if (g_data.exit_value > 0)
+	{
+		ft_free_commandlist(&commandlist);
+		return (1);
+	}
 	execute_command(commandlist);
 	ft_free_commandlist(&commandlist);
 	return (0);

@@ -25,7 +25,7 @@ void	ft_child(int **pip, int i, t_cmd *cmd)
 	if (!ft_isbuiltin(cmd->av[0]))
 		launch_builtin(cmd);
 	else
-		ft_get_cmd_path(cmd);
+		exec_cmd(cmd->av);
 	if (cmd->redir_nb > 0)
 		ft_endredir(cmd);
 	if (g_data.nb_pipe > 0)
