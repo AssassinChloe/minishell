@@ -14,7 +14,7 @@
 
 void	ft_child(int **pip, int i, t_cmd *cmd)
 {
-	printf("passe par child\n");
+	//printf("passe par child\n");
 	if (g_data.nb_pipe > 0)
 		ft_closepipe(pip, i);
 	ft_divide_redirection(cmd);

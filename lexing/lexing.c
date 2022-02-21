@@ -96,10 +96,12 @@ int	test_iscmd(t_list *cmdlist)
 		}
 		free(test);
 		test = NULL;
-		if (ft_get_cmd_path(cmd) > 0)
-				return (127);
+		if (ft_strcmp(cmd->av[0], "") == 0 || (cmd->type[0] != T_BUILTIN && ft_get_cmd_path(cmd) > 0))
+		{
+			printf("command not found\n");
+			return (127);
+		}
 		command = command->next;
-		printf("%d\n", i++);
 	}
 	return (0);
 }

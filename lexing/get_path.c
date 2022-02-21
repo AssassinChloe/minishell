@@ -28,10 +28,7 @@ void	ft_free_tab(char **path_split)
 int	ft_lauch_cmd(t_cmd *cmd, char *path)
 {
 	if (path == NULL)
-	{
-			printf("command not found\n");
 		return (127);
-	}
 	else
 	{
 		free(cmd->av[0]);
