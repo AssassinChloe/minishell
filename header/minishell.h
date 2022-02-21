@@ -62,6 +62,7 @@ typedef struct s_env //ajout
 {
 	char			*key;
 	char			*value;
+	int				has_value;
 	struct s_env	*next;
 	struct s_env	*prev;
 }	t_env;
@@ -158,7 +159,7 @@ int		has_equal(char *str);
 int		print_exp_list(void);
 int		ft_export(t_cmd cmd);
 t_env	*find_last_env(void);
-void	add_env_value(char *newkey, char *newvalue);
+void	add_env_value(char *newkey, char *newvalue, int int_value);
 int	is_flag_n(char *arg);
 int	ft_unset(char **arg);
 void	free_env(void);

@@ -22,7 +22,7 @@ t_env	*search_var(char *str)// renvoi un pointeur sur la var de key STR (voir si
 	{
 		if (!ft_strcmp(var->key, str))
 		{
-			printf("search_var %s = key : %s, value : %s\n", str, var->key, var->value); // uniquement pour test
+	//		printf("search_var %s = key : %s, value : %s\n", str, var->key, var->value); // uniquement pour test
 			return (var);
 		}
 		var = var->next;

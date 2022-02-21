@@ -26,9 +26,12 @@ int	ft_env(t_cmd cmd)
 	var = g_data.env;
 	while (var)
 	{
-		ft_putstr_fd(var->key, STDOUT_FILENO);
-		ft_putchar_fd('=', STDOUT_FILENO);
-		ft_putendl_fd(var->value, STDOUT_FILENO);
+		if(var->has_value)
+		{
+			ft_putstr_fd(var->key, STDOUT_FILENO);
+			ft_putchar_fd('=', STDOUT_FILENO);
+			ft_putendl_fd(var->value, STDOUT_FILENO);
+		}
 		var = var->next;
 	}
 	return (0);

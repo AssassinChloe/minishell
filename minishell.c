@@ -49,6 +49,9 @@ t_env	*record_var(char *key, char *value)
 		return (NULL);
 	var->key = ft_strdup(key);
 	var->value = ft_strdup(value);
+	var->has_value = 1;
+	if (!value)
+		var->has_value = 0;
 	var->next = NULL;
 	if (!var->key || !var->value)
 	{
