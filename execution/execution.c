@@ -33,7 +33,12 @@ void	execute_command(t_list *commandlist)
 		ft_open_pipes(pip);
 	}
 	if (g_data.nb_pipe == 0 && !ft_isbuiltin(command->av[0]))
+	{
+		ft_divide_redirection(command);
 		launch_builtin(command);
+		if (command->redir_nb > 0)
+			ft_endredir(command);
+	}
 	else
 	{
 		pid = fork();
@@ -47,7 +52,7 @@ void	execute_command(t_list *commandlist)
 			pid = fork();
 		}
 		if (pid == 0)
-			ft_child(pip, i, commandlist);
+			ft_child(pip, i, command);
 		else
 			ft_parent(pip, i);
 		if (g_data.nb_pipe != 0)

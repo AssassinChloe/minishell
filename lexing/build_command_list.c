@@ -36,15 +36,13 @@ void	ft_free_commandlist(t_list **commandlist)
 	ft_lstclear(commandlist);
 }
 
-t_cmd	*ft_divide_redirection(t_list *commandlist)
+void	ft_divide_redirection(t_cmd *cmd)
 {
-	t_cmd	*cmd;
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	cmd = (t_cmd *)commandlist->content;
 	ft_countredir(cmd);
 	if (cmd->redir_nb > 0)
 	{
@@ -53,16 +51,14 @@ t_cmd	*ft_divide_redirection(t_list *commandlist)
 		{	
 			if (cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER)
 				i++;
-			if (j <= cmd->redir_nb && (cmd->type[i] >= T_LOWER
-			&& cmd->type[i] <= T_GGREATER))
+			if (j < cmd->redir_nb && (cmd->type[i] >= T_LOWER
+					&& cmd->type[i] <= T_GGREATER))
 			{
-				printf("plop\n");
 				ft_handleredir(j, cmd, &i);
 				j++;
 			}
 		}
 	}
-	return (cmd);
 }
 
 t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2)
@@ -81,8 +77,6 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2)
 	{
 		tmp->av[j] = ft_strdup((char *)tmplist2->content);
 		tmp->type[j] = get_token_type((char *)tmplist2->content, &multicmd);
-		if (j == 0 && (tmp->type[j] != T_CMD && tmp->type[j] != T_BUILTIN))
-			printf("%s : command not in THE LIST\n", tmp->av[j]);
 		if (j > 0 && (tmp->type[j - 1] >= T_LOWER
 				&& tmp->type[j - 1] <= T_GGREATER))
 			tmp->type[j] = T_FILENAME;

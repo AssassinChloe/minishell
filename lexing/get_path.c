@@ -25,20 +25,17 @@ void	ft_free_tab(char **path_split)
 	free(path_split);
 }
 
-void	ft_lauch_cmd(t_cmd *cmd, char *path)
+int	ft_lauch_cmd(t_cmd *cmd, char *path)
 {
 	if (path == NULL)
-	{
-		printf("command not found\n");
-		return ;
-	}
+		return (127);
 	else
 	{
 		free(cmd->av[0]);
 		cmd->av[0] = ft_strdup(path);
 		free(path);
+		return (0);
 	}
-	exec_cmd(cmd->av);
 }
 
 void	ft_concat_path(char *path_split, char **path, char *cmd)
@@ -50,7 +47,7 @@ void	ft_concat_path(char *path_split, char **path, char *cmd)
 		printf("error malloc\n");
 }
 
-void	ft_get_cmd_path(t_cmd *cmd)
+int	ft_get_cmd_path(t_cmd *cmd)
 {
 	char	*path;
 	char	**path_split;
@@ -75,6 +72,9 @@ void	ft_get_cmd_path(t_cmd *cmd)
 				ft_concat_path(path_split[j], &path, cmd->av[0]);
 		}
 		ft_free_tab(path_split);
-		ft_lauch_cmd(cmd, path);
+		i = ft_lauch_cmd(cmd, path);
+		if (i > 0)
+			return (i);
 	}
+	return(0);
 }

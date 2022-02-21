@@ -43,13 +43,19 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 		*multiple = 0;
 		while (str[*i] && ft_isquote(str[*i]) == 0 && ft_special(str[*i]) == 0)
 		{	
-			if (is_forbidden_char(str[*i]) == 1)
-				return (-1);
+			/*if (is_forbidden_char(str[*i]) == 1)
+				return (-1);*/
 			*tmp = ft_strjoin_char(*tmp, str[*i]);
 			*i = *i + 1;
 		}
+		printf("tmpparse : %s\n", *tmp);
 		if (has_dollar(*tmp) == 1)
 			*tmp = ft_extract_var(*tmp);
+		if (*tmp && strcmp(*tmp, "$") == 0 && (str[*i] && ft_isquote(str[*i]) > 0))
+		{
+			free (*tmp);
+			*tmp = NULL;
+		}
 		if (str[*i] && ft_isquote(str[*i]) > 0)
 		{
 			ft_concatquote(str, tmp, i);
@@ -60,13 +66,13 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 	return (0);
 }
 
-char *ft_extract_limit(char *str, int *i, int *hasquote)
+char	*ft_extract_limit(char *str, int *i, int *hasquote)
 {
-	char *tmp;
-	char *tmp2;
+	char	*tmp;
+	char	*tmp2;
 
 	tmp = NULL;
-	tmp2= NULL;
+	tmp2 = NULL; 
 	while (str[*i] && ft_special(str[*i]) == 0)
 	{
 		if (ft_isquote(str[*i]) > 0)
@@ -88,17 +94,19 @@ char *ft_extract_limit(char *str, int *i, int *hasquote)
 
 int	ft_parsespecial(char *str, int *i, char	**tmp, t_list **tokens, int *multiple)
 {
-	int hasquote;
+	int	hasquote;
 
 	hasquote = 0;
 	if (*tmp == NULL && *i < 0)
 		return (-1);
-	else if ((ft_strcmp(*tmp, "<<") == 0))
+	else if (*i >= 0 && (ft_strcmp(*tmp, "<<") == 0))
 	{
 		ft_addone(tokens, tmp);
 		while (str[*i] && ft_isspace(str[*i]) == 1)
 			*i = *i + 1;
 		*tmp = ft_extract_limit(str, i, &hasquote);
+		if (*tmp == NULL)
+			return (0);
 		if (*tmp == NULL && *i < 0)
 			return (-1);
 		if (hasquote == 1)
@@ -121,7 +129,7 @@ void	ft_parse(char *str)
 	i = 0;
 	tmp = NULL;
 	tokens = NULL;
-	multiple = 0;
+	multiple = 1;
 	while (str[i])
 	{
 		if (ft_parsetxt(str, &i, &tmp, &multiple) < 0)
@@ -134,7 +142,12 @@ void	ft_parse(char *str)
 				return (ft_freeparsing(&tmp, &tokens));
 		}
 	}
-	// ft_printchain(tokens);
+	if (multiple == 1)
+	{
+		is_forbidden_redir(&i, &multiple);
+		return (ft_freeparsing(&tmp, &tokens));
+	}
+	ft_printchain(tokens);
 	ft_lexing(&tokens);
 	ft_lstclear(&tokens);
 }

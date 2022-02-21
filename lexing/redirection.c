@@ -40,7 +40,7 @@ void	ft_llowerstart(t_cmd *cmd, int i, int j)
 {
 	char	*buffer;
 	char	*delimiter;
-	int 	start;
+	int		start;
 
 	start = 0;
 	if (ft_isquote(cmd->av[i + 1][0]) > 0)

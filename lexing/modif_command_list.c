@@ -75,6 +75,6 @@ void	modif_arg_heredoc(t_cmd **cmd, char *filename)
 	(*cmd)->type[i] = 0;
 	j = j + 2;
 	copy_and_free_end(cmd, j, i);
-		(*cmd)->argc = (*cmd)->argc - 1;
+	(*cmd)->argc = (*cmd)->argc - 1;
 	return ;
 }

@@ -23,11 +23,11 @@ PARSING	=	parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote
 
 PARSDIR	=	parsing/
 
-LEXING	=	lexing.c build_command_list.c redirection.c redirection_2.c modif_command_list.c
+LEXING	=	lexing.c build_command_list.c get_path.c redirection.c redirection_2.c modif_command_list.c
 
 LEXDIR	=	lexing/
 
-EXEC	=	execution.c pipe.c closing_pipe.c get_path.c
+EXEC	=	execution.c pipe.c closing_pipe.c 
 
 EXECDIR	=	execution/
 

@@ -12,14 +12,12 @@
 
 #include "minishell.h"
 
-void	ft_child(int **pip, int i, t_list *cmdlist)
+void	ft_child(int **pip, int i, t_cmd *cmd)
 {
-	t_cmd *cmd;
-
-	printf("passe par child\n");
+	//printf("passe par child\n");
 	if (g_data.nb_pipe > 0)
 		ft_closepipe(pip, i);
-	cmd = ft_divide_redirection(cmdlist);
+	ft_divide_redirection(cmd);
 	if (g_data.nb_pipe > 0 && i < g_data.nb_pipe)
 		dup2(pip[i][1], STDOUT_FILENO);
 	if (g_data.nb_pipe > 0 && i > 0)
@@ -27,7 +25,7 @@ void	ft_child(int **pip, int i, t_list *cmdlist)
 	if (!ft_isbuiltin(cmd->av[0]))
 		launch_builtin(cmd);
 	else
-		ft_get_cmd_path(cmd);
+		exec_cmd(cmd->av);
 	if (cmd->redir_nb > 0)
 		ft_endredir(cmd);
 	if (g_data.nb_pipe > 0)

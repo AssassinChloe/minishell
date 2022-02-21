@@ -78,7 +78,12 @@ char	*ft_extract_var(char *str)
 			if (str[i + 1] == '?')
 				ft_extract_exitval(&tmp, &i);
 			else if (ft_isvarphabet(str[i + 1]) == 0)
-				tmp = ft_strjoin_char(tmp, str[i++]);
+			{
+				printf("plop\n");
+				if (ft_isspace(str[i + 1]) == 1 || str[i + 1] == '\0')
+					tmp = ft_strjoin_char(tmp, str[i]);
+				i++;
+			}
 			else
 				ft_copyvarvalue(&tmp, str, &i);
 		}

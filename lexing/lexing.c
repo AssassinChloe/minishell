@@ -12,35 +12,6 @@
 
 #include "minishell.h"
 
-int	ft_is_command(char *str)
-{
-	int		fd;
-	char	*line;
-	int		ret;
-	int		isvalid;
-
-	line = NULL;
-	isvalid = 0;
-	fd = open("lexing/commandes.txt", O_RDONLY);
-	if (fd < 0)
-		printf("erreur open\n");
-	ret = get_next_line(fd, &line);
-	while (ret > 0)
-	{
-		if (ft_strcmp(str, line) == 0)
-			isvalid = 1;
-		free(line);
-		line = NULL;
-		ret = get_next_line(fd, &line);
-	}
-	if (ret < 0)
-		printf("erreur gnl \n");
-	free(line);
-	line = NULL;
-	close(fd);
-	return (isvalid);
-}
-
 int	ft_isbuiltin(char *str)
 {
 	if (ft_strcmp(str, "cd") == 0 || ft_strcmp(str, "pwd") == 0
@@ -70,7 +41,7 @@ int	get_token_type(char *str, int *multicmd)
 		*multicmd = 1;
 		return (T_BUILTIN);
 	}
-	else if (*multicmd == 0 && ft_is_command(str) == 1)
+	else if (*multicmd == 0)
 	{
 		*multicmd = 1;
 		return (T_CMD);
@@ -101,12 +72,52 @@ void	ft_printtype(t_list *elem)
 	}
 }
 
+int	test_iscmd(t_list *cmdlist)
+{
+	struct stat	*test;
+	t_cmd	*cmd;
+	t_list	*command;
+	int i;
+
+	i = 0;
+	command = cmdlist;
+	cmd = NULL;
+	test = NULL;
+	while (command)
+	{
+		cmd = (t_cmd *)command->content;
+		test = malloc(sizeof(struct stat));
+		if (stat(cmd->av[0], test) >= 0 && S_ISDIR(test->st_mode) == 1)
+		{
+			printf("%s is a directory\n", cmd->av[0]);
+			free(test);
+			test = NULL;
+			return (126);
+		}
+		free(test);
+		test = NULL;
+		if (ft_strcmp(cmd->av[0], "") == 0 || (cmd->type[0] != T_BUILTIN && ft_get_cmd_path(cmd) > 0))
+		{
+			printf("command not found\n");
+			return (127);
+		}
+		command = command->next;
+	}
+	return (0);
+}
+
 int	ft_lexing(t_list **list)
 {
 	t_list	*commandlist;
 
 	commandlist = NULL;
 	ft_divide_pipe(*list, *list, &commandlist);
+	g_data.exit_value = test_iscmd(commandlist);
+	if (g_data.exit_value > 0)
+	{
+		ft_free_commandlist(&commandlist);
+		return (1);
+	}
 	execute_command(commandlist);
 //	ft_free_commandlist(&commandlist);
 	return (0);

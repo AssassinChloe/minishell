@@ -19,17 +19,17 @@ void	ft_freeparsing(char **str, t_list **chain)
 	ft_lstclear(chain);
 }
 
-int	is_forbidden_char(char c)
+/*int	is_forbidden_char(char c)
 {
-	if (c == ';' || c == 92)
+	if (c == ';' || c == 92 || c == '!' || c == ':' || c == '&')
 		return (1);
 	return (0);
-}
+}*/
 
 char	*is_forbidden_redir(int *i, int *multiple)
 {
 	*i = -1;
-	printf("error multiple specific char without arg between\n");
+	printf("error specific char without arg between or after\n");
 	*multiple = 0;
 	return (NULL);
 }
