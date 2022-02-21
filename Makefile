@@ -43,7 +43,7 @@ INC		=	-I header/
 
 LIB		=	libft/libft.a
 
-# FLAG	=	-Wall -Wextra -Werror 
+FLAG	=	-Wall -Wextra -Werror 
 
 CC		=	clang
 

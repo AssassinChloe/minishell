@@ -51,7 +51,7 @@ void	ft_divide_redirection(t_cmd *cmd)
 		{	
 			if (cmd->type[i] < T_LOWER || cmd->type[i] > T_GGREATER)
 				i++;
-			if (j <= cmd->redir_nb && (cmd->type[i] >= T_LOWER
+			if (j < cmd->redir_nb && (cmd->type[i] >= T_LOWER
 					&& cmd->type[i] <= T_GGREATER))
 			{
 				ft_handleredir(j, cmd, &i);
