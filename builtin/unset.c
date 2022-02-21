@@ -56,6 +56,11 @@ int	ft_unset(char **arg)
 		prev = get_prev(arg[i]);
 		printf("prev : key = %s, value = %s, next = %s\n", prev->key, prev->value, prev->next->key);
 		tmp = prev->next->next;
+		if (!tmp)
+		{
+			prev->next = NULL;
+			return (0);
+		}
 		if (prev->next->value)
 			free(prev->next->value);
 		if (prev->next->key)
