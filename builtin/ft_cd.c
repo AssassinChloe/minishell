@@ -85,7 +85,7 @@ int ft_cd(t_cmd cmd)
                 return(0); //
      //       }
         }
-   //     dest_path = getcwd(NULL, 0);
+        dest_path = getcwd(NULL, 0);
    //     printf("dest_path = %s\n", dest_path); // pour test
     //    printf("src_path = %s\n", src_path); //opur test
     /*
