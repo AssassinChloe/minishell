@@ -35,28 +35,58 @@ int	check_format_exit(char *str)
 	}
 	return (1);
 }
-/*
+
 void	free_env(void)
 {
 	t_env	*tmp;
-	t_env	*env
+	t_env	*env;
 
-	tmp = g_data.env;
+	env = g_data.env;
+	tmp = env;
 	while (tmp)
 	{
+		printf("tmp a nettoyer : %s\n", tmp->key);
 		env = env->next;
+		printf("env value : %s\n", env->key);
 		if (tmp->key)
 			free(tmp->key);
 		if (tmp->value)
 			free(tmp->value);
 		free(tmp);
 		tmp = NULL;
-		tmp = env;
+		if (env->next)
+			tmp = env;
+		printf("tmp de fin de boucle : %s\n", tmp->key);
 	}
+	printf("boucle finie\n");
 	free(g_data.env);
 	g_data.env = NULL;
+	printf("env freed\n");
 }
+/*
+typedef struct s_data // globale ?
+{
+	char	*line;
+	t_cmd	*cmd_lst;
+	char	**splited_line;
+	char	**args;
+	t_env	*env;
+	int		exit_value;
+	int		nb_pipe;
+	int		execution; // pour dire si on est en cours d'execution ou non
+	int		loop; // variable pour maintien de la boucle while
+}		t_data;
 */
+
+void	free_g_data()
+{
+	printf("passe par free g_data\n");
+	if (g_data.env)
+		free_env();
+	if (g_data.line)
+		free(g_data.line);
+}
+
 int	ft_exit(t_cmd cmd)
 {
 	int	number;
@@ -66,7 +96,8 @@ int	ft_exit(t_cmd cmd)
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 		g_data.exit_value = 0;
-//      destroy_all(); // fonction a faire
+		free_g_data(); //destroy_all(); // fonction a faire
+		g_data.loop = -1;
 	}
 	if (cmd.argc > 2)
 	{
@@ -96,8 +127,9 @@ int	ft_exit(t_cmd cmd)
 		printf ("number = %d\n", number); //pour test
 		g_data.exit_value = number;
 		g_data.loop = 0;
-//		free_env();
+		free_g_data(); //
 		print_exp_list(); //pour test
+		g_data.loop = -1;
 		return (number);
 	}
 	return (0);

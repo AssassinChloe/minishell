@@ -12,6 +12,20 @@
 
 #include "minishell.h"
 
+void	modify_shlvl_value(void)
+{
+	char	*tmp;
+	int		num;
+
+	tmp = get_env_value("SHLVL");
+	num = ft_atoi(tmp);
+	num++;
+	tmp = ft_itoa(num);
+//	printf("SHLVL VALUE = %s\n", tmp);
+	search_var("SHLVL")->value = ft_strdup(tmp);
+	free(tmp);
+}
+
 int	ft_env(t_cmd cmd)
 {
 	t_env	*var;
@@ -26,7 +40,7 @@ int	ft_env(t_cmd cmd)
 	var = g_data.env;
 	while (var)
 	{
-		if(var->has_value)
+		if (var->has_value)
 		{
 			ft_putstr_fd(var->key, STDOUT_FILENO);
 			ft_putchar_fd('=', STDOUT_FILENO);

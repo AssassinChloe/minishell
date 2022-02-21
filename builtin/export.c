@@ -14,102 +14,39 @@
 
 /*
 - si pas d'argument (argc == 1)
-affichage des variables (voir diff avec env  : export au début de chaque ligne + 
-“” autour de la value + ordre alphabetique de key : voir avec strcmp pour ordre d'impression)
+affichage des variables (voir diff avec env  : 
+export au début de chaque ligne + “” autour de la value 
++ ordre alphabetique de key : voir avec strcmp pour ordre d'impression)
 
 - si 1 argument (ne contient pas de '=')
 export NOMVARIABLE → la variable sera exportee dans tous les childs process 
 (exemple : possibilite de faire echo $NOMVARIABLE apres 
 avoir lance export NOMVARIABLE puis bash)
 si elle n'existe pas il la cree sans valeur
-n'affiche rien
+n'affiche rien OK
 
 - si 1 argument (contient un egal) 
 creation d’une nouvelle variable (ex : export HOLA=bonjour) 
 ou changement de la VALUE si la variable existait deja
-n'affiche rien
+n'affiche rien OK
 
-- si plusieurs arguments, traire successivemet chaque arguments selon les regles ci-dessus 
-en fonction de la presence de = ou pas ->OK
+- si plusieurs arguments, traire successivemet chaque arguments selon 
+les regles ci-dessus en fonction de la presence de = ou pas ->OK
 
 -identifiant valide : lettres ou chifres ou _, pas autre chose 
-memes regles d'extension des $x que pour le parsing sauf qu'il ne doit pas rester de $ dans le nom
+memes regles d'extension des $x que pour le parsing sauf qu'il ne doit 
+pas rester de $ dans le nom
 (ex : $x entre ' ' -> nom invalide, $x entre "" -> OK)
 
 - memes regles d'extension des $ que pour le parsing, sauf ' + $ -> \$... 
 
-- doit-on gerer export truc+=chose ? 
-qui vient ajouter chose a la valeur deja d2finie avant
+- doit-on gerer export truc+=chose ? OK
+
+RESTE A FAIRE : 
+	couper fonction principale 
+	impression par ordre alpha
+
 */
-/*
-t_env   *search_var(char *str)// renvoi un pointeur sur la var de key STR (voir si env en paam)
-{
-    t_env   *var;
-
-    var = g_data.env;
-    while (var)
-	{
-        if (!ft_strcmp(var->key, str))
-		{
-			printf("key : %s, value : %s\n", var->key, var->value); // uniquement pour test
-			return (var);
-		}
-		var = var->next;
-	}
-
-    return (NULL);
-}
-*/
-/*
-t_env *modify_env_value(t_env *var, char *new_value)
-{
-	var->value = ft_strdup(new_value);
-	return(var);
-}
-*/
-
-t_env	*find_last_env(void)
-{
-	t_env	*env;
-
-	env = g_data.env;
-	if (!env)
-		return (NULL);
-	while (env->next != NULL)
-		env = env->next;
-	return (env);
-}
-
-int	already_in_env(char *arg)
-{
-	t_env	*tmp;
-
-	tmp = g_data.env;
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->key, arg))
-			return (1);
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
-int	format_key_ok(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!ft_isalpha(str[i]) && str[i] != '_')
-		return (0);
-	i++;
-	while (str[i])
-	{
-		if (!ft_isalpha(str[i]) && !ft_isdigit(str[i]) && !(str[i] == '_'))
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 int	has_equal(char *str)
 {
@@ -143,23 +80,6 @@ int	has_plus_equal(char *str)
 	return (0);
 }
 
-void	add_env_value(char *newkey, char *newvalue, int int_value)
-{
-	t_env	*last;
-	t_env	*new;
-
-	last = g_data.env;
-	new = malloc(sizeof(char *) * 3);
-	new->key = ft_strdup(newkey);
-	new->value = ft_strdup(newvalue);
-	new->has_value = int_value;
-	new->next = NULL;
-//	printf("New value : key = %s, value = %s, has_value = %d\n", new->key, new->value, new->has_value); //
-	last = find_last_env();
-	last->next = new;
-//	printf("Last value : key = %s, value = %s, next key = %s\n", last->key, last->value, last->next->key); //
-}
-
 int	print_exp_list(void)
 {
 	t_env	*var;
@@ -181,12 +101,10 @@ int	print_exp_list(void)
 	return (0);
 }
 
-
-
 int	ft_export(t_cmd cmd)
 {
 	int		i;
-	char **split_var;
+	char	**spvar;
 
 	if (cmd.argc == 1)
 	{
@@ -212,35 +130,27 @@ int	ft_export(t_cmd cmd)
 		else
 		{
 			if (has_plus_equal(cmd.av[i]))
-			{
-				split_var = ft_split_env_plus(cmd.av[i]);
-	//			printf("split_var_plus_equal = %s / %s\n", split_var[0], split_var[1]);
-			}
+				spvar = ft_split_env_plus(cmd.av[i]);
 			else if (has_equal(cmd.av[i]))
-			{
-				split_var = ft_split_env(cmd.av[i]);
-	//			printf("split_var_equal = %s / %s\n", split_var[0], split_var[1]);
-			}
-	//		printf("format key OK ? %d\n", format_key_ok(split_var[0]));
-			if (!format_key_ok(split_var[0]))
+				spvar = ft_split_env(cmd.av[i]);
+			if (!format_key_ok(spvar[0]))
 			{
 				ft_putstr_fd("export: `", 2);
-				ft_putstr_fd(split_var[0], 2);
+				ft_putstr_fd(spvar[0], 2);
 				ft_putstr_fd("': not a valid identifier\n", 2);
-				free_tab2(split_var);
+				free_tab2(spvar);
 				g_data.exit_value = 1;
 				return (1);
 			}
-		//	printf("already in env ? %d\n", already_in_env(split_var[0]));
-			if (!already_in_env(split_var[0]))
-				add_env_value(split_var[0], split_var[1], 1);// add new env avec splitvar 0 et 1
+			if (!already_in_env(spvar[0]))
+				add_env_value(spvar[0], spvar[1], 1);
 			else
 			{
 				if (has_plus_equal(cmd.av[i]))
-					split_var[1]=ft_strjoin(get_env_value(split_var[0]), split_var[1]);
-		//		change_env_value(split_var[0], split_var[1], 1);// add new env avec splitvar 0 et 1
-				search_var(split_var[0])->value = ft_strdup(split_var[1]);
+					spvar[1] = ft_strjoin(get_env_value(spvar[0]), spvar[1]);
+				search_var(spvar[0])->value = ft_strdup(spvar[1]);
 			}
+			free_tab2(spvar);
 		}
 	}
 	return (0);

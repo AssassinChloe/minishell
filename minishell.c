@@ -162,6 +162,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1)
 		exit(EXIT_FAILURE);
 	init_data(envp);
+	modify_shlvl_value();
 	init_signal();
 	minishell();
 //	destroy_all(); a faire 

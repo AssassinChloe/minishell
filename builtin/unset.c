@@ -16,7 +16,8 @@
 si arg = nom d'une variable -> suppression de cette variable
 g_data.exit_value = 0
 
-si arg = nom nom valide (ex : contient - ) : message error : not a valid identifier
+si arg = nom nom valide (ex : contient - ) : 
+message error : not a valid identifier
 g_data.exit_value = 1
 
 si pas d'arg -> ne fait rien
@@ -40,21 +41,32 @@ t_env	*get_prev(char *key)
 	return (NULL);
 }
 
+int	unset_invalid(char *str)
+{
+	ft_putstr_fd("unset: `", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+	g_data.exit_value = 1;
+	return (1);
+}
+
 int	ft_unset(char **arg)
 {
 	t_env	*prev;
 	t_env	*tmp;
 	int		i;
 
-	i = 1;
-	while (arg[i])
+	i = 0;
+	while (arg[++i])
 	{
+		if (!format_key_ok(arg[i]))
+			return (unset_invalid(arg[i]));
 		tmp = NULL;
-		printf("already_in_env ? %d\n", already_in_env(arg[i]));
 		if (!already_in_env(arg[i]))
 			return (0);
 		prev = get_prev(arg[i]);
-		printf("prev : key = %s, value = %s, next = %s\n", prev->key, prev->value, prev->next->key);
+//		printf("prev : key = %s, value = %s, next = %s\n",
+//			prev->key, prev->value, prev->next->key);
 		tmp = prev->next->next;
 		if (!tmp)
 		{
@@ -65,11 +77,9 @@ int	ft_unset(char **arg)
 			free(prev->next->value);
 		if (prev->next->key)
 			free(prev->next->key);
-		printf("prev apres : key = %s, value = %s, next = %s\n", prev->key, prev->value, prev->next->key);
 		free(prev->next);
 		prev->next = tmp;
-		printf("prev final : key = %s, value = %s, next = %s\n", prev->key, prev->value, prev->next->key);
-		i++;
+//		i++;
 	}
 	return (0);
 }

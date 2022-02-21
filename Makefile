@@ -31,7 +31,7 @@ EXEC	=	execution.c pipe.c closing_pipe.c get_path.c
 
 EXECDIR	=	execution/
 
-BUILTIN	=	echo.c pwd.c env.c launch_builtin.c export.c ft_cd.c ft_exit.c unset.c
+BUILTIN	=	echo.c pwd.c env.c launch_builtin.c export.c ft_cd.c ft_exit.c unset.c env_utils.c
 
 BUILDIR	=	builtin/
 
