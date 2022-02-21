@@ -29,8 +29,10 @@ void	ft_free_commandlist(t_list **commandlist)
 				free(type->av[i]);
 			i++;
 		}
-		free(type->av);
-		free(type->type);
+		if (type->av)
+			free(type->av);
+		if (type->type)
+			free(type->type);
 		tmp = tmp->next;
 	}
 	ft_lstclear(commandlist);

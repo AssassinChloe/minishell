@@ -119,6 +119,6 @@ int	ft_lexing(t_list **list)
 		return (1);
 	}
 	execute_command(commandlist);
-//	ft_free_commandlist(&commandlist);
+	ft_free_commandlist(&commandlist);
 	return (0);
 }
