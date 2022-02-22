@@ -22,11 +22,11 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 {
 	if (g_data.nb_pipe > 0)
 		ft_closepipe(pip, i);
-	ft_divide_redirection(cmd);
 	if (g_data.nb_pipe > 0 && i < g_data.nb_pipe)
 		dup2(pip[i][1], STDOUT_FILENO);
 	if (g_data.nb_pipe > 0 && i > 0)
 		dup2(pip[i - 1][0], STDIN_FILENO);
+	ft_divide_redirection(cmd);
 	if (!ft_isbuiltin(cmd->av[0]))
 		launch_builtin(cmd);
 	else
@@ -96,8 +96,8 @@ int	execute_command(t_list *commandlist)
 	{
 		ft_divide_redirection(command);
 		launch_builtin(command);
-		//if (command->redir_nb > 0)
-		//	ft_endredir(command);
+		if (command->redir_nb > 0)
+			ft_endredir(command);
 	}
 	else
 	{
