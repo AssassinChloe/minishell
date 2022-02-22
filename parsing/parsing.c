@@ -147,6 +147,8 @@ void	ft_parse(char *str)
 		return (ft_freeparsing(&tmp, &tokens));
 	}
 	//ft_printchain(tokens);
-	ft_lexing(&tokens);
+	i = ft_lexing(&tokens);
 	ft_lstclear(&tokens);
+	if (i == 0)
+		exit(EXIT_SUCCESS);
 }

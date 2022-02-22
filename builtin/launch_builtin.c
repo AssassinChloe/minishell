@@ -14,7 +14,7 @@
 
 int	launch_builtin(t_cmd *cmd)
 {
-	printf("passe par builtin\n");
+	printf("%s passe par builtin\n", cmd->av[0]);
 	if (ft_strcmp(cmd->av[0], "cd") == 0)
 		return (ft_cd(*cmd));
 	if (ft_strcmp(cmd->av[0], "echo") == 0)

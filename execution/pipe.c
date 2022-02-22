@@ -12,40 +12,6 @@
 
 #include "minishell.h"
 
-void	ft_child(int **pip, int i, t_cmd *cmd)
-{
-	//printf("passe par child\n");
-	if (g_data.nb_pipe > 0)
-		ft_closepipe(pip, i);
-	ft_divide_redirection(cmd);
-	if (g_data.nb_pipe > 0 && i < g_data.nb_pipe)
-		dup2(pip[i][1], STDOUT_FILENO);
-	if (g_data.nb_pipe > 0 && i > 0)
-		dup2(pip[i - 1][0], STDIN_FILENO);
-	if (!ft_isbuiltin(cmd->av[0]))
-		launch_builtin(cmd);
-	else
-		exec_cmd(cmd->av);
-	if (cmd->redir_nb > 0)
-		ft_endredir(cmd);
-	if (g_data.nb_pipe > 0)
-		ft_closepipe_end(pip, i);
-	exit(EXIT_SUCCESS);
-}
-
-void	ft_parent(int **pip, int i)
-{
-	if (g_data.nb_pipe > 0)
-		ft_closepipe(pip, (i + 1));
-	g_data.execution = 1;
-	while (g_data.execution == 1)
-	{
-		g_data.execution = 0;
-		while (wait(NULL) != -1 || errno != ECHILD)
-			g_data.execution = 1;
-	}
-}
-
 void	ft_free_pipe(int **pip)
 {
 	int	i;

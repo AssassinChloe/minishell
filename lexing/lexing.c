@@ -109,6 +109,7 @@ int	test_iscmd(t_list *cmdlist)
 int	ft_lexing(t_list **list)
 {
 	t_list	*commandlist;
+	int	pid;
 
 	commandlist = NULL;
 	ft_divide_pipe(*list, *list, &commandlist);
@@ -118,7 +119,7 @@ int	ft_lexing(t_list **list)
 		ft_free_commandlist(&commandlist);
 		return (1);
 	}
-	execute_command(commandlist);
+	pid = execute_command(commandlist);
 	ft_free_commandlist(&commandlist);
-	return (0);
+	return (pid);
 }

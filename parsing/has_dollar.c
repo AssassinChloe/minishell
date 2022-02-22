@@ -56,10 +56,12 @@ void	ft_copyvarvalue(char **tmp, char *str, int *i)
 		var = ft_strjoin_char(var, str[*i]);
 		*i = *i + 1;
 	}
-	conv = getenv(var);
+	conv = get_env_value(var);
 	free(var);
 	var = NULL;
 	*tmp = ft_strjoin(*tmp, ft_strdup(conv));
+	free(conv);
+	conv = NULL;
 }
 
 char	*ft_extract_var(char *str)
@@ -79,7 +81,6 @@ char	*ft_extract_var(char *str)
 				ft_extract_exitval(&tmp, &i);
 			else if (ft_isvarphabet(str[i + 1]) == 0)
 			{
-				printf("plop\n");
 				if (ft_isspace(str[i + 1]) == 1 || str[i + 1] == '\0')
 					tmp = ft_strjoin_char(tmp, str[i]);
 				i++;

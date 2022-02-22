@@ -47,34 +47,48 @@ void	ft_concat_path(char *path_split, char **path, char *cmd)
 		printf("error malloc\n");
 }
 
+void	ft_checkpath(char **path_split, char **path, char *cmd, int i)
+{
+	int	j;
+
+	j = 0;
+	while (j < i && access(*path, F_OK | X_OK) != 0)
+	{
+		free(*path);
+		*path = NULL;
+		j++;
+		if (j < i)
+			ft_concat_path(path_split[j], path, cmd);
+	}
+}
+
 int	ft_get_cmd_path(t_cmd *cmd)
 {
 	char	*path;
 	char	**path_split;
 	int		i;
 	int		j;
+	char	*tmp;
 
 	if (access(cmd->av[0], F_OK | X_OK) != 0)
 	{
 		i = 0;
 		j = 0;
 		path = NULL;
-		path_split = ft_split(getenv("PATH"), ":");
+		tmp = get_env_value("PATH");
+		if (tmp == NULL)
+			return (0);
+		path_split = ft_split(tmp, ":");
+		free(tmp);
+		tmp = NULL;
 		while (path_split[i])
 			i++;
 		ft_concat_path(path_split[j], &path, cmd->av[0]);
-		while (j < i && access(path, F_OK | X_OK) != 0)
-		{
-			free(path);
-			path = NULL;
-			j++;
-			if (j < i)
-				ft_concat_path(path_split[j], &path, cmd->av[0]);
-		}
+		ft_checkpath(path_split, &path, cmd->av[0], i);
 		ft_free_tab(path_split);
 		i = ft_lauch_cmd(cmd, path);
 		if (i > 0)
 			return (i);
 	}
-	return(0);
+	return (0);
 }
