@@ -74,8 +74,8 @@ int	ft_cd(t_cmd cmd)
 		ft_putstr_fd("minishell: cd: ", STDOUT_FILENO);
 		ft_putstr_fd(cmd.av[1], STDOUT_FILENO);
 		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
-        free(dest_path);
-		free(src_path);
+//        free(dest_path);
+//		free(src_path);
 		g_data.exit_value = 1;
 		return (1);
 	}

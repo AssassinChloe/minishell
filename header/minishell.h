@@ -164,4 +164,5 @@ int	is_flag_n(char *arg);
 int	ft_unset(char **arg);
 void	free_env(void);
 void	modify_shlvl_value(void);
+void	change_env_value(char *key, char *newvalue, int int_value);
 #endif
