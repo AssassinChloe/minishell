@@ -40,14 +40,16 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 
 void	ft_parent(int **pip, int i)
 {
-	if (g_data.nb_pipe > 0)
+if (g_data.nb_pipe > 0)
 		ft_closepipe(pip, (i + 1));
 	g_data.execution = -1;
 	while (g_data.execution == -1)
 	{
 		g_data.execution = 1;
 		while (wait(NULL) != -1 || errno != ECHILD)
+		{
 			g_data.execution = 0;
+		}
 	}
 }
 

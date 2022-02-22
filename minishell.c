@@ -44,7 +44,7 @@ t_env	*record_var(char *key, char *value)
 {
 	t_env	*var;
 
-	var = malloc(sizeof(t_env));
+	var = (void *)malloc(sizeof(t_env)); //
 	if (!var)
 		return (NULL);
 	var->key = ft_strdup(key);
@@ -112,11 +112,15 @@ void	handle_sig(int sig)
 			rl_redisplay();
 		g_data.exit_value = 130;
 	}
-	if (sig == SIGQUIT && g_data.execution != 0)
+	else if (sig == SIGQUIT && g_data.execution != 0)
 	{
-//	    write(1, "\b\b  \b\b", 6);
-		printf("Quit (core dumped)\n");
+	    write(1, "\b\b  \b\b", 6);
+		printf("^\\Quit (core dumped)\n");
 		g_data.exit_value = 131;
+	}
+	else
+	{
+		write(1, "\b\b  \b\b", 6);
 	}
 }
 
@@ -132,8 +136,9 @@ int	minishell(void)
 
 	while (g_data.loop > 0) // remplacement de x = 1
 	{
+//		printf("g_data.loop = %d, g_data.exit_value = %d\n", g_data.loop, g_data.exit_value);
 		buffer = readline("$> ");
-		if (buffer && ft_strcmp(buffer, "exit") != 0)
+		if (buffer) // && ft_strcmp(buffer, "exit") != 0)
 		{
 			if (*buffer)
 			{
@@ -144,7 +149,7 @@ int	minishell(void)
 			}
 			free(buffer);
 			buffer = NULL;
-			g_data.loop = 1;
+//			g_data.loop = 1;
 		}
 		else
 		{
@@ -168,36 +173,3 @@ int	main(int argc, char **argv, char **envp)
 //	destroy_all(); a faire 
 	return (0);
 }
-
-/*
-int main(int argc, char **argv, char **envp) //main de test
-{
-	(void)argv;
-
-//	t_env *last; //pour test
-	t_cmd cmd; //pour test
-//	char *str1 = "0val=boss"; //
-//	char *str2 = "Valerie"; 
-//	char *str3 = "USER+=_the_boss";//
-//	int ret; //
-	if (argc != 1)
-		exit(EXIT_FAILURE);
-	init_data(envp);
-//	add_env_value("key", "newvalue");// ajout pour test
-//	last = find_last_env(); //pour test
-//	printf("lastkey = "); // pour test
-	print_exp_list();// ajout pour test
-	cmd.argc=1; //pour test
-	ft_env(cmd); //pour test
-	cmd.argc=4; //
-//	cmd.av[1]=str1; //
-//	cmd.av[2]=str2; //
-//	cmd.av[3]=str3; //
-//	ret = ft_export(cmd); //
-	print_exp_list(); //
-	init_signal();
-	minishell();
-//	destroy_all(); a faire 
-	return (0);
-}
-*/
