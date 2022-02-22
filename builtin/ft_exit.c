@@ -10,12 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h" //a modifier opur test : ../header/minishell.h
-
-//t_data g_data; // pour test a supprimer
-
-// reste a faire : fonction destroy_all 
-//+ voir si on a besoin de renvoyer la meme valeur que g_data.exit_value
+#include "minishell.h" 
 
 int	check_format_exit(char *str)
 {
@@ -36,6 +31,15 @@ int	check_format_exit(char *str)
 	return (1);
 }
 
+void	destroy_var_env(t_env *var)
+{
+	if (var->key)
+		free(var->key);
+	if (var->value)
+		free(var->value);
+	free(var);
+}
+
 void	free_env(void)
 {
 	t_env	*tmp;
@@ -43,48 +47,32 @@ void	free_env(void)
 
 	env = g_data.env;
 	tmp = env;
-	while (tmp)
+	while (tmp && env->next)
 	{
-		printf("tmp a nettoyer : %s\n", tmp->key);
-		env = env->next;
-		printf("env value : %s\n", env->key);
+		if (env->next)
+			env = env->next;
 		if (tmp->key)
 			free(tmp->key);
 		if (tmp->value)
 			free(tmp->value);
-		free(tmp);
+		if (tmp)
+			free(tmp);
 		tmp = NULL;
-		if (env->next)
-			tmp = env;
-		printf("tmp de fin de boucle : %s\n", tmp->key);
+		tmp = env;
+//		printf("tmp de fin de boucle : %s\n", tmp->key);
 	}
-	printf("boucle finie\n");
-	free(g_data.env);
 	g_data.env = NULL;
-	printf("env freed\n");
+//	printf("env freed\n");
 }
-/*
-typedef struct s_data // globale ?
-{
-	char	*line;
-	t_cmd	*cmd_lst;
-	char	**splited_line;
-	char	**args;
-	t_env	*env;
-	int		exit_value;
-	int		nb_pipe;
-	int		execution; // pour dire si on est en cours d'execution ou non
-	int		loop; // variable pour maintien de la boucle while
-}		t_data;
-*/
 
 void	free_g_data()
 {
-	printf("passe par free g_data\n");
+//	printf("passe par free g_data\n");
 	if (g_data.env)
 		free_env();
 	if (g_data.line)
 		free(g_data.line);
+	printf("g_data_line freed\n");
 }
 
 int	ft_exit(t_cmd cmd)
@@ -94,9 +82,9 @@ int	ft_exit(t_cmd cmd)
 
 	if (cmd.argc == 1)
 	{
-		ft_putstr_fd("exit\n", STDERR_FILENO);
+//		ft_putstr_fd("exit\n", STDERR_FILENO);
 		g_data.exit_value = 0;
-		free_g_data(); //destroy_all(); // fonction a faire
+		free_g_data(); 
 		g_data.loop = -1;
 	}
 	if (cmd.argc > 2)
@@ -124,28 +112,12 @@ int	ft_exit(t_cmd cmd)
 		}
 		if (number > 255)
 			number = number % 256;
-		printf ("number = %d\n", number); //pour test
 		g_data.exit_value = number;
 		g_data.loop = 0;
-		free_g_data(); //
+		free_g_data();
 		print_exp_list(); //pour test
 		g_data.loop = -1;
 		return (number);
 	}
 	return (0);
 }
-/*
-#include <stdio.h>
-
-int main(int argc, char **argv)
-{
-    int exitvalue;
-    t_cmd cmd;
-    cmd.argc = argc;
-    cmd.av = argv;
-    exitvalue = ft_exit(cmd);
-    printf("exit_value = %d\n", exitvalue);
-
-    return (0);
-}
-*/

@@ -71,6 +71,7 @@ void	change_env_value(char *key, char *newvalue, int int_value)
 		tmp->has_value = 0;
 	to_free = tmp->value;
 	tmp->value = ft_strdup(newvalue);
+	free(newvalue);
 	tmp->has_value = int_value;
 	free (to_free);
 	if (!tmp->value)
