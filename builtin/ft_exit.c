@@ -38,6 +38,7 @@ void	destroy_var_env(t_env *var)
 	if (var->value)
 		free(var->value);
 	free(var);
+	var = NULL;
 }
 
 void	free_env(void)
@@ -47,17 +48,17 @@ void	free_env(void)
 
 	env = g_data.env;
 	tmp = env;
-	while (tmp && env->next)
+	while (tmp != NULL)
 	{
-		if (env->next)
-			env = env->next;
-		if (tmp->key)
-			free(tmp->key);
-		if (tmp->value)
-			free(tmp->value);
-		if (tmp)
-			free(tmp);
-		tmp = NULL;
+		env = env->next;
+		// if (tmp->key)
+		// 	free(tmp->key);
+		// if (tmp->value)
+		// 	free(tmp->value);
+		// if (tmp)
+		// 	free(tmp);
+		// tmp = NULL;
+		destroy_var_env(tmp);
 		tmp = env;
 //		printf("tmp de fin de boucle : %s\n", tmp->key);
 	}

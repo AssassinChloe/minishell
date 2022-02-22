@@ -44,7 +44,7 @@ t_env	*record_var(char *key, char *value)
 {
 	t_env	*var;
 
-	var = (void *)malloc(sizeof(t_env)); //
+	var = (void *)malloc(sizeof(t_env));
 	if (!var)
 		return (NULL);
 	var->key = ft_strdup(key);
@@ -78,6 +78,7 @@ t_env	*get_env(char **envp)
 		var = record_var(tmp[0], tmp[1]);
 		if (!var)
 		{
+			free_tab2(tmp);
 			clear_list(&var_env);
 			break ;
 		}

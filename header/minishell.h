@@ -53,9 +53,9 @@ typedef struct s_cmd
 	int				*type;
 	t_redir			*redir;
 	int				redir_nb;
-	int				order; // voir si besoin order ou si liste chainee
+//	int				order; // voir si besoin order ou si liste chainee
 	struct s_cmd	*next;
-	struct s_cmd	*prev;
+//	struct s_cmd	*prev;
 }					t_cmd;
 
 typedef struct s_env //ajout
