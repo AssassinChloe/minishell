@@ -85,7 +85,7 @@ int	ft_exit(t_cmd cmd)
 	{
 //		ft_putstr_fd("exit\n", STDERR_FILENO);
 		g_data.exit_value = 0;
-		free_g_data(); 
+		//free_g_data(); 
 		g_data.loop = -1;
 	}
 	if (cmd.argc > 2)
@@ -115,8 +115,8 @@ int	ft_exit(t_cmd cmd)
 			number = number % 256;
 		g_data.exit_value = number;
 		g_data.loop = 0;
-		free_g_data();
-		print_exp_list(); //pour test
+		//free_g_data();
+		//print_exp_list(); //pour test
 		g_data.loop = -1;
 		return (number);
 	}

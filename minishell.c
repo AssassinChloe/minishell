@@ -157,8 +157,8 @@ int	minishell(void)
 			g_data.loop = -1;
 			rl_clear_history();
 		}
-		free_g_data();
 	}
+	free_g_data();
 	printf("exit\n");
 	return (0);
 }
