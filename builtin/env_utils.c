@@ -54,14 +54,36 @@ int	format_key_ok(char *str)
 	}
 	return (1);
 }
+/*
+void	change_env_value(char *key, char *newvalue, int int_value)
+{
+	t_env	*tmp;
+	char	*to_free;
 
+	tmp = g_data.env;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, key))
+			break ;
+		tmp = tmp->next;
+	}
+	if (!tmp->value[0])
+		tmp->with_value = 0;
+	to_free = tmp->value;
+	tmp->value = ft_strdup(newvalue);
+	tmp->has_value = int_value;
+	free (to_free);
+	if (!tmp->value)
+		return ;
+}
+*/
 void	add_env_value(char *newkey, char *newvalue, int int_value)
 {
 	t_env	*last;
 	t_env	*new;
 
 	last = g_data.env;
-	new = malloc(sizeof(char *) * 3);
+	new = malloc(sizeof(char *) * 4);
 	new->key = ft_strdup(newkey);
 	new->value = ft_strdup(newvalue);
 	new->has_value = int_value;
