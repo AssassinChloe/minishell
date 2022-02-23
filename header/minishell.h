@@ -132,6 +132,7 @@ void	ft_parent(int **pip, int i);
 void	ft_free_pipe(int **pip);
 void	ft_open_pipes(int **pip);
 char	*ft_addquote(char *str);
+void 	if_redir(int **pip, t_cmd *cmd, int i);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);
