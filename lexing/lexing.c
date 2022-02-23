@@ -89,7 +89,7 @@ int	test_iscmd(t_list *cmdlist)
 		test = malloc(sizeof(struct stat));
 		if (stat(cmd->av[0], test) >= 0 && S_ISDIR(test->st_mode) == 1)
 		{
-			printf("%s is a directory\n", cmd->av[0]);
+			printf("minishell: %s: Is a directory\n", cmd->av[0]);
 			free(test);
 			test = NULL;
 			return (126);

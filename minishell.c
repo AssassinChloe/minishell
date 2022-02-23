@@ -74,7 +74,7 @@ t_env	*get_env(char **envp)
 	var_env = NULL;
 	while (i--)
 	{
-		tmp = ft_split_env(envp[i]); // 1 seul split au premier =
+		tmp = ft_split_env(envp[i]);
 		var = record_var(tmp[0], tmp[1]);
 		if (!var)
 		{
@@ -85,7 +85,6 @@ t_env	*get_env(char **envp)
 		var->next = var_env;
 		var_env = var;
 		free_tab2(tmp);
-//		printf(" var %d : %s = %s\n", i, var_env->key, var_env->value); //ligne pour verif si besoin
 	}
 	return (var_env);
 }
@@ -95,7 +94,6 @@ void	init_data(char **envp)
 	g_data.loop = 1;
 	g_data.line = NULL;
 	g_data.env = get_env(envp);
-//	g_data.export_env = NULL; //get_env(envp); pas utile a mon avis si on ne lance pas de shell
 	g_data.exit_value = 0;
 	g_data.cmd_lst = NULL;
 	g_data.nb_pipe = 0;
@@ -109,13 +107,13 @@ void	handle_sig(int sig)
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		if (g_data.execution == 0) // si execution en cours (genre cat, il faut == 1)
+		if (g_data.execution == 0)
 			rl_redisplay();
 		g_data.exit_value = 130;
 	}
 	else if (sig == SIGQUIT && g_data.execution != 0)
 	{
-	    write(1, "\b\b  \b\b", 6);
+		write(1, "\b\b  \b\b", 6);
 		printf("^\\Quit (core dumped)\n");
 		g_data.exit_value = 131;
 	}
@@ -135,11 +133,10 @@ int	minishell(void)
 {
 	char	*buffer;
 
-	while (g_data.loop > 0) // remplacement de x = 1
+	while (g_data.loop > 0)
 	{
-//		printf("g_data.loop = %d, g_data.exit_value = %d\n", g_data.loop, g_data.exit_value);
 		buffer = readline("$> ");
-		if (buffer) // && ft_strcmp(buffer, "exit") != 0)
+		if (buffer)
 		{
 			if (*buffer)
 			{
@@ -150,14 +147,11 @@ int	minishell(void)
 			}
 			free(buffer);
 			buffer = NULL;
-//			g_data.loop = 1;
 		}
 		else
-		{
 			g_data.loop = -1;
-			rl_clear_history();
-		}
 	}
+	rl_clear_history();
 	free_g_data();
 	printf("exit\n");
 	return (0);
@@ -172,6 +166,5 @@ int	main(int argc, char **argv, char **envp)
 	modify_shlvl_value();
 	init_signal();
 	minishell();
-//	destroy_all(); a faire 
 	return (0);
 }

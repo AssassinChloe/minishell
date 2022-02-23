@@ -101,6 +101,34 @@ int	print_exp_list(void)
 	return (0);
 }
 
+char	*ft_strjoin_dbl_free(char *s1, char *s2)
+{
+	unsigned int	i;
+	unsigned int	j;
+	char			*s3;
+
+	i = 0;
+	j = 0;
+	if (!(s1) && !(s2))
+		return (NULL);
+	else if (!s1)
+		return (s2);
+	else if (!s2)
+		return (s1);
+	s3 = (char *)malloc(sizeof(char) * (ft_strlen(s1) + (ft_strlen(s2)) + 1));
+	if (!(s3))
+		return (NULL);
+	while (s1[i])
+		s3[j++] = s1[i++];
+	i = 0;
+	free(s1);
+	while (s2[i])
+		s3[j++] = s2[i++];
+	s3[j] = '\0';
+	free(s2);
+	return (s3);
+}
+
 int	ft_export(t_cmd cmd)
 {
 	int		i;
@@ -116,9 +144,9 @@ int	ft_export(t_cmd cmd)
 	{
 		if (!has_equal(cmd.av[i]))
 		{
-			if (format_key_ok(cmd.av[i]))
+			if (format_key_ok(cmd.av[i]) && !already_in_env(cmd.av[i]))
 				add_env_value(cmd.av[i], NULL, 0);
-			else
+			else if (!format_key_ok(cmd.av[i]))
 			{
 				ft_putstr_fd("export: `", 2);
 				ft_putstr_fd(cmd.av[i], 2);
@@ -147,8 +175,10 @@ int	ft_export(t_cmd cmd)
 			else
 			{
 				if (has_plus_equal(cmd.av[i]))
-					spvar[1] = ft_strjoin(get_env_value(spvar[0]), spvar[1]);
+					spvar[1] = ft_strjoin_dbl_free(get_env_value(spvar[0]), spvar[1]);
+				free(search_var(spvar[0])->value); 
 				search_var(spvar[0])->value = ft_strdup(spvar[1]);
+				search_var(spvar[0])->has_value = 1;
 			}
 			free_tab2(spvar);
 		}

@@ -150,5 +150,8 @@ void	ft_parse(char *str)
 	i = ft_lexing(&tokens);
 	ft_lstclear(&tokens);
 	if (i == 0)
+	{
+		free_g_data();
 		exit(EXIT_SUCCESS);
+	}
 }
