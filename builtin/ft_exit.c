@@ -66,7 +66,7 @@ void	free_env(void)
 //	printf("env freed\n");
 }
 
-void	free_g_data()
+void	free_g_data(void)
 {
 //	printf("passe par free g_data\n");
 	if (g_data.env)
@@ -105,11 +105,11 @@ int	ft_exit(t_cmd cmd)
 			g_data.exit_value = 2;
 			return (2);
 		}
-		number = ft_atoi(cmd.av[1]); 
-		if (number  < 0)
+		number = ft_atoi(cmd.av[1]);
+		if (number < 0)
 		{
 			while (number >= 0 && number <= 255)
-			number = number + 256;
+				number = number + 256;
 		}
 		if (number > 255)
 			number = number % 256;
