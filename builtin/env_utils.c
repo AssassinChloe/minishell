@@ -54,7 +54,7 @@ int	format_key_ok(char *str)
 	}
 	return (1);
 }
-// fonction ajoutee pour shlvl
+
 void	change_env_value(char *key, char *newvalue, int int_value)
 {
 	t_env	*tmp;
@@ -89,10 +89,6 @@ void	add_env_value(char *newkey, char *newvalue, int int_value)
 	new->value = ft_strdup(newvalue);
 	new->has_value = int_value;
 	new->next = NULL;
-//	printf("New value : key = %s, value = %s, has_value = %d\n", 
-//		new->key, new->value, new->has_value); //
 	last = find_last_env();
 	last->next = new;
-//	printf("Last value : key = %s, value = %s, next key = %s\n", 
-//		last->key, last->value, last->next->key); //
 }

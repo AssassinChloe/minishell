@@ -23,9 +23,7 @@ void	modify_shlvl_value(void)
 	free(tmp);
 	tmp = NULL;
 	tmp = ft_itoa(num);
-//	printf("SHLVL VALUE = %s\n", tmp);
 	change_env_value("SHLVL", ft_strdup(tmp), 1);
-//	search_var("SHLVL")->value = ft_strdup(tmp);
 	free(tmp);
 }
 

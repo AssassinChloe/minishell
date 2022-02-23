@@ -12,7 +12,7 @@
 
 NAME	=	minishell
 
-SRCS	=	minishell.c split_env.c\
+SRCS	=	minishell.c\
 			$(addprefix $(PARSDIR), $(PARSING))\
 			$(addprefix $(LEXDIR), $(LEXING))\
 			$(addprefix $(BUILDIR), $(BUILTIN))\
@@ -31,7 +31,7 @@ EXEC	=	execution.c pipe.c closing_pipe.c
 
 EXECDIR	=	execution/
 
-BUILTIN	=	echo.c pwd.c env.c launch_builtin.c export.c ft_cd.c ft_exit.c unset.c env_utils.c
+BUILTIN	=	echo.c pwd.c env.c launch_builtin.c export.c ft_cd.c ft_exit.c unset.c env_utils.c env_init.c split_env.c			
 
 BUILDIR	=	builtin/
 

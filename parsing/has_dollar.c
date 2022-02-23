@@ -41,6 +41,7 @@ void	ft_extract_exitval(char **tmp, int *i)
 
 	conv = ft_itoa(g_data.exit_value);
 	*tmp = ft_strjoin(*tmp, ft_strdup(conv));
+	free(conv);
 	*i = *i + 2;
 }
 
@@ -81,7 +82,8 @@ char	*ft_extract_var(char *str)
 				ft_extract_exitval(&tmp, &i);
 			else if (ft_isvarphabet(str[i + 1]) == 0)
 			{
-				if (ft_isspace(str[i + 1]) == 1 || str[i + 1] == '\0')
+				if (ft_isspace(str[i + 1]) == 1 || str[i + 1] == '\0'
+				|| str[i + 1] == ':' || str[i + 1] == '=')
 					tmp = ft_strjoin_char(tmp, str[i]);
 				i++;
 			}

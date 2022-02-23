@@ -14,7 +14,6 @@
 
 int	launch_builtin(t_cmd *cmd)
 {
-	//printf("%s passe par builtin\n", cmd->av[0]);
 	if (ft_strcmp(cmd->av[0], "cd") == 0)
 		return (ft_cd(*cmd));
 	if (ft_strcmp(cmd->av[0], "echo") == 0)
@@ -22,7 +21,7 @@ int	launch_builtin(t_cmd *cmd)
 	if (ft_strcmp(cmd->av[0], "env") == 0)
 		return (ft_env(*cmd));
 	if (ft_strcmp(cmd->av[0], "exit") == 0)
-		return (ft_exit(*cmd));
+		g_data.exit_value = ft_exit(*cmd);
 	if (ft_strcmp(cmd->av[0], "export") == 0)
 		return (ft_export(*cmd));
 	if (ft_strcmp(cmd->av[0], "pwd") == 0)

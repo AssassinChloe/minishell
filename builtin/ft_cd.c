@@ -40,9 +40,44 @@ char	*get_env_value(char *str)
 
 int	cd_too_many(void)
 {
-	ft_putstr_fd("minishell: cd: too many arguments", STDOUT_FILENO);
+	ft_putstr_fd("minishell: cd: too many arguments\n", STDOUT_FILENO);
 	g_data.exit_value = 1;
 	return (1);
+}
+
+int	err_cd_home_unset(char *srcpath, char *destpath)
+{
+	ft_putstr_fd("cd: HOME not set\n", STDOUT_FILENO);
+	free(destpath);
+	free(srcpath);
+	g_data.exit_value = 1;
+	return (1);
+}
+
+int	err_cd_wrong_path(char *str, char *srcpath, char *destpath)
+{
+	ft_putstr_fd("minishell: cd: ", STDOUT_FILENO);
+	ft_putstr_fd(str, STDOUT_FILENO);
+	ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
+	free(destpath);
+	free(srcpath);
+	g_data.exit_value = 1;
+	return (1);
+}
+
+void	ft_cd_end(char *src_path, char *dest_path)
+{
+	free(dest_path);
+	dest_path = NULL;
+	dest_path = getcwd(NULL, 0);
+	free(search_var("OLDPWD")->value);
+	search_var("OLDPWD")->value = ft_strdup(src_path);
+	free(search_var("PWD")->value);
+	search_var("PWD")->value = ft_strdup(dest_path);
+	free(src_path);
+	src_path = NULL;
+	free(dest_path);
+	dest_path = NULL;
 }
 
 int	ft_cd(t_cmd cmd)
@@ -57,13 +92,7 @@ int	ft_cd(t_cmd cmd)
 	{
 		dest_path = get_env_value("HOME");
 		if (!dest_path)
-		{
-			ft_putstr_fd("cd: HOME not set\n", STDOUT_FILENO);
-			free(dest_path);
-			free(src_path);
-			g_data.exit_value = 1;
-			return (1);
-		}
+			return (err_cd_home_unset(src_path, dest_path));
 	}
 	else if (!ft_strcmp(cmd.av[1], "-"))
 	{
@@ -73,25 +102,7 @@ int	ft_cd(t_cmd cmd)
 	else
 		dest_path = ft_strdup(cmd.av[1]);
 	if (chdir(dest_path))
-	{
-		ft_putstr_fd("minishell: cd: ", STDOUT_FILENO);
-		ft_putstr_fd(cmd.av[1], STDOUT_FILENO);
-		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
-//        free(dest_path);
-//		free(src_path);
-		g_data.exit_value = 1;
-		return (1);
-	}
-	free(dest_path);
-	dest_path = NULL;
-	dest_path = getcwd(NULL, 0);
-	free(search_var("OLDPWD")->value);
-	search_var("OLDPWD")->value = ft_strdup(src_path);
-	free(search_var("PWD")->value);
-	search_var("PWD")->value = ft_strdup(dest_path);
-	free(src_path);
-	src_path = NULL;
-	free(dest_path);
-	dest_path = NULL;
+		return (err_cd_wrong_path(cmd.av[1], src_path, dest_path));
+	ft_cd_end(src_path, dest_path);
 	return (0);
 }

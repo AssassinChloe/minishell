@@ -51,60 +51,44 @@ void	free_env(void)
 	while (tmp != NULL)
 	{
 		env = env->next;
-		// if (tmp->key)
-		// 	free(tmp->key);
-		// if (tmp->value)
-		// 	free(tmp->value);
-		// if (tmp)
-		// 	free(tmp);
-		// tmp = NULL;
 		destroy_var_env(tmp);
 		tmp = env;
-//		printf("tmp de fin de boucle : %s\n", tmp->key);
 	}
 	g_data.env = NULL;
-//	printf("env freed\n");
 }
 
 void	free_g_data(void)
 {
-//	printf("passe par free g_data\n");
 	if (g_data.env)
 		free_env();
 	if (g_data.line)
 		free(g_data.line);
-	printf("g_data_line freed\n");
+}
+
+int	err_format_exit(char *str)
+{
+	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+	ft_putstr_fd(str, STDERR_FILENO);
+	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+	g_data.exit_value = 2;
+	return (2);
 }
 
 int	ft_exit(t_cmd cmd)
 {
 	int	number;
-	int	valid;
 
 	if (cmd.argc == 1)
-	{
-//		ft_putstr_fd("exit\n", STDERR_FILENO);
-		g_data.exit_value = 0;
-		//free_g_data(); 
 		g_data.loop = -1;
-	}
 	if (cmd.argc > 2)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
-		g_data.exit_value = 1;
 		return (1);
 	}
 	if (cmd.argc == 2)
 	{
-		valid = check_format_exit(cmd.av[1]);
-		if (!valid)
-		{
-			ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-			ft_putstr_fd(cmd.av[1], STDERR_FILENO);
-			ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-			g_data.exit_value = 2;
-			return (2);
-		}
+		if (!check_format_exit(cmd.av[1]))
+			return (err_format_exit(cmd.av[1]));
 		number = ft_atoi(cmd.av[1]);
 		if (number < 0)
 		{
@@ -113,10 +97,6 @@ int	ft_exit(t_cmd cmd)
 		}
 		if (number > 255)
 			number = number % 256;
-		g_data.exit_value = number;
-		g_data.loop = 0;
-		//free_g_data();
-		//print_exp_list(); //pour test
 		g_data.loop = -1;
 		return (number);
 	}

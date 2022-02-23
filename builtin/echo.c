@@ -20,37 +20,7 @@ voir pour les protections
 voir pour mise a jour de g_data.exit_value
 */
 
-/*
-size_t	ft_strlen(const char *str)
-{
-	size_t	n;
-
-	n = 0;
-	while (str[n] != '\0')
-		n++;
-	return (n);
-}
-
-void	ft_putchar_fd(char c, int fd)
-{
-	if (fd < 0)
-		return ;
-	write(fd, &c, 1);
-}
-
-void	ft_putstr_fd(char *s, int fd)
-{
-	size_t		i;
-
-	i = 0;
-	if (!s || fd < 0)
-		return ;
-	while (s[i])
-		i++;
-	write(fd, s, i);
-}
-*/
-int	is_flag_n(char *arg) // modifie pour integer les nnn possibles
+int	is_flag_n(char *arg)
 {
 	int	i;
 
@@ -78,8 +48,8 @@ int	ft_echo(char **args)
 	int	i;
 
 	flag_n = 0;
-	i = 1; //le premier arg est echo, on ne veut pas l'imprimer
-	while (is_flag_n(args[i])) // le -n ne peut etre qu'au debut, sur n args
+	i = 1;
+	while (is_flag_n(args[i]))
 	{
 		flag_n = 1;
 		i++;
@@ -94,12 +64,3 @@ int	ft_echo(char **args)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	return (0);
 }
-/*
-int	main(int argc, char **argv)
-{
-	printf("flag -n ? %d\n", is_flag_n(argv[1]));
-	ft_echo(argv);
-
-	return (0);
-}
-*/

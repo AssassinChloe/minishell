@@ -101,7 +101,7 @@ int	print_exp_list(void)
 	return (0);
 }
 
-char	*ft_strjoin_dbl_free(char *s1, char *s2)
+char	*ft_strjoin_d(char *s1, char *s2)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -129,6 +129,70 @@ char	*ft_strjoin_dbl_free(char *s1, char *s2)
 	return (s3);
 }
 
+int	err_format_id_export(char *str)
+{
+	ft_putstr_fd("export: `", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+	g_data.exit_value = 1;
+	return (1);
+}
+
+int	ft_export_with_equal(char *str)
+{
+	char	**spvar;
+
+	if (has_plus_equal(str))
+		spvar = ft_split_env_plus(str);
+	else
+		spvar = ft_split_env(str);
+	if (!format_key_ok(spvar[0]))
+	{
+		err_format_id_export(spvar[0]);
+		free_tab2(spvar);
+		return (1);
+	}
+	if (!already_in_env(spvar[0]))
+		add_env_value(spvar[0], spvar[1], 1);
+	else
+	{
+		if (has_plus_equal(str))
+			spvar[1] = ft_strjoin_d(get_env_value(spvar[0]), spvar[1]);
+		free(search_var(spvar[0])->value);
+		search_var(spvar[0])->value = ft_strdup(spvar[1]);
+		search_var(spvar[0])->has_value = 1;
+	}
+	free_tab2(spvar);
+	return (0);
+}
+
+int	ft_export(t_cmd cmd)
+{
+	int		i;
+
+	if (cmd.argc == 1)
+	{
+		print_exp_list();
+		return (0);
+	}
+	i = 0;
+	while (cmd.av[++i])
+	{
+		if (!has_equal(cmd.av[i]))
+		{
+			if (format_key_ok(cmd.av[i]) && !already_in_env(cmd.av[i]))
+				add_env_value(cmd.av[i], NULL, 0);
+			else if (!format_key_ok(cmd.av[i]))
+				return (err_format_id_export(cmd.av[i]));
+		}
+		else
+		{
+			return (ft_export_with_equal(cmd.av[i]));
+		}
+	}
+	return (0);
+}
+/*
 int	ft_export(t_cmd cmd)
 {
 	int		i;
@@ -147,13 +211,7 @@ int	ft_export(t_cmd cmd)
 			if (format_key_ok(cmd.av[i]) && !already_in_env(cmd.av[i]))
 				add_env_value(cmd.av[i], NULL, 0);
 			else if (!format_key_ok(cmd.av[i]))
-			{
-				ft_putstr_fd("export: `", 2);
-				ft_putstr_fd(cmd.av[i], 2);
-				ft_putstr_fd("': not a valid identifier\n", 2);
-				g_data.exit_value = 1;
-				return (1);
-			}
+				return (err_format_id_export(cmd.av[i]));
 		}
 		else
 		{
@@ -163,11 +221,8 @@ int	ft_export(t_cmd cmd)
 				spvar = ft_split_env(cmd.av[i]);
 			if (!format_key_ok(spvar[0]))
 			{
-				ft_putstr_fd("export: `", 2);
-				ft_putstr_fd(spvar[0], 2);
-				ft_putstr_fd("': not a valid identifier\n", 2);
+				err_format_id_export(spvar[0]);
 				free_tab2(spvar);
-				g_data.exit_value = 1;
 				return (1);
 			}
 			if (!already_in_env(spvar[0]))
@@ -175,8 +230,8 @@ int	ft_export(t_cmd cmd)
 			else
 			{
 				if (has_plus_equal(cmd.av[i]))
-					spvar[1] = ft_strjoin_dbl_free(get_env_value(spvar[0]), spvar[1]);
-				free(search_var(spvar[0])->value); 
+					spvar[1] = ft_strjoin_d(get_env_value(spvar[0]), spvar[1]);
+				free(search_var(spvar[0])->value);
 				search_var(spvar[0])->value = ft_strdup(spvar[1]);
 				search_var(spvar[0])->has_value = 1;
 			}
@@ -185,3 +240,4 @@ int	ft_export(t_cmd cmd)
 	}
 	return (0);
 }
+*/
