@@ -73,8 +73,18 @@ void if_redir(int **pip, t_cmd *cmd, int i)
 		if (i > 0)
 			close(pip[i - 1][0]);
 	}
-	if (i < g_data.nb_pipe && tab_type[2] == 0 && tab_type[0] == 0)
-		dup2(pip[i][1], STDOUT_FILENO);
-	if (i > 0 && tab_type[1] == 0 && tab_type[3 == 0])
-		dup2(pip[i - 1][0], STDIN_FILENO);
+	if (cmd->redir_nb > 0)
+	{
+		if (i < g_data.nb_pipe && tab_type[2] == 0 && tab_type[0] == 0)
+			dup2(pip[i][1], STDOUT_FILENO);
+		if (i > 0 && tab_type[1] == 0 && tab_type[3] == 0)
+			dup2(pip[i - 1][0], STDIN_FILENO);
+	}
+	else
+	{
+		if (i < g_data.nb_pipe)
+			dup2(pip[i][1], STDOUT_FILENO);
+		if (i > 0)
+			dup2(pip[i - 1][0], STDIN_FILENO);
+	}
 }

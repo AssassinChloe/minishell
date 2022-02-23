@@ -26,6 +26,8 @@
 # include <signal.h>
 # include "../libft/libft.h"
 
+#include <sys/ioctl.h>
+
 # define T_ERR 1
 # define T_PIPE 2
 # define T_CMD 3
@@ -76,6 +78,7 @@ typedef struct s_data // globale ?
 	t_env	*env;
 	int		exit_value;
 	int		nb_pipe;
+	int		test;
 	int		execution; // pour dire si on est en cours d'execution ou non
 	int		loop; // variable pour maintien de la boucle while
 }		t_data;
@@ -128,7 +131,7 @@ int		execute_command(t_list *commandlist);
 void	exec_cmd(char **cmd);
 int		ft_isbuiltin(char *str);
 int		ft_child(int **pip, int i, t_cmd *cmd);
-void	ft_parent(int **pip, int i);
+void	ft_parent(int **pip, int i, int *pid_tab);
 void	ft_free_pipe(int **pip);
 void	ft_open_pipes(int **pip);
 char	*ft_addquote(char *str);

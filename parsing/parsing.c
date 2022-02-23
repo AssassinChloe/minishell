@@ -152,6 +152,9 @@ void	ft_parse(char *str)
 	if (i == 0)
 	{
 		free_g_data();
+		close(STDOUT_FILENO);
+		close(STDIN_FILENO);
+		close(STDERR_FILENO);
 		exit(EXIT_SUCCESS);
 	}
 }

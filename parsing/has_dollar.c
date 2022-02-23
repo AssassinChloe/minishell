@@ -41,6 +41,7 @@ void	ft_extract_exitval(char **tmp, int *i)
 
 	conv = ft_itoa(g_data.exit_value);
 	*tmp = ft_strjoin(*tmp, ft_strdup(conv));
+	free(conv);
 	*i = *i + 2;
 }
 

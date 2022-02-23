@@ -142,6 +142,7 @@ int	minishell(void)
 			{
 				add_history(buffer);
 				ft_parse(buffer);
+				printf("plop\n");
 				unlink(".heredoc");
 				g_data.nb_pipe = 0;
 			}
@@ -166,5 +167,8 @@ int	main(int argc, char **argv, char **envp)
 	modify_shlvl_value();
 	init_signal();
 	minishell();
+	close(STDOUT_FILENO);
+	close(STDIN_FILENO);
+	close(STDERR_FILENO);
 	return (0);
 }

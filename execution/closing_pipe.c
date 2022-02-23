@@ -111,5 +111,6 @@ void	ft_closepipe(int **pip, int i)
 				printf("error close\n");
 			j++;
 		}
+		printf("all closed \n");
 	}
 }
