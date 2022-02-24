@@ -48,12 +48,13 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 			*tmp = ft_strjoin_char(*tmp, str[*i]);
 			*i = *i + 1;
 		}
+		printf("%s\n", *tmp);
 		if (has_dollar(*tmp) == 1)
 			*tmp = ft_extract_var(*tmp);
 		if (*tmp && strcmp(*tmp, "$") == 0 && (str[*i] && ft_isquote(str[*i]) > 0))
 		{
-			if (!((*i - 3) > 0 && (ft_isquote(str[*i - 3]) > 0
-				&& ft_isquote(str[*i - 3]) == ft_isquote(str[*i - 1]))))
+			if (!((*i - 3) > 0 && ft_isquote(str[*i - 3]) > 0
+				&& ft_isquote(str[*i - 3]) == ft_isquote(str[*i - 1])))
 			{
 				free (*tmp);
 				*tmp = NULL;
@@ -150,7 +151,9 @@ void	ft_parse(char *str)
 		is_forbidden_redir(&i, &multiple);
 		return (ft_freeparsing(&tmp, &tokens));
 	}
-	//ft_printchain(tokens);
+	if (tokens == NULL)
+		return ;
+	ft_printchain(tokens);
 	i = ft_lexing(&tokens);
 	ft_lstclear(&tokens);
 	if (i == 0)
