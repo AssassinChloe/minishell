@@ -26,8 +26,6 @@ void	sigusr_handler(int sig)
 
 int	ft_child(int **pip, int i, t_cmd *cmd)
 {
-	printf("child %d\n", i);
-	
 	ft_divide_redirection(cmd);
 	if (g_data.nb_pipe > 0)
 	{
@@ -59,21 +57,12 @@ void	ft_parent(int **pip, int i, int *pid_tab)
 		ft_closepipe(pip, (i + 1));
 	while (j < g_data.nb_pipe + 1)
 	{
-		printf("%d\n", pid_tab[j]);
+		g_data.execution = 1;
 		kill(pid_tab[j], SIGUSR1);
 		waitpid(pid_tab[j], &status, 0);
 		j++;
 	}
-	// g_data.execution = -1;
-	// // while (g_data.execution == -1)
-	// // {
-	// // 	g_data.execution = 1;
-	// // 	while (wait(NULL) != -1 || errno != ECHILD)
-	// // 	{
-	// // 		g_data.execution = 0;
-	// // 	}
-	// // }
-	printf("quit parent \n");
+	g_data.execution = 0;
 }
 
 int	ft_exec(t_list *commandlist, int **pip)
