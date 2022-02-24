@@ -52,8 +52,12 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 			*tmp = ft_extract_var(*tmp);
 		if (*tmp && strcmp(*tmp, "$") == 0 && (str[*i] && ft_isquote(str[*i]) > 0))
 		{
-			free (*tmp);
-			*tmp = NULL;
+			if (!((*i - 3) > 0 && (ft_isquote(str[*i - 3]) > 0
+				&& ft_isquote(str[*i - 3]) == ft_isquote(str[*i - 1]))))
+			{
+				free (*tmp);
+				*tmp = NULL;
+			}
 		}
 		if (str[*i] && ft_isquote(str[*i]) > 0)
 		{
