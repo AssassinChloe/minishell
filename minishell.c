@@ -92,5 +92,8 @@ int	main(int argc, char **argv, char **envp)
 	modify_shlvl_value();
 	init_signal();
 	minishell();
+	close(STDOUT_FILENO);
+	close(STDIN_FILENO);
+	close(STDERR_FILENO);
 	return (g_data.exit_value);
 }

@@ -18,50 +18,70 @@ void	exec_cmd(char **cmd)
 		perror("minishell ");
 }
 
+void	sigusr_handler(int sig)
+{
+	if (sig == SIGUSR1)
+		g_data.test = 0;	
+}
+
 int	ft_child(int **pip, int i, t_cmd *cmd)
 {
-	if (g_data.nb_pipe > 0)
-		ft_closepipe(pip, i);
-	if (g_data.nb_pipe > 0 && i < g_data.nb_pipe)
-		dup2(pip[i][1], STDOUT_FILENO);
-	if (g_data.nb_pipe > 0 && i > 0)
-		dup2(pip[i - 1][0], STDIN_FILENO);
 	ft_divide_redirection(cmd);
+	if (g_data.nb_pipe > 0)
+	{
+		ft_closepipe(pip, i);
+		if (i < g_data.nb_pipe)
+			dup2(pip[i][1], STDOUT_FILENO);
+		if (i > 0)
+			dup2(pip[i - 1][0], STDIN_FILENO);
+		if_redir(pip, cmd, i);
+	}
 	if (!ft_isbuiltin(cmd->av[0]))
 		launch_builtin(cmd);
 	else
 		exec_cmd(cmd->av);
-	if (cmd->redir_nb > 0)
-		ft_endredir(cmd);
 	if (g_data.nb_pipe > 0)
 		ft_closepipe_end(pip, i);
+	if (cmd->redir_nb > 0)
+		ft_endredir(cmd);
 	return (0);
 }
 
-void	ft_parent(int **pip, int i)
+void	ft_parent(int **pip, int i, int *pid_tab)
 {
-if (g_data.nb_pipe > 0)
+	int	j;
+	int status;
+
+	j = 0;
+	if (g_data.nb_pipe > 0)
 		ft_closepipe(pip, (i + 1));
-	g_data.execution = -1;
-	while (g_data.execution == -1)
+	while (j < g_data.nb_pipe + 1)
 	{
 		g_data.execution = 1;
-		while (wait(NULL) != -1 || errno != ECHILD)
-		{
-			g_data.execution = 0;
-		}
+		kill(pid_tab[j], SIGUSR1);
+		waitpid(pid_tab[j], &status, 0);
+		j++;
 	}
+	g_data.execution = 0;
 }
 
 int	ft_exec(t_list *commandlist, int **pip)
 {
 	int		pid;
+	int		*pid_tab;
 	t_cmd	*command;
 	int		i;
-	
+	struct sigaction sig;
+
+	g_data.test = 1;
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = 0;
+	sig.sa_handler = sigusr_handler;
 	i = 0;
+	pid_tab = malloc(sizeof(int) * (g_data.nb_pipe + 1));
 	command = (t_cmd *)commandlist->content;
 	pid = fork();
+	pid_tab[i] = pid;
 	if (pid < 0)
 		printf("error fork\n");
 	while (pid != 0 && (i + 1) <= g_data.nb_pipe)
@@ -70,11 +90,17 @@ int	ft_exec(t_list *commandlist, int **pip)
 		commandlist = commandlist->next;
 		command = (t_cmd *)commandlist->content;
 		pid = fork();
+		pid_tab[i] = pid;
 	}
 	if (pid == 0)
+	{
+		while (g_data.test == 1) 
+			sigaction(SIGUSR1, &sig, NULL);
 		ft_child(pip, i, command);
+	}
 	else
-		ft_parent(pip, i);
+		ft_parent(pip, i, pid_tab);
+	free(pid_tab);
 	return (pid);
 }
 
