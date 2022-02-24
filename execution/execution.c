@@ -18,12 +18,6 @@ void	exec_cmd(char **cmd)
 		perror("minishell ");
 }
 
-void	sigusr_handler(int sig)
-{
-	if (sig == SIGUSR1)
-		g_data.test = 0;	
-}
-
 int	ft_child(int **pip, int i, t_cmd *cmd)
 {
 	ft_divide_redirection(cmd);
@@ -47,41 +41,25 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 	return (0);
 }
 
-void	ft_parent(int **pip, int i, int *pid_tab)
+void	ft_parent(int **pip, int i)
 {
 	int	j;
-	int status;
 
 	j = 0;
 	if (g_data.nb_pipe > 0)
 		ft_closepipe(pip, (i + 1));
-	while (j < g_data.nb_pipe + 1)
-	{
-		g_data.execution = 1;
-		kill(pid_tab[j], SIGUSR1);
-		waitpid(pid_tab[j], &status, 0);
-		j++;
-	}
-	g_data.execution = 0;
+	while (wait(NULL) != -1 || errno!= ECHILD);
 }
 
 int	ft_exec(t_list *commandlist, int **pip)
 {
 	int		pid;
-	int		*pid_tab;
 	t_cmd	*command;
 	int		i;
-	struct sigaction sig;
 
-	g_data.test = 1;
-	sigemptyset(&sig.sa_mask);
-	sig.sa_flags = 0;
-	sig.sa_handler = sigusr_handler;
 	i = 0;
-	pid_tab = malloc(sizeof(int) * (g_data.nb_pipe + 1));
 	command = (t_cmd *)commandlist->content;
 	pid = fork();
-	pid_tab[i] = pid;
 	if (pid < 0)
 		printf("error fork\n");
 	while (pid != 0 && (i + 1) <= g_data.nb_pipe)
@@ -90,17 +68,11 @@ int	ft_exec(t_list *commandlist, int **pip)
 		commandlist = commandlist->next;
 		command = (t_cmd *)commandlist->content;
 		pid = fork();
-		pid_tab[i] = pid;
 	}
 	if (pid == 0)
-	{
-		while (g_data.test == 1) 
-			sigaction(SIGUSR1, &sig, NULL);
 		ft_child(pip, i, command);
-	}
 	else
-		ft_parent(pip, i, pid_tab);
-	free(pid_tab);
+		ft_parent(pip, i);
 	return (pid);
 }
 

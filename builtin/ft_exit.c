@@ -73,7 +73,7 @@ void	free_g_data(void)
 		free_env();
 	if (g_data.line)
 		free(g_data.line);
-	printf("g_data_line freed\n");
+	//printf("g_data_line freed\n");
 }
 
 int	ft_exit(t_cmd cmd)
