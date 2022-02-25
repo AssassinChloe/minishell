@@ -23,19 +23,16 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 	ft_divide_redirection(cmd);
 	if (g_data.nb_pipe > 0)
 	{
-		ft_closepipe(pip, i);
 		if (i < g_data.nb_pipe)
 			dup2(pip[i][1], STDOUT_FILENO);
 		if (i > 0)
 			dup2(pip[i - 1][0], STDIN_FILENO);
-		if_redir(pip, cmd, i);
+		ft_closepipe(pip);
 	}
 	if (!ft_isbuiltin(cmd->av[0]))
 		launch_builtin(cmd);
 	else
 		exec_cmd(cmd->av);
-	if (g_data.nb_pipe > 0)
-		ft_closepipe_end(pip, i);
 	if (cmd->redir_nb > 0)
 		ft_endredir(cmd);
 	return (0);
@@ -46,8 +43,9 @@ void	ft_parent(int **pip, int i)
 	int	j;
 
 	j = 0;
+	i = 0;
 	if (g_data.nb_pipe > 0)
-		ft_closepipe(pip, (i + 1));
+		ft_closepipe(pip);
 	while (wait(NULL) != -1 || errno!= ECHILD);
 }
 

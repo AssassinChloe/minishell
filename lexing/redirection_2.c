@@ -63,9 +63,9 @@ void	ft_endredir(t_cmd *cmd)
 	free(cmd->redir);
 }
 
-void	ft_write_heredoc(char **buffer, t_cmd *cmd, int j)
+void	ft_write_heredoc(char **buffer, t_cmd *cmd, int j, int isquote)
 {
-	if (has_dollar(*buffer) > 0)
+	if (isquote == 0 && has_dollar(*buffer) > 0)
 		*buffer = ft_extract_var(*buffer);
 	write(cmd->redir[j].fd, *buffer, ft_strlen(*buffer));
 	write(cmd->redir[j].fd, "\n", 1);

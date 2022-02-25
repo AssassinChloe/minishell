@@ -38,18 +38,21 @@ char	*ft_handleis(char *str, int *i, int *multiple)
 
 int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 {
+	int start;
+	int quote;
+
+	start = *i;
+	quote = 0;
 	while (str[*i] && ft_special(str[*i]) == 0)
 	{
 		*multiple = 0;
 		while (str[*i] && ft_isquote(str[*i]) == 0 && ft_special(str[*i]) == 0)
 		{	
-			/*if (is_forbidden_char(str[*i]) == 1)
-				return (-1);*/
 			*tmp = ft_strjoin_char(*tmp, str[*i]);
 			*i = *i + 1;
 		}
-		printf("%s\n", *tmp);
-		if (has_dollar(*tmp) == 1)
+		printf("tmp %s, start %d\n", *tmp, start);
+		if (*tmp && str[*i] && has_dollar(*tmp + start) == 1)
 			*tmp = ft_extract_var(*tmp);
 		if (*tmp && strcmp(*tmp, "$") == 0 && (str[*i] && ft_isquote(str[*i]) > 0))
 		{
@@ -62,10 +65,12 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 		}
 		if (str[*i] && ft_isquote(str[*i]) > 0)
 		{
+			quote++;
 			ft_concatquote(str, tmp, i);
 			if (*i < 0)
 				return (-1);
 		}
+		start = ft_strlen(*tmp);
 	}
 	return (0);
 }
@@ -158,6 +163,9 @@ void	ft_parse(char *str)
 	ft_lstclear(&tokens);
 	if (i == 0)
 	{
+		close(STDOUT_FILENO);
+		close(STDIN_FILENO);
+		close(STDERR_FILENO);
 		free_g_data();
 		exit(EXIT_SUCCESS);
 	}

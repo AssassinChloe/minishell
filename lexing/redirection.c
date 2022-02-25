@@ -40,11 +40,11 @@ void	ft_llowerstart(t_cmd *cmd, int i, int j)
 {
 	char	*buffer;
 	char	*delimiter;
-	int		start;
+	int		isquote;
 
-	start = 0;
+	isquote = 0;
 	if (ft_isquote(cmd->av[i + 1][0]) > 0)
-		delimiter = ft_handle_quote(cmd->av[i + 1], &start, 0);
+		delimiter = ft_handle_quote(cmd->av[i + 1], &isquote, 0);
 	else
 		delimiter = ft_strdup(cmd->av[i + 1]);
 	buffer = readline("heredoc> ");
@@ -55,7 +55,7 @@ void	ft_llowerstart(t_cmd *cmd, int i, int j)
 		return ;
 	}
 	while (buffer && ft_strcmp(buffer, delimiter) != 0)
-		ft_write_heredoc(&buffer, cmd, j);
+		ft_write_heredoc(&buffer, cmd, j, isquote);
 	free(buffer);
 	free(delimiter);
 	modif_arg_heredoc(&cmd, ".heredoc");

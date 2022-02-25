@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	ft_close_first(int **pip, int i)
+/*void	ft_close_first(int **pip, int i)
 {
 	int	j;
 
@@ -88,21 +88,21 @@ void	ft_closepipe_end(int **pip, int i)
 		if (close(pip[i - 1][0]) < 0)
 			printf("error close\n");
 	}
-}
+}*/
 
-void	ft_closepipe(int **pip, int i)
+void	ft_closepipe(int **pip/*, int i*/)
 {
 	int	j;
 
 	j = 0;
-	if (i == 0)
+	/*if (i == 0)
 		ft_close_first(pip, i);
 	else if (i > 0 && i < g_data.nb_pipe)
 		ft_close_middle(pip, i);
 	else if (i == g_data.nb_pipe)
 		ft_close_last(pip, i);
 	else if (i > g_data.nb_pipe)
-	{
+	{*/
 		while (j < g_data.nb_pipe)
 		{
 			if (close(pip[j][0]) < 0)
@@ -111,5 +111,5 @@ void	ft_closepipe(int **pip, int i)
 				printf("error close\n");
 			j++;
 		}
-	}
+	//}
 }

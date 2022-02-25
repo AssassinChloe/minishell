@@ -17,7 +17,7 @@ int	has_dollar(char *str)
 	int	i;
 
 	i = 0;
-	if (!str)
+	if (!str || !*str)
 		return (0);
 	while (str[i])
 	{
@@ -60,7 +60,7 @@ void	ft_copyvarvalue(char **tmp, char *str, int *i)
 	conv = get_env_value(var);
 	free(var);
 	var = NULL;
-	*tmp = ft_strjoin(*tmp, ft_strdup(conv));
+	*tmp = ft_strjoin(*tmp, conv);
 	free(conv);
 	conv = NULL;
 }

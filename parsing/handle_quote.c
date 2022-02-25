@@ -94,6 +94,7 @@ void	ft_concatquote(char *str, char **tmp, int *i)
 		return ;
 	if (ret == 2 && has_dollar(tmp2) == 1)
 		tmp2 = ft_extract_var(tmp2);
+	printf("%s\n", tmp2);
 	if (*tmp != NULL)
 		*tmp = ft_strjoin(*tmp, tmp2);
 	else

@@ -26,7 +26,9 @@ int	is_flag_n(char *arg)
 
 	i = 0;
 	if (ft_strlen(arg) < 2)
+	{
 		return (0);
+	}
 	if (arg[0] != '-')
 		return (0);
 	else

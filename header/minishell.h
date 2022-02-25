@@ -55,9 +55,7 @@ typedef struct s_cmd
 	int				*type;
 	t_redir			*redir;
 	int				redir_nb;
-//	int				order; // voir si besoin order ou si liste chainee
 	struct s_cmd	*next;
-//	struct s_cmd	*prev;
 }					t_cmd;
 
 typedef struct s_env //ajout
@@ -71,14 +69,13 @@ typedef struct s_env //ajout
 
 typedef struct s_data // globale ?
 {
-	char	*line;
 	t_cmd	*cmd_lst;
+	char	*line;
 	char	**splited_line;
 	char	**args;
 	t_env	*env;
 	int		exit_value;
 	int		nb_pipe;
-	int		test;
 	int		execution; // pour dire si on est en cours d'execution ou non
 	int		loop; // variable pour maintien de la boucle while
 }		t_data;
@@ -111,7 +108,7 @@ void	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist);
 void	ft_free_commandlist(t_list **commandlist);
 void	ft_lowerstart(t_cmd *tmp, int i, int j);
 void	ft_llowerstart(t_cmd *tmp, int i, int j);
-void	ft_write_heredoc(char **buffer, t_cmd *cmd, int j);
+void	ft_write_heredoc(char **buffer, t_cmd *cmd, int j, int isquote);
 void	ft_greaterstart(t_cmd *tmp, int i, int j);
 void	ft_ggreaterstart(t_cmd *tmp, int i, int j);
 void	modif_arg(t_cmd **cmd);
@@ -119,7 +116,7 @@ void	modif_arg_heredoc(t_cmd **cmd, char *filename);
 void	ft_countredir(t_cmd *cmd);
 void	ft_handleredir(int j, t_cmd *cmd, int *i);
 void	ft_pipe(t_list *commandlist);
-void	ft_closepipe(int **pip, int i);
+void	ft_closepipe(int **pip/*, int i*/);
 void	ft_closepipe_end(int **pip, int i);
 void	ft_endredir(t_cmd *cmd);
 void	ft_redirstd(t_redir *redir, int std);
