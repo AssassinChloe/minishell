@@ -12,10 +12,22 @@
 
 #include "minishell.h"
 
-void	exec_cmd(char **cmd)
+void	exec_cmd(t_cmd *cmd, int i)
 {
-	if (execve(cmd[0], cmd, NULL) == -1)
-		perror("minishell ");
+	if (is_valid_cmd(cmd) == 0)
+	{
+		i = execve(cmd->av[0], cmd->av, NULL);
+		if (i == -1)
+		{
+			printf("ret %d\n", i);
+			perror("minishell ");
+		}
+		else
+		{
+			printf("ret %d\n", i);
+		}
+	}
+	
 }
 
 int	ft_child(int **pip, int i, t_cmd *cmd)
@@ -29,21 +41,17 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 			dup2(pip[i - 1][0], STDIN_FILENO);
 		ft_closepipe(pip);
 	}
-	if (!ft_isbuiltin(cmd->av[0]))
+	if (cmd->av[0] && !ft_isbuiltin(cmd->av[0]))
 		launch_builtin(cmd);
 	else
-		exec_cmd(cmd->av);
+		exec_cmd(cmd, i);
 	if (cmd->redir_nb > 0)
 		ft_endredir(cmd);
 	return (0);
 }
 
-void	ft_parent(int **pip, int i)
+void	ft_parent(int **pip)
 {
-	int	j;
-
-	j = 0;
-	i = 0;
 	if (g_data.nb_pipe > 0)
 		ft_closepipe(pip);
 	while (wait(NULL) != -1 || errno!= ECHILD);
@@ -70,7 +78,7 @@ int	ft_exec(t_list *commandlist, int **pip)
 	if (pid == 0)
 		ft_child(pip, i, command);
 	else
-		ft_parent(pip, i);
+		ft_parent(pip);
 	return (pid);
 }
 

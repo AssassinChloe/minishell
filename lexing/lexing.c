@@ -26,8 +26,6 @@ int	get_token_type(char *str, int *multicmd)
 {
 	if (ft_strcmp(str, "|") == 0)
 		return (T_PIPE);
-	else if (is_flag_n(str) == 1)
-		return (T_FLAG);
 	else if (ft_strcmp(str, "<") == 0)
 		return (T_LOWER);
 	else if (ft_strcmp(str, "<<") == 0)
@@ -36,15 +34,13 @@ int	get_token_type(char *str, int *multicmd)
 		return (T_GREATER);
 	else if (ft_strcmp(str, ">>") == 0)
 		return (T_GGREATER);
-	else if (*multicmd == 0 && ft_isbuiltin(str) == 0)
+	else if (*multicmd == 0) 
 	{
 		*multicmd = 1;
-		return (T_BUILTIN);
-	}
-	else if (*multicmd == 0)
-	{
-		*multicmd = 1;
-		return (T_CMD);
+		if (ft_isbuiltin(str) == 0)
+			return (T_BUILTIN);
+		else	
+			return (T_CMD);
 	}
 	else
 		return (T_STRING);
@@ -74,36 +70,24 @@ void	ft_printtype(t_list *elem)
 
 int	test_iscmd(t_list *cmdlist)
 {
-	struct stat	*test;
-	t_cmd	*cmd;
-	t_list	*command;
-	int i;
+	t_cmd		*cmd;
+	t_list		*command;
+	int			ret;
 
-	i = 0;
 	command = cmdlist;
 	cmd = NULL;
-	test = NULL;
+	ret = 0;
 	while (command)
 	{
 		cmd = (t_cmd *)command->content;
-		test = malloc(sizeof(struct stat));
-		if (stat(cmd->av[0], test) >= 0 && S_ISDIR(test->st_mode) == 1)
-		{
+		ret = is_valid_cmd(cmd);
+		if (ret == 126) 
 			printf("minishell: %s: Is a directory\n", cmd->av[0]);
-			free(test);
-			test = NULL;
-			return (126);
-		}
-		free(test);
-		test = NULL;
-		if (ft_strcmp(cmd->av[0], "") == 0 || (cmd->type[0] != T_BUILTIN && ft_get_cmd_path(cmd) > 0))
-		{
+		else if (ret == 127)
 			printf("minishell: %s: command not found\n", cmd->av[0]);
-			return (127);
-		}
 		command = command->next;
 	}
-	return (0);
+	return (ret);
 }
 
 int	ft_lexing(t_list **list)
@@ -113,12 +97,13 @@ int	ft_lexing(t_list **list)
 
 	commandlist = NULL;
 	ft_divide_pipe(*list, *list, &commandlist);
+	//ft_printtype(commandlist);
 	g_data.exit_value = test_iscmd(commandlist);
-	if (g_data.exit_value > 0)
+	/*if (g_data.exit_value > 0)
 	{
 		ft_free_commandlist(&commandlist);
 		return (1);
-	}
+	}*/
 	pid = execute_command(commandlist);
 	ft_free_commandlist(&commandlist);
 	return (pid);

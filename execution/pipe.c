@@ -39,7 +39,22 @@ void	ft_open_pipes(int **pip)
 	}
 }
 
-void if_redir(int **pip, t_cmd *cmd, int i)
+void	ft_closepipe(int **pip)
+{
+	int	j;
+
+	j = 0;
+		while (j < g_data.nb_pipe)
+		{
+			if (close(pip[j][0]) < 0)
+				printf("error close\n");
+			if (close(pip[j][1]) < 0)
+				printf("error close\n");
+			j++;
+		}
+}
+
+/*void if_redir(int **pip, t_cmd *cmd, int i)
 {
 	int	j;
 	int	tab_type[4];
@@ -87,4 +102,4 @@ void if_redir(int **pip, t_cmd *cmd, int i)
 		if (i > 0)
 			dup2(pip[i - 1][0], STDIN_FILENO);
 	}
-}
+}*/

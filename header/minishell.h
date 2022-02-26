@@ -31,7 +31,7 @@
 # define T_ERR 1
 # define T_PIPE 2
 # define T_CMD 3
-# define T_FLAG 4
+# define T_VAR 4
 # define T_LOWER 5
 # define T_GREATER 6
 # define T_LLOWER 7
@@ -116,8 +116,7 @@ void	modif_arg_heredoc(t_cmd **cmd, char *filename);
 void	ft_countredir(t_cmd *cmd);
 void	ft_handleredir(int j, t_cmd *cmd, int *i);
 void	ft_pipe(t_list *commandlist);
-void	ft_closepipe(int **pip/*, int i*/);
-void	ft_closepipe_end(int **pip, int i);
+void	ft_closepipe(int **pip);
 void	ft_endredir(t_cmd *cmd);
 void	ft_redirstd(t_redir *redir, int std);
 char	*is_forbidden_redir(int *i, int *multiple);
@@ -125,14 +124,15 @@ char	*ft_extract_pipe(char *str, int *i, int *multiple);
 char	*extract_redir(char *str, int *i, int *multiple);
 int		ft_get_cmd_path(t_cmd *cmd);
 int		execute_command(t_list *commandlist);
-void	exec_cmd(char **cmd);
+void	exec_cmd(t_cmd *cmd, int i);
 int		ft_isbuiltin(char *str);
 int		ft_child(int **pip, int i, t_cmd *cmd);
-void	ft_parent(int **pip, int i);
+void	ft_parent(int **pip);
 void	ft_free_pipe(int **pip);
 void	ft_open_pipes(int **pip);
 char	*ft_addquote(char *str);
 void 	if_redir(int **pip, t_cmd *cmd, int i);
+int 	is_valid_cmd(t_cmd *cmd);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);
