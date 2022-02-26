@@ -14,20 +14,14 @@
 
 void	exec_cmd(t_cmd *cmd, int i)
 {
+	if (i == g_data.nb_pipe)
+		dup2(g_data.check, STDERR_FILENO);
 	if (is_valid_cmd(cmd) == 0)
 	{
-		i = execve(cmd->av[0], cmd->av, NULL);
-		if (i == -1)
-		{
-			printf("ret %d\n", i);
+		if (execve(cmd->av[0], cmd->av, NULL) < 0)
 			perror("minishell ");
-		}
-		else
-		{
-			printf("ret %d\n", i);
-		}
 	}
-	
+	close(g_data.check);
 }
 
 int	ft_child(int **pip, int i, t_cmd *cmd)
@@ -51,10 +45,16 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 }
 
 void	ft_parent(int **pip)
-{
+{	
 	if (g_data.nb_pipe > 0)
 		ft_closepipe(pip);
-	while (wait(NULL) != -1 || errno!= ECHILD);
+	g_data.execution = 1;
+	while (g_data.execution == 1)
+	{
+		while (wait(NULL) != -1 || errno!= ECHILD)
+			g_data.execution = 0;
+	}
+	close(g_data.check);
 }
 
 int	ft_exec(t_list *commandlist, int **pip)
@@ -62,6 +62,7 @@ int	ft_exec(t_list *commandlist, int **pip)
 	int		pid;
 	t_cmd	*command;
 	int		i;
+
 
 	i = 0;
 	command = (t_cmd *)commandlist->content;
@@ -84,11 +85,13 @@ int	ft_exec(t_list *commandlist, int **pip)
 
 int	execute_command(t_list *commandlist)
 {
-	
 	t_cmd	*command;
 	int		**pip;
 	int		pid;
-
+	
+	g_data.check = open(".log", O_CREAT | O_RDWR | O_TRUNC, 0666);
+	if (g_data.check < 0)
+		printf("error open\n");
 	pid = 1;
 	command = (t_cmd *)commandlist->content;
 	if (g_data.nb_pipe > 0)

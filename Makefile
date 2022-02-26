@@ -12,7 +12,7 @@
 
 NAME	=	minishell
 
-SRCS	=	minishell.c\
+SRCS	=	minishell.c printf_error.c\
 			$(addprefix $(PARSDIR), $(PARSING))\
 			$(addprefix $(LEXDIR), $(LEXING))\
 			$(addprefix $(BUILDIR), $(BUILTIN))\

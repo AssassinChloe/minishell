@@ -78,6 +78,7 @@ typedef struct s_data // globale ?
 	int		nb_pipe;
 	int		execution; // pour dire si on est en cours d'execution ou non
 	int		loop; // variable pour maintien de la boucle while
+	int check;
 }		t_data;
 
 extern t_data	g_data;
@@ -133,6 +134,7 @@ void	ft_open_pipes(int **pip);
 char	*ft_addquote(char *str);
 void 	if_redir(int **pip, t_cmd *cmd, int i);
 int 	is_valid_cmd(t_cmd *cmd);
+void	ft_print_error();
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);

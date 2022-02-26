@@ -42,6 +42,7 @@ int	gnl_read_file(int fd, char **file)
 			return (ret);
 		(*file)[ret] = '\0';
 	}
+	
 	while (gnl_check_nl(*file) == 0 && ret != 0)
 	{
 		ret = read(fd, save, BUFFER_SIZE);
