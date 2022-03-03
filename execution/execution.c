@@ -19,7 +19,12 @@ void	exec_cmd(t_cmd *cmd, int i)
 	if (is_valid_cmd(cmd) == 0)
 	{
 		if (execve(cmd->av[0], cmd->av, NULL) < 0)
-			perror("minishell ");
+		{
+			if (cmd->env == 0)
+				perror("minishell ");
+			else
+				perror("env ");
+		}
 	}
 	close(g_data.check);
 }
@@ -35,7 +40,7 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 			dup2(pip[i - 1][0], STDIN_FILENO);
 		ft_closepipe(pip);
 	}
-	if (cmd->av[0] && !ft_isbuiltin(cmd->av[0]))
+	if (cmd->av[0] && cmd->type[0] == T_BUILTIN/*!ft_isbuiltin(cmd->av[0])*/)
 		launch_builtin(cmd);
 	else
 		exec_cmd(cmd, i);
@@ -48,11 +53,12 @@ void	ft_parent(int **pip)
 {	
 	if (g_data.nb_pipe > 0)
 		ft_closepipe(pip);
-	g_data.execution = 1;
-	while (g_data.execution == 1)
+	g_data.execution = -1;
+	while (g_data.execution == -1)
 	{
 		while (wait(NULL) != -1 || errno!= ECHILD)
-			g_data.execution = 0;
+			g_data.execution = 1;
+		g_data.execution = 0;
 	}
 	close(g_data.check);
 }

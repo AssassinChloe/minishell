@@ -20,7 +20,7 @@ int	launch_builtin(t_cmd *cmd)
 	if (ft_strcmp(cmd->av[0], "echo") == 0)
 		return (ft_echo((*cmd).av));
 	if (ft_strcmp(cmd->av[0], "env") == 0)
-		return (ft_env(*cmd));
+		return (ft_env());
 	if (ft_strcmp(cmd->av[0], "exit") == 0)
 		g_data.exit_value = ft_exit(*cmd);
 	if (ft_strcmp(cmd->av[0], "export") == 0)

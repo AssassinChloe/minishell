@@ -14,7 +14,6 @@
 
 t_data	g_data;
 
-
 void	init_data(char **envp)
 {
 	g_data.loop = 1;

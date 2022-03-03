@@ -81,10 +81,7 @@ int	test_iscmd(t_list *cmdlist)
 	{
 		cmd = (t_cmd *)command->content;
 		ret = is_valid_cmd(cmd);
-		if (ret == 126) 
-			printf("minishell: %s: Is a directory\n", cmd->av[0]);
-		else if (ret == 127)
-			printf("minishell: %s: command not found\n", cmd->av[0]);
+		ft_error_check_cmd(cmd, ret);
 		command = command->next;
 	}
 	return (ret);
@@ -97,13 +94,13 @@ int	ft_lexing(t_list **list)
 
 	commandlist = NULL;
 	ft_divide_pipe(*list, *list, &commandlist);
-	//ft_printtype(commandlist);
 	g_data.exit_value = test_iscmd(commandlist);
-	/*if (g_data.exit_value > 0)
+	//ft_printtype(commandlist);
+	if (g_data.exit_value > 0)
 	{
 		ft_free_commandlist(&commandlist);
 		return (1);
-	}*/
+	}
 	pid = execute_command(commandlist);
 	ft_free_commandlist(&commandlist);
 	return (pid);

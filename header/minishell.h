@@ -55,6 +55,7 @@ typedef struct s_cmd
 	int				*type;
 	t_redir			*redir;
 	int				redir_nb;
+	int				env;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -101,6 +102,7 @@ char	*ft_handle_quote(char *str, int *i, int keepquote);
 int		ft_parsetxt(char *str, int *i, char **tmp, int *multiple);
 void	ft_freeparsing(char **str, t_list **chain);
 int		is_forbidden_char(char c);
+void	ft_check_for_env(t_cmd *tokens);
 int		ft_lexing(t_list **list);
 void	ft_printtype(t_list *elem);
 void	ft_execution_test(t_cmd *cmd);
@@ -135,6 +137,7 @@ char	*ft_addquote(char *str);
 void 	if_redir(int **pip, t_cmd *cmd, int i);
 int 	is_valid_cmd(t_cmd *cmd);
 void	ft_print_error();
+void	ft_error_check_cmd(t_cmd *cmd, int ret);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);
@@ -153,7 +156,7 @@ int		launch_builtin(t_cmd *cmd);
 t_env	*search_var(char *str);
 char	*get_env_value(char *str);
 int		ft_cd(t_cmd cmd);
-int		ft_env(t_cmd cmd);
+int		ft_env();
 int		ft_atoi_exit(const char *str);
 int		ft_exit(t_cmd cmd);
 int		already_in_env(char *arg);

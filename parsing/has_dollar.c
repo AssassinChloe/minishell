@@ -40,8 +40,9 @@ void	ft_extract_exitval(char **tmp, int *i)
 	char	*conv;
 
 	conv = ft_itoa(g_data.exit_value);
-	*tmp = ft_strjoin(*tmp, ft_strdup(conv));
+	*tmp = ft_strjoin(*tmp, conv);
 	free(conv);
+	conv = NULL;
 	*i = *i + 2;
 }
 
@@ -60,9 +61,12 @@ void	ft_copyvarvalue(char **tmp, char *str, int *i)
 	conv = get_env_value(var);
 	free(var);
 	var = NULL;
-	*tmp = ft_strjoin(*tmp, conv);
-	free(conv);
-	conv = NULL;
+	if (conv)
+	{
+		*tmp = ft_strjoin(*tmp, conv);
+		free(conv);
+		conv = NULL;
+	}
 }
 
 char	*ft_extract_var(char *str)
