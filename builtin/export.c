@@ -186,8 +186,8 @@ int	ft_export(t_cmd cmd)
 	i = 0;
 	while (cmd.av[++i])
 	{
-		if (cmd.av[i][0] == '-')
-			return (ft_export_invalid_option(cmd.av[i]));
+		if (cmd.av[1][0] == '-' && cmd.av[1][1])
+			return (ft_export_invalid_option(cmd.av[1]));
 		if (!has_equal(cmd.av[i]))
 		{
 			if (format_key_ok(cmd.av[i]) && !already_in_env(cmd.av[i]))

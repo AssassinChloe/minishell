@@ -24,7 +24,8 @@ si pas d'arg -> ne fait rien
 g_data.exit_value = 0
 
 si plusieurs arguments : 
-traite tous les arguments les uns a la suite des autres, s'arrte si erreur
+traite tous les arguments les uns a la suite des autres, 
+ne s'arrette pas si erreur
 */
 
 void	del_first_env(t_env *tmp)
@@ -68,27 +69,29 @@ int	ft_unset(char **arg)
 	t_env	*prev;
 	t_env	*tmp;
 	int		i;
+	int 	ret;
 
 	i = 0;
+	ret = 0;
 	while (arg[++i])
 	{
 		if (!format_key_ok(arg[i]))
-			return (unset_invalid(arg[i]));
+			ret = unset_invalid(arg[i]);
 		tmp = NULL;
 		if (already_in_env(arg[i]))
 		{
 			prev = get_prev(arg[i]);
-			if (!prev)
+			if (prev)
 			{
-				del_first_env(tmp);
-				return (0);
+				tmp = prev->next->next;
+				destroy_var_env(prev->next);
+				prev->next = tmp;
 			}
-			tmp = prev->next->next;
-			destroy_var_env(prev->next);
-			prev->next = tmp;
+			else
+				del_first_env(tmp);
 		}
 	}
-	return (0);
+	return (ret);
 }
 
 /*

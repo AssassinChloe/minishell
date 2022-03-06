@@ -74,6 +74,14 @@ int	err_format_exit(char *str)
 	return (2);
 }
 
+int err_many_arg_exit(char *str)
+{
+	if (!check_format_exit(str))
+			return (err_format_exit(str));
+	ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
+		return (1);
+}
+
 int	ft_exit(t_cmd cmd)
 {
 	int	number;
@@ -81,10 +89,7 @@ int	ft_exit(t_cmd cmd)
 	if (cmd.argc == 1)
 		g_data.loop = -1;
 	if (cmd.argc > 2)
-	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
-		return (1);
-	}
+		return (err_many_arg_exit(cmd.av[1]));
 	if (cmd.argc == 2)
 	{
 		if (!check_format_exit(cmd.av[1]))
