@@ -131,7 +131,7 @@ char	*ft_strjoin_d(char *s1, char *s2)
 
 int	err_format_id_export(char *str)
 {
-	ft_putstr_fd("export: `", 2);
+	ft_putstr_fd("minishell: export: `", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
 	g_data.exit_value = 1;
@@ -148,7 +148,7 @@ int	ft_export_with_equal(char *str)
 		spvar = ft_split_env(str);
 	if (!format_key_ok(spvar[0]))
 	{
-		err_format_id_export(spvar[0]);
+		err_format_id_export(str); // changement pour afficher X=XX
 		free_tab2(spvar);
 		return (1);
 	}
@@ -166,18 +166,28 @@ int	ft_export_with_equal(char *str)
 	return (0);
 }
 
+int ft_export_invalid_option(char *str)
+{
+	ft_putstr_fd("minishell: export: `", 2);
+	ft_putchar_fd(str[0], 2);
+	if (str[1])
+		ft_putchar_fd(str[1], 2);
+	ft_putstr_fd("': invalid option\n", 2);
+	g_data.exit_value = 2;
+	return (2);
+}
+
 int	ft_export(t_cmd cmd)
 {
 	int		i;
 
 	if (cmd.argc == 1)
-	{
-		print_exp_list();
-		return (0);
-	}
+		return (print_exp_list());
 	i = 0;
 	while (cmd.av[++i])
 	{
+		if (cmd.av[i][0] == '-')
+			return (ft_export_invalid_option(cmd.av[i]));
 		if (!has_equal(cmd.av[i]))
 		{
 			if (format_key_ok(cmd.av[i]) && !already_in_env(cmd.av[i]))
