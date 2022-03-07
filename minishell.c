@@ -86,6 +86,7 @@ int	minishell(void)
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argv;
+	g_data.env_p = &envp;
 	if (argc != 1)
 		exit(EXIT_FAILURE);
 	init_data(envp);

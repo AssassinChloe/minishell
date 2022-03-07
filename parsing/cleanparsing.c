@@ -27,3 +27,31 @@ char	*is_forbidden_redir(int *i, int *multiple)
 	g_data.exit_value = 2;
 	return (NULL);
 }
+
+char	*ft_remove_dollar(char *str, int start)
+{
+	int	i;
+	char *tmp;
+
+	i = 0;
+	tmp = NULL;
+	if ((ft_strlen(str) - 1) > 0)
+	{
+		tmp = malloc(ft_strlen(str));
+		while (i < (start))
+		{
+			tmp[i] = str[i];
+			i++;
+		}
+		while (str[i] != '$')
+		{
+			tmp[i] = str[i];
+			i++;
+		}
+		tmp[i] = '\0';
+
+	}
+	free(str);
+	str = NULL;
+	return (tmp);
+}

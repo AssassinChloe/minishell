@@ -56,14 +56,14 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 				equal = 1;*/
 		}
 		if (*tmp && has_dollar(*tmp + start) == 1)
-			*tmp = ft_extract_var(*tmp);
-		if (*tmp && ft_strcmp(*tmp, "$") == 0 && (str[*i] && ft_isquote(str[*i]) > 0))
 		{
-			if (!((*i - 3) > 0 && ft_isquote(str[*i - 3]) > 0
-				&& ft_isquote(str[*i - 3]) == ft_isquote(str[*i - 1])))
+			if ((str[*i]) && ft_isquote(str[*i]) == 0)
+				*tmp = ft_extract_var(*tmp);
+			else
 			{
-				free(*tmp);
-				*tmp = NULL;
+				printf("has dol %s \n", *tmp);
+				*tmp = ft_remove_dollar(*tmp, start);
+				printf("has dol2 %s \n", *tmp);
 			}
 		}
 		if (str[*i] && ft_isquote(str[*i]) > 0)
@@ -173,7 +173,7 @@ void	ft_parse(char *str)
 		return ;
 	}
 	/*ft_lstclear(&localvar);  >> j'ai commenté tous les passages pour la gestion du = */
-	//ft_printchain(tokens);
+	ft_printchain(tokens);
 	i = ft_lexing(&tokens);
 	ft_lstclear(&tokens);
 	if (i == 0)

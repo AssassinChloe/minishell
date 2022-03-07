@@ -75,6 +75,7 @@ typedef struct s_data // globale ?
 	char	**splited_line;
 	char	**args;
 	t_env	*env;
+	char	***env_p;
 	int		exit_value;
 	int		nb_pipe;
 	int		execution; // pour dire si on est en cours d'execution ou non
@@ -138,6 +139,7 @@ void 	if_redir(int **pip, t_cmd *cmd, int i);
 int 	is_valid_cmd(t_cmd *cmd);
 void	ft_print_error();
 void	ft_error_check_cmd(t_cmd *cmd, int ret);
+char	*ft_remove_dollar(char *str, int start);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);
