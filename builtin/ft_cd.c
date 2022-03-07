@@ -129,6 +129,8 @@ int	ft_cd(t_cmd cmd)
 			return (err_cd_oldpwd_unset(src_path, dest_path));
 		ft_putendl_fd(dest_path, STDOUT_FILENO);
 	}
+	else if (!ft_strcmp(cmd.av[1], ""))
+		return (0);
 	else
 		dest_path = ft_strdup(cmd.av[1]);
 	if (chdir(dest_path))

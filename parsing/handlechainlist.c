@@ -33,7 +33,7 @@ void	ft_addone(t_list **tokens, char **tmp)
 	{
 		if (*tokens == NULL)
 			*tokens = ft_lstnew(ft_strdup(*tmp));
-		else if (ft_strcmp(*tmp, "") != 0)
+		else
 			ft_lstadd_back(tokens, ft_lstnew(ft_strdup(*tmp)));
 		free(*tmp);
 		*tmp = NULL;
