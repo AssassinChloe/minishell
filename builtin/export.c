@@ -180,10 +180,12 @@ int ft_export_invalid_option(char *str)
 int	ft_export(t_cmd cmd)
 {
 	int		i;
+	int		ret;
 
 	if (cmd.argc == 1)
 		return (print_exp_list());
 	i = 0;
+	ret = 0;
 	while (cmd.av[++i])
 	{
 		if (cmd.av[1][0] == '-' && cmd.av[1][1])
@@ -193,14 +195,12 @@ int	ft_export(t_cmd cmd)
 			if (format_key_ok(cmd.av[i]) && !already_in_env(cmd.av[i]))
 				add_env_value(cmd.av[i], NULL, 0);
 			else if (!format_key_ok(cmd.av[i]))
-				return (err_format_id_export(cmd.av[i]));
+				ret = err_format_id_export(cmd.av[i]);
 		}
 		else
-		{
-			return (ft_export_with_equal(cmd.av[i]));
-		}
+			ft_export_with_equal(cmd.av[i]);
 	}
-	return (0);
+	return (ret);
 }
 /*
 int	ft_export(t_cmd cmd)
