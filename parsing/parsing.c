@@ -57,10 +57,10 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 		}
 		if (*tmp && has_dollar(*tmp + start) == 1)
 		{
-			if ((str[*i]) && ft_isquote(str[*i]) == 0)
-				*tmp = ft_extract_var(*tmp);
-			else
+			if (str[*i - 1] && str[*i - 1] == '$' && ft_isquote(str[*i]) == 1)
 				*tmp = ft_remove_dollar(*tmp, start);
+			else
+				*tmp = ft_extract_var(*tmp);
 		}
 		if (str[*i] && ft_isquote(str[*i]) > 0)
 		{
