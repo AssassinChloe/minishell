@@ -138,7 +138,7 @@ char	*ft_addquote(char *str);
 void 	if_redir(int **pip, t_cmd *cmd, int i);
 int 	is_valid_cmd(t_cmd *cmd);
 void	ft_print_error();
-void	ft_error_check_cmd(t_cmd *cmd, int ret);
+void	ft_error_check_cmd(t_cmd *cmd, int *ret);
 char	*ft_remove_dollar(char *str, int start);
 
 void	destroy_var(t_env *var);

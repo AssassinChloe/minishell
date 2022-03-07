@@ -169,7 +169,7 @@ void	ft_parse(char *str)
 		return ;
 	}
 	/*ft_lstclear(&localvar);  >> j'ai commenté tous les passages pour la gestion du = */
-	ft_printchain(tokens);
+	//ft_printchain(tokens);
 	i = ft_lexing(&tokens);
 	ft_lstclear(&tokens);
 	if (i == 0)

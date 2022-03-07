@@ -81,7 +81,7 @@ int	test_iscmd(t_list *cmdlist)
 	{
 		cmd = (t_cmd *)command->content;
 		ret = is_valid_cmd(cmd);
-		ft_error_check_cmd(cmd, ret);
+		ft_error_check_cmd(cmd, &ret);
 		command = command->next;
 	}
 	return (ret);
@@ -95,7 +95,7 @@ int	ft_lexing(t_list **list)
 	commandlist = NULL;
 	ft_divide_pipe(*list, *list, &commandlist);
 	g_data.exit_value = test_iscmd(commandlist);
-	ft_printtype(commandlist);
+	//ft_printtype(commandlist);
 	if (g_data.exit_value > 0)
 	{
 		ft_free_commandlist(&commandlist);

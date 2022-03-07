@@ -12,22 +12,24 @@
 
 #include "minishell.h"
 
-void	ft_error_check_cmd(t_cmd *cmd, int ret)
+void	ft_error_check_cmd(t_cmd *cmd, int *ret)
 {
 	if (cmd->env == 0)
 	{
-		if (ret == 126) 
+		if (*ret == 126) 
 			printf("minishell: %s: Is a directory\n", cmd->av[0]);
-		else if (ret == 127)
+		else if (*ret == 127)
 			printf("minishell: %s: command not found\n", cmd->av[0]);
 	}
 	else
 	{
-		if (ret == 126) 
-			printf("env: %s: Is a directory\n", cmd->av[0]);
-		else if (ret == 127)
-			printf("env: %s: command not found\n", cmd->av[0]);
+		if (*ret > 0)
+		{
+			printf("env: %s: No such file or directory\n", cmd->av[0]);
+			*ret = 127;
+		}
 	}
+
 }
 
 void	ft_print_error()
