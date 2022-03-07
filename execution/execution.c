@@ -12,20 +12,19 @@
 
 #include "minishell.h"
 
-void	exec_cmd(t_cmd *cmd, int i)
+void	exec_cmd(t_cmd *cmd)
 {
-	if (i == g_data.nb_pipe)
-		dup2(g_data.check, STDERR_FILENO);
 	if (is_valid_cmd(cmd) == 0)
 	{
 		if (execve(cmd->av[0], cmd->av, /**(g_data.env_p)*/NULL) < 0)
 				perror("minishell ");
 	}
-	close(g_data.check);
+	close(g_data.check);	
 }
 
 int	ft_child(int **pip, int i, t_cmd *cmd)
 {
+	char	*nb;
 	ft_divide_redirection(cmd);
 	if (g_data.nb_pipe > 0)
 	{
@@ -34,11 +33,22 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 		if (i > 0)
 			dup2(pip[i - 1][0], STDIN_FILENO);
 		ft_closepipe(pip);
+		if (i == g_data.nb_pipe)
+		dup2(g_data.check, STDERR_FILENO);
 	}
 	if (cmd->av[0] && cmd->type[0] == T_BUILTIN/*!ft_isbuiltin(cmd->av[0])*/)
+	{
 		launch_builtin(cmd);
+		if (i == g_data.nb_pipe)
+		{
+		nb = ft_itoa(g_data.exit_value);
+		write(2, nb, ft_strlen(nb));
+		free(nb);
+		}
+		close(g_data.check);
+	}
 	else
-		exec_cmd(cmd, i);
+		exec_cmd(cmd);
 	if (cmd->redir_nb > 0)
 		ft_endredir(cmd);
 	return (0);
@@ -90,7 +100,7 @@ int	execute_command(t_list *commandlist)
 	int		**pip;
 	int		pid;
 	
-	g_data.check = open(".log", O_CREAT | O_RDWR | O_TRUNC, 0666);
+	g_data.check = open(".log", O_CREAT | O_RDWR | O_APPEND, 0666);
 	if (g_data.check < 0)
 		printf("error open\n");
 	pid = 1;

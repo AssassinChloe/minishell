@@ -128,7 +128,7 @@ char	*ft_extract_pipe(char *str, int *i, int *multiple);
 char	*extract_redir(char *str, int *i, int *multiple);
 int		ft_get_cmd_path(t_cmd *cmd);
 int		execute_command(t_list *commandlist);
-void	exec_cmd(t_cmd *cmd, int i);
+void	exec_cmd(t_cmd *cmd);
 int		ft_isbuiltin(char *str);
 int		ft_child(int **pip, int i, t_cmd *cmd);
 void	ft_parent(int **pip);

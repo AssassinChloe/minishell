@@ -32,6 +32,19 @@ void	ft_error_check_cmd(t_cmd *cmd, int *ret)
 
 }
 
+int	ft_is_only_digit(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i] && ft_isdigit(str[i]) == 1)
+		i++;
+	if (str[i])
+		return (0);
+	return (1);
+}
 void	ft_print_error()
 {
 	char	*log;
@@ -46,7 +59,10 @@ void	ft_print_error()
 		ret = get_next_line(fd, &log);
 		if (ret >= 0)
 		{
-			error = ft_strdup(log);
+			if (ft_is_only_digit(log) == 1)
+				g_data.exit_value = ft_atoi(log);
+			else 
+				error = ft_strdup(log);
 			while (ret == 1)
 			{
 				if (error != NULL)
@@ -54,7 +70,10 @@ void	ft_print_error()
 				free(log);
 				log = NULL;
 				ret = get_next_line(fd, &log);
-				error = ft_strjoin(error, log);
+				if (ft_is_only_digit(log) == 1)
+					g_data.exit_value = ft_atoi(log);
+				else 
+					error = ft_strjoin(error, log);
 			}
 			if (ft_strlen(error) > 0)
 			{

@@ -69,7 +69,6 @@ int	minishell(void)
 				ft_parse(buffer);
 				ft_print_error();
 				unlink(".heredoc");
-				unlink(".log");
 				g_data.nb_pipe = 0;
 			}
 			free(buffer);
