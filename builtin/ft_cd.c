@@ -49,7 +49,20 @@ int	err_cd_home_unset(char *srcpath, char *destpath)
 {
 	ft_putstr_fd("cd: HOME not set\n", STDOUT_FILENO);
 	free(destpath);
+	destpath = NULL;
 	free(srcpath);
+	srcpath = NULL;
+	g_data.exit_value = 1;
+	return (1);
+}
+
+int	err_cd_oldpwd_unset(char *srcpath, char *destpath)
+{
+	ft_putstr_fd("cd: OLDPWD not set\n", STDOUT_FILENO);
+	free(destpath);
+	destpath = NULL;
+	free(srcpath);
+	srcpath = NULL;
 	g_data.exit_value = 1;
 	return (1);
 }
@@ -60,7 +73,9 @@ int	err_cd_wrong_path(char *str, char *srcpath, char *destpath)
 	ft_putstr_fd(str, STDOUT_FILENO);
 	ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
 	free(destpath);
+	destpath = NULL;
 	free(srcpath);
+	srcpath = NULL;
 	g_data.exit_value = 1;
 	return (1);
 }
@@ -70,10 +85,23 @@ void	ft_cd_end(char *src_path, char *dest_path)
 	free(dest_path);
 	dest_path = NULL;
 	dest_path = getcwd(NULL, 0);
-	free(search_var("OLDPWD")->value);
-	search_var("OLDPWD")->value = ft_strdup(src_path);
-	free(search_var("PWD")->value);
-	search_var("PWD")->value = ft_strdup(dest_path);
+	if (search_var("OLDPWD") != NULL)
+	{	free(search_var("OLDPWD")->value);
+		search_var("OLDPWD")->value = ft_strdup(src_path);
+	}
+	else
+	{
+		add_env_value("OLDPWD", src_path, 1);
+	}
+	if (search_var("PWD") != NULL)
+	{
+		free(search_var("PWD")->value);
+		search_var("PWD")->value = ft_strdup(dest_path);
+	}
+	else
+	{
+		add_env_value("PWD", dest_path, 1);
+	}
 	free(src_path);
 	src_path = NULL;
 	free(dest_path);
@@ -97,6 +125,8 @@ int	ft_cd(t_cmd cmd)
 	else if (!ft_strcmp(cmd.av[1], "-"))
 	{
 		dest_path = get_env_value("OLDPWD");
+		if (!dest_path)
+			return (err_cd_oldpwd_unset(src_path, dest_path));
 		ft_putendl_fd(dest_path, STDOUT_FILENO);
 	}
 	else
