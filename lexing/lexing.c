@@ -60,7 +60,7 @@ void	ft_printtype(t_list *elem)
 		printf(" il y a %d argument dans la ligne de commande : \n", type->argc);
 		while (i < type->argc)
 		{
-			printf("type %d : %s\n", type->type[i], type->av[i]);
+			printf("type %d : -%s-\n", type->type[i], type->av[i]);
 			i++;
 		}
 		i = 0;

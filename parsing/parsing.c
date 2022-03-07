@@ -60,11 +60,7 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 			if ((str[*i]) && ft_isquote(str[*i]) == 0)
 				*tmp = ft_extract_var(*tmp);
 			else
-			{
-				printf("has dol %s \n", *tmp);
 				*tmp = ft_remove_dollar(*tmp, start);
-				printf("has dol2 %s \n", *tmp);
-			}
 		}
 		if (str[*i] && ft_isquote(str[*i]) > 0)
 		{

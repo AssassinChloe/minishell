@@ -21,7 +21,7 @@ void	ft_printchain(t_list *elem)
 	tmp = elem;
 	while (tmp)
 	{
-		printf("token %d : %s\n", i, (char *)tmp->content);
+		printf("token %d : -%s-\n", i, (char *)tmp->content);
 		tmp = tmp->next;
 		i++;
 	}
@@ -29,7 +29,7 @@ void	ft_printchain(t_list *elem)
 
 void	ft_addone(t_list **tokens, char **tmp)
 {
-	if (*tmp != NULL)
+	if (*tmp != NULL && ft_strcmp(*tmp, "") != 0)
 	{
 		if (*tokens == NULL)
 			*tokens = ft_lstnew(ft_strdup(*tmp));

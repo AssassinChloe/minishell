@@ -80,7 +80,6 @@ char	*ft_extract_var(char *str)
 	{
 		while (str[i] && str[i] != '$')
 			tmp = ft_strjoin_char(tmp, str[i++]);
-		printf("ev %s \n", tmp);
 		if (str[i] == '$')
 		{
 			if (str[i + 1] == '?')

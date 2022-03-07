@@ -19,7 +19,7 @@ void	exec_cmd(t_cmd *cmd, int i)
 	if (is_valid_cmd(cmd) == 0)
 	{
 		printf("plop %s\n", cmd->av[0]);
-		if (execve(cmd->av[0], cmd->av, *(g_data.env_p)) < 0)
+		if (execve(cmd->av[0], cmd->av, /**(g_data.env_p)*/NULL) < 0)
 		{
 			if (cmd->env == 0)
 				perror("minishell ");
