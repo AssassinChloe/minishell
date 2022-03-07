@@ -29,11 +29,11 @@ void	ft_printchain(t_list *elem)
 
 void	ft_addone(t_list **tokens, char **tmp)
 {
-	if (*tmp != NULL && ft_strcmp(*tmp, "") != 0)
+	if (*tmp != NULL)
 	{
 		if (*tokens == NULL)
 			*tokens = ft_lstnew(ft_strdup(*tmp));
-		else
+		else if (ft_strcmp(*tmp, "") != 0)
 			ft_lstadd_back(tokens, ft_lstnew(ft_strdup(*tmp)));
 		free(*tmp);
 		*tmp = NULL;
