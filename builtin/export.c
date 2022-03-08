@@ -95,7 +95,6 @@ int	count_var_env(void)
 	return (nb_var);
 }
 
-
 char	**table_export_key(void)
 {
 	char	**table;
@@ -119,11 +118,11 @@ char	**table_export_key(void)
 	return (table);
 }
 
-char **sort_table(char **table)
+char	**sort_table(char **table)
 {
-	int i;
-	int j;
-	char *tmp;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	if (*table == NULL)
 		return (NULL);
@@ -145,7 +144,7 @@ char **sort_table(char **table)
 
 void	free_table_string(char **table)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (table[i])
@@ -156,22 +155,21 @@ void	free_table_string(char **table)
 	free(table);
 }
 
-
 int	print_table(char **table)
 {
-	int i;
+	int		i;
 	t_env	*var;
-	char *var_value;
+	char	*var_value;
 
-	i= 0;
-	while(table[i])
+	i = 0;
+	while (table[i])
 	{
 		ft_putstr_fd("Export ", STDOUT_FILENO);
 		ft_putstr_fd(table[i], STDOUT_FILENO);
 		var = search_var(table[i]);
 		if (var->value)
 		{
-			var_value=(get_env_value(table[i]));
+			var_value = (get_env_value(table[i]));
 			ft_putstr_fd("=\"", STDOUT_FILENO);
 			ft_putstr_fd(var_value, STDOUT_FILENO);
 			ft_putstr_fd("\"", STDOUT_FILENO);
@@ -270,7 +268,7 @@ int	ft_export_with_equal(char *str)
 	return (0);
 }
 
-int ft_export_invalid_option(char *str)
+int	ft_export_invalid_option(char *str)
 {
 	ft_putstr_fd("minishell: export: ", 2);
 	ft_putchar_fd(str[0], 2);
@@ -285,15 +283,13 @@ int	ft_export(t_cmd cmd)
 {
 	int		i;
 	int		ret;
-	char **table;
+	char	**table;
 
 	if (cmd.argc == 1) // ajout test d'impression  orde
 	{
 		table = table_export_key();
 		table = sort_table(table);
 		return (print_table(table));
-//		printf("\n");
-//		return (print_exp_list());	
 	}
 	i = 0;
 	ret = 0;
