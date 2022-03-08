@@ -37,5 +37,6 @@ void	ft_addone(t_list **tokens, char **tmp)
 			ft_lstadd_back(tokens, ft_lstnew(ft_strdup(*tmp)));
 		free(*tmp);
 		*tmp = NULL;
+		g_data.token++;
 	}
 }

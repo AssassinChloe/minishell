@@ -95,7 +95,7 @@ int	ft_lexing(t_list **list)
 	commandlist = NULL;
 	ft_divide_pipe(*list, *list, &commandlist);
 	g_data.exit_value = test_iscmd(commandlist);
-	//ft_printtype(commandlist);
+	// ft_printtype(commandlist);
 	if (g_data.exit_value > 0)
 	{
 		ft_free_commandlist(&commandlist);

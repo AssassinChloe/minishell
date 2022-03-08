@@ -52,14 +52,16 @@ void	ft_print_error()
 	int		ret;
 	int     fd;
 
-	if (g_data.nb_pipe > 0 && (fd = open(".log", O_RDONLY)) > 0)
-	{ 
+	if (g_data.nb_pipe > 0)
+	{
+		fd = open(".log", O_RDONLY);
+		if (fd < 0)
+			return ;
 		log = NULL;
 		error = NULL;
 		ret = get_next_line(fd, &log);
 		if (ret >= 0)
 		{
-		printf("test %s %d\n", log, g_data.exit_value);
 
 			if (ft_is_only_digit(log) == 1)
 				g_data.exit_value = ft_atoi(log);
@@ -75,7 +77,6 @@ void	ft_print_error()
 				if (ft_is_only_digit(log) == 1)
 				{
 					g_data.exit_value = ft_atoi(log);
-					printf(" test2 exit %d\n", g_data.exit_value);
 				}
 				else 
 					error = ft_strjoin(error, log);
@@ -88,7 +89,6 @@ void	ft_print_error()
 			free(error);  
 		}
 		free(log);
-		printf(" test3 exit %d\n", g_data.exit_value);
 		log = NULL;
 		close(fd);
 		unlink(".log");

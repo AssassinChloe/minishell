@@ -38,6 +38,21 @@ void	ft_free_commandlist(t_list **commandlist)
 	ft_lstclear(commandlist);
 }
 
+void	ft_free_splitlist(t_list **splitlist)
+{
+	t_list	*tmp;
+	t_split	*split;
+
+	tmp = *splitlist;
+	while (tmp)
+	{
+		split = (t_split *)tmp->content;
+		if (split->str)
+			free(split->str);
+		tmp = tmp->next;
+	}
+	ft_lstclear(splitlist);
+}
 void	ft_divide_redirection(t_cmd *cmd)
 {
 	int		i;
@@ -63,27 +78,78 @@ void	ft_divide_redirection(t_cmd *cmd)
 	}
 }
 
+void	free_tab(char **tab)
+{
+	int i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		tab[i] = NULL;
+		i++;
+	}
+	free(tab);
+	tab = NULL;
+}
+
 t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2)
 {
 	int	j;
 	int	multicmd;
+	char **split;
+	int	k;
+	int token;
+	t_split	*var;
+	t_list *list;
 
 	multicmd = 0;
+	list = g_data.split;
 	j = 0;
+	token = 0;
+	if (list != NULL)
+		var = (t_split *)list->content;
 	tmp->argc = i;
 	tmp->argc_init = i;
 	tmp->redir_nb = 0;
-	tmp->av = malloc(sizeof(char *) * (i + 1));
-	tmp->type = malloc(sizeof(int) * i);
+	tmp->av = malloc(sizeof(char *) * (i + 10));
+	tmp->type = malloc(sizeof(int) * 10);
 	while (tmplist2 && i > j)
 	{
-		tmp->av[j] = ft_strdup((char *)tmplist2->content);
-		tmp->type[j] = get_token_type((char *)tmplist2->content, &multicmd);
-		if (j > 0 && (tmp->type[j - 1] >= T_LOWER
-				&& tmp->type[j - 1] <= T_GGREATER))
-			tmp->type[j] = T_FILENAME;
+		//printf("test %s, j : %d, token %d\n", g_data.line, j, g_data.token);
+		if (list && token == var->token_nb)
+		{
+			k = 0;
+			split = ft_split((char *)tmplist2->content, " ");
+			while (split[k])
+			{
+				tmp->av[j] = ft_strdup(split[k]);
+				if (j == 0)
+					tmp->type[j] = get_token_type((char *)tmplist2->content, &multicmd);
+				else
+					tmp->type[j] = T_FILENAME;
+				k++;
+				j++;
+			}
+			tmp->argc = tmp->argc + k - 1;
+			tmp->argc_init = tmp->argc_init + k - 1;
+			free_tab(split);
+			list = list->next;
+			if (list != NULL)
+				var = (t_split *)list->content;
+		}
+		else
+		{
+			tmp->av[j] = ft_strdup((char *)tmplist2->content);
+			tmp->type[j] = get_token_type((char *)tmplist2->content, &multicmd);
+			if (j > 0 && (tmp->type[j - 1] >= T_LOWER
+					&& tmp->type[j - 1] <= T_GGREATER))
+				tmp->type[j] = T_FILENAME;
+			
+			j++;
+		}
+		token++;
 		tmplist2 = tmplist2->next;
-		j++;
 	}
 	tmp->av[j] = NULL;
 	if (tmplist2 && ft_strcmp((char *)tmplist2->content, "|") == 0)
@@ -115,5 +181,6 @@ void	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 			*commandlist = ft_lstnew(tmp);
 		else
 			ft_lstadd_back(commandlist, ft_lstnew(tmp));
+		ft_free_splitlist(&g_data.split);
 	}
 }

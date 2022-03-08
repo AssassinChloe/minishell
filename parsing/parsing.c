@@ -56,7 +56,7 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 			if (str[*i - 1] && str[*i - 1] == '$' && ft_isquote(str[*i]) > 0)
 				*tmp = ft_remove_dollar(*tmp, start);
 			else
-				*tmp = ft_extract_var(*tmp);
+				*tmp = ft_extract_var(*tmp, 0);
 		}
 		if (str[*i] && ft_isquote(str[*i]) > 0)
 		{
@@ -156,6 +156,7 @@ void	ft_parse(char *str)
 	}
 	if (tokens == NULL)
 		return ;
+	// ft_printchain(tokens);
 	i = ft_lexing(&tokens);
 	ft_lstclear(&tokens);
 	if (i == 0)
