@@ -84,7 +84,7 @@ int	minishell(void)
 	}
 	rl_clear_history();
 	free_g_data();
-	printf("exit\n");
+//	printf("exit\n");
 	return (0);
 }
 
