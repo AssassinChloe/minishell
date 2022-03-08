@@ -25,15 +25,27 @@ void	ft_putstr_fd(char *s, int fd)
 	write(fd, s, i);
 }
 */
-int	ft_pwd(void)
+int	ft_pwd(t_cmd cmd)
 {
 	char	*pwd;
 
-	pwd = getcwd(NULL, 0);
-	ft_putstr_fd(pwd, STDOUT_FILENO);
-	ft_putstr_fd("\n", STDOUT_FILENO);
-	free(pwd);
-	return (0);
+	if (cmd.av[1] && cmd.av[1][0] == '-' && cmd.av[1][1])
+	{
+		ft_putstr_fd("minshell: pwd: ", 2);
+		ft_putchar_fd(cmd.av[1][0], 2);
+		ft_putchar_fd(cmd.av[1][1], 2);
+		ft_putstr_fd(": invalid option\n", 2);
+		g_data.exit_value = 2;
+		return (2);
+	}
+	else
+	{
+		pwd = getcwd(NULL, 0);
+		ft_putstr_fd(pwd, STDOUT_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		free(pwd);
+		return (0);	
+	}
 }
 /*
 int	main()

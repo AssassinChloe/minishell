@@ -68,10 +68,10 @@ int	unset_invalid_id(char *str)
 
 int	unset_invalid_option(char *str)
 {
-	ft_putstr_fd("unset: `", 2);
+	ft_putstr_fd("unset: ", 2);
 	ft_putchar_fd(str[0], 2);
 	ft_putchar_fd(str[1], 2);
-	ft_putstr_fd("': invalid option\n", 2);
+	ft_putstr_fd(": invalid option\n", 2);
 	g_data.exit_value = 2;
 	return (2);
 }

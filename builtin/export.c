@@ -168,11 +168,11 @@ int	ft_export_with_equal(char *str)
 
 int ft_export_invalid_option(char *str)
 {
-	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd("minishell: export: ", 2);
 	ft_putchar_fd(str[0], 2);
 	if (str[1])
 		ft_putchar_fd(str[1], 2);
-	ft_putstr_fd("': invalid option\n", 2);
+	ft_putstr_fd(": invalid option\n", 2);
 	g_data.exit_value = 2;
 	return (2);
 }

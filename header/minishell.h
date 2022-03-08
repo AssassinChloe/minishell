@@ -153,7 +153,7 @@ void	handle_sig(int sig);
 void	init_signal(void);
 int		minishell(void);
 int		ft_echo(char **args);
-int		ft_pwd(void);
+int		ft_pwd(t_cmd cmd);
 int		launch_builtin(t_cmd *cmd);
 t_env	*search_var(char *str);
 char	*get_env_value(char *str);

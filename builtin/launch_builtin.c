@@ -16,7 +16,7 @@ int	launch_builtin(t_cmd *cmd)
 {
 	close(g_data.check);
 	if (ft_strcmp(cmd->av[0], "cd") == 0)
-		return (ft_cd(*cmd));
+		g_data.exit_value = (ft_cd(*cmd));
 	if (ft_strcmp(cmd->av[0], "echo") == 0)
 		return (ft_echo((*cmd).av));
 	if (ft_strcmp(cmd->av[0], "env") == 0)
@@ -26,7 +26,7 @@ int	launch_builtin(t_cmd *cmd)
 	if (ft_strcmp(cmd->av[0], "export") == 0)
 		return (ft_export(*cmd));
 	if (ft_strcmp(cmd->av[0], "pwd") == 0)
-		return (ft_pwd());
+		return (ft_pwd(*cmd));
 	if (ft_strcmp(cmd->av[0], "unset") == 0)
 		return (ft_unset((*cmd).av));
 	return (1);
