@@ -80,6 +80,110 @@ int	has_plus_equal(char *str)
 	return (0);
 }
 
+int	count_var_env(void)
+{
+	int		nb_var;
+	t_env	*var;
+
+	var = g_data.env;
+	nb_var = 0;
+	while (var->next)
+	{
+		nb_var++;
+		var = var->next;
+	}
+	return (nb_var);
+}
+
+
+char	**table_export_key(void)
+{
+	char	**table;
+	int		nb_var;
+	t_env	*var;
+
+	var = g_data.env;
+	nb_var = count_var_env();
+	table = (char **)malloc(sizeof(char *) * (nb_var + 2));
+	if (!table)
+		return (NULL);
+	var = g_data.env;
+	table[nb_var + 1] = NULL;
+	while (var->next)
+	{
+		table[nb_var] = ft_strdup(var->key);
+		nb_var--;
+		var = var->next;
+	}
+	table[nb_var] = ft_strdup(var->key);
+	return (table);
+}
+
+char **sort_table(char **table)
+{
+	int i;
+	int j;
+	char *tmp;
+
+	if (*table == NULL)
+		return (NULL);
+	i = 0;
+	while (table[i])
+	{
+		j = i;
+		while (j && ft_strcmp(table[j], table[j - 1]) < 0)
+		{
+			tmp = table[j];
+			table[j] = table[j - 1];
+			table[j - 1] = tmp;
+			j--;
+		}
+		i++;
+	}
+	return (table);
+}
+
+void	free_table_string(char **table)
+{
+	int i;
+
+	i = 0;
+	while (table[i])
+	{
+		free(table[i]);
+		i++;
+	}
+	free(table);
+}
+
+
+int	print_table(char **table)
+{
+	int i;
+	t_env	*var;
+	char *var_value;
+
+	i= 0;
+	while(table[i])
+	{
+		ft_putstr_fd("Export ", STDOUT_FILENO);
+		ft_putstr_fd(table[i], STDOUT_FILENO);
+		var = search_var(table[i]);
+		if (var->value)
+		{
+			var_value=(get_env_value(table[i]));
+			ft_putstr_fd("=\"", STDOUT_FILENO);
+			ft_putstr_fd(var_value, STDOUT_FILENO);
+			ft_putstr_fd("\"", STDOUT_FILENO);
+			free(var_value);
+		}
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		i++;
+	}
+	free_table_string(table);
+	return (0);
+}
+
 int	print_exp_list(void)
 {
 	t_env	*var;
@@ -148,7 +252,7 @@ int	ft_export_with_equal(char *str)
 		spvar = ft_split_env(str);
 	if (!format_key_ok(spvar[0]))
 	{
-		err_format_id_export(str); // changement pour afficher X=XX
+		err_format_id_export(str);
 		free_tab2(spvar);
 		return (1);
 	}
@@ -181,9 +285,16 @@ int	ft_export(t_cmd cmd)
 {
 	int		i;
 	int		ret;
+	char **table;
 
-	if (cmd.argc == 1)
-		return (print_exp_list());
+	if (cmd.argc == 1) // ajout test d'impression  orde
+	{
+		table = table_export_key();
+		table = sort_table(table);
+		return (print_table(table));
+//		printf("\n");
+//		return (print_exp_list());	
+	}
 	i = 0;
 	ret = 0;
 	while (cmd.av[++i])
@@ -202,52 +313,3 @@ int	ft_export(t_cmd cmd)
 	}
 	return (ret);
 }
-/*
-int	ft_export(t_cmd cmd)
-{
-	int		i;
-	char	**spvar;
-
-	if (cmd.argc == 1)
-	{
-		print_exp_list();
-		return (0);
-	}
-	i = 0;
-	while (cmd.av[++i])
-	{
-		if (!has_equal(cmd.av[i]))
-		{
-			if (format_key_ok(cmd.av[i]) && !already_in_env(cmd.av[i]))
-				add_env_value(cmd.av[i], NULL, 0);
-			else if (!format_key_ok(cmd.av[i]))
-				return (err_format_id_export(cmd.av[i]));
-		}
-		else
-		{
-			if (has_plus_equal(cmd.av[i]))
-				spvar = ft_split_env_plus(cmd.av[i]);
-			else if (has_equal(cmd.av[i]))
-				spvar = ft_split_env(cmd.av[i]);
-			if (!format_key_ok(spvar[0]))
-			{
-				err_format_id_export(spvar[0]);
-				free_tab2(spvar);
-				return (1);
-			}
-			if (!already_in_env(spvar[0]))
-				add_env_value(spvar[0], spvar[1], 1);
-			else
-			{
-				if (has_plus_equal(cmd.av[i]))
-					spvar[1] = ft_strjoin_d(get_env_value(spvar[0]), spvar[1]);
-				free(search_var(spvar[0])->value);
-				search_var(spvar[0])->value = ft_strdup(spvar[1]);
-				search_var(spvar[0])->has_value = 1;
-			}
-			free_tab2(spvar);
-		}
-	}
-	return (0);
-}
-*/
