@@ -44,7 +44,7 @@ int	ft_pwd(t_cmd cmd)
 		ft_putstr_fd(pwd, STDOUT_FILENO);
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		free(pwd);
-		return (0);	
+		return (0);
 	}
 }
 /*

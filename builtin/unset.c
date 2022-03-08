@@ -28,35 +28,6 @@ traite tous les arguments les uns a la suite des autres,
 ne s'arrette pas si erreur
 */
 
-void	del_first_env(void)
-{
-	t_env	*tmp;
-
-	tmp = g_data.env->next;
-	if ((g_data.env)->key)
-		free((g_data.env)->key);
-	if ((g_data.env)->value)
-		free((g_data.env)->value);
-	if (g_data.env)
-		free(g_data.env);
-	g_data.env = NULL;
-	g_data.env = tmp;
-}
-
-t_env	*get_prev(char *key)
-{
-	t_env	*tmp;
-
-	tmp = g_data.env;
-	while (tmp->next)
-	{
-		if (!ft_strcmp(tmp->next->key, key))
-			return (tmp);
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
-
 int	unset_invalid_id(char *str)
 {
 	ft_putstr_fd("unset: `", 2);
