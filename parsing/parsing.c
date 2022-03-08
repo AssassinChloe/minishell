@@ -40,11 +40,9 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 {
 	int start;
 	int quote;
-	int	equal;
 
 	start = 0;
 	quote = 0;
-	equal = 0;
 	while (str[*i] && ft_special(str[*i]) == 0)
 	{
 		*multiple = 0;
@@ -52,12 +50,10 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 		{	
 			*tmp = ft_strjoin_char(*tmp, str[*i]);
 			*i = *i + 1;
-			/*if (str[*i] == '=')
-				equal = 1;*/
 		}
 		if (*tmp && has_dollar(*tmp + start) == 1)
 		{
-			if (str[*i - 1] && str[*i - 1] == '$' && ft_isquote(str[*i]) == 1)
+			if (str[*i - 1] && str[*i - 1] == '$' && ft_isquote(str[*i]) > 0)
 				*tmp = ft_remove_dollar(*tmp, start);
 			else
 				*tmp = ft_extract_var(*tmp);
@@ -71,7 +67,7 @@ int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 		}
 		start = ft_strlen(*tmp);
 	}
-	return (equal);
+	return (0);
 }
 
 char	*ft_extract_limit(char *str, int *i, int *hasquote)
@@ -132,22 +128,18 @@ void	ft_parse(char *str)
 	int		i;
 	char	*tmp;
 	t_list	*tokens;
-	/*t_list	*localvar;*/
 	int		ret;
 	int		multiple;
 
 	i = 0;
 	tmp = NULL;
 	tokens = NULL;
-/*	localvar = NULL;*/
 	multiple = 1;
 	while (str[i])
 	{
 		ret = ft_parsetxt(str, &i, &tmp, &multiple);
 		if (ret < 0)
 			return (ft_freeparsing(&tmp, &tokens));
-	/*	else if (ret == 1)
-			ft_addone(&localvar, &tmp);*/
 		else
 			ft_addone(&tokens, &tmp);
 		while (str[i] && ft_special(str[i]) == 1)
@@ -163,13 +155,7 @@ void	ft_parse(char *str)
 		return (ft_freeparsing(&tmp, &tokens));
 	}
 	if (tokens == NULL)
-	{
-		/*add localvar comme variables(non affiché par env)
-		ou modifier les variable d'env existantes et free la list*/
 		return ;
-	}
-	/*ft_lstclear(&localvar);  >> j'ai commenté tous les passages pour la gestion du = */
-	//ft_printchain(tokens);
 	i = ft_lexing(&tokens);
 	ft_lstclear(&tokens);
 	if (i == 0)
