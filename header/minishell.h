@@ -47,6 +47,12 @@ typedef struct s_redir
 	int	type;
 }	t_redir;
 
+typedef struct s_split
+{
+	char			*str;
+	int				token_nb;
+}	t_split;
+
 typedef struct s_cmd
 {
 	char			**av;
@@ -57,7 +63,7 @@ typedef struct s_cmd
 	int				redir_nb;
 	int				env;
 	struct s_cmd	*next;
-}					t_cmd;
+}	t_cmd;
 
 typedef struct s_env //ajout
 {
@@ -70,17 +76,18 @@ typedef struct s_env //ajout
 
 typedef struct s_data // globale ?
 {
+	t_list	*split;
 	t_cmd	*cmd_lst;
 	char	*line;
+	int		token;
 	char	**splited_line;
 	char	**args;
 	t_env	*env;
-	char	***env_p;
 	int		exit_value;
 	int		nb_pipe;
 	int		execution; // pour dire si on est en cours d'execution ou non
 	int		loop; // variable pour maintien de la boucle while
-	int check;
+	int		check;
 }		t_data;
 
 extern t_data	g_data;
@@ -95,7 +102,7 @@ void	ft_printchain(t_list *elem);
 void	ft_addone(t_list **tokens, char **tmp);
 int		has_dollar(char *str);
 int		get_token_type(char *str, int *multicmd);
-char	*ft_extract_var(char *str);
+char	*ft_extract_var(char *str, int quote, int start);
 int		ft_isredir(char c);
 int		ft_isdoubleredir(char *str, int i);
 void	ft_concatquote(char *str, char **tmp, int *i);
@@ -140,6 +147,7 @@ int 	is_valid_cmd(t_cmd *cmd);
 void	ft_print_error();
 void	ft_error_check_cmd(t_cmd *cmd, int *ret);
 char	*ft_remove_dollar(char *str, int start);
+void	ft_free_splitlist(t_list **splitlist);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);

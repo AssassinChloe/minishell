@@ -18,11 +18,13 @@ void	init_data(char **envp)
 {
 	g_data.loop = 1;
 	g_data.line = NULL;
+	g_data.split = NULL;
 	g_data.env = get_env(envp);
 	g_data.exit_value = 0;
 	g_data.cmd_lst = NULL;
 	g_data.nb_pipe = 0;
 	g_data.execution = 0;
+	g_data.token = 0;
 }
 
 void	handle_sig(int sig)
@@ -69,7 +71,11 @@ int	minishell(void)
 				ft_parse(buffer);
 				ft_print_error();
 				unlink(".heredoc");
+				unlink(".log");
 				g_data.nb_pipe = 0;
+				g_data.token = 0;
+				ft_free_splitlist(&g_data.split);
+				g_data.split = NULL;
 			}
 			free(buffer);
 			buffer = NULL;
@@ -86,7 +92,6 @@ int	minishell(void)
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argv;
-	g_data.env_p = &envp;
 	if (argc != 1)
 		exit(EXIT_FAILURE);
 	init_data(envp);
