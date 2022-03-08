@@ -28,8 +28,10 @@ traite tous les arguments les uns a la suite des autres,
 ne s'arrette pas si erreur
 */
 
-void	del_first_env(t_env *tmp)
+void	del_first_env(void)
 {
+	t_env	*tmp;
+
 	tmp = g_data.env->next;
 	if ((g_data.env)->key)
 		free((g_data.env)->key);
@@ -70,16 +72,24 @@ int	unset_invalid_option(char *str)
 	ft_putchar_fd(str[0], 2);
 	ft_putchar_fd(str[1], 2);
 	ft_putstr_fd("': invalid option\n", 2);
-	g_data.exit_value = 1;
+	g_data.exit_value = 2;
 	return (2);
+}
+
+void	unset_has_prev(t_env *prev)
+{
+	t_env	*tmp;
+
+	tmp = prev->next->next;
+	destroy_var_env(prev->next);
+	prev->next = tmp;
 }
 
 int	ft_unset(char **arg)
 {
 	t_env	*prev;
-	t_env	*tmp;
 	int		i;
-	int 	ret;
+	int		ret;
 
 	i = 0;
 	ret = 0;
@@ -89,54 +99,14 @@ int	ft_unset(char **arg)
 			return (unset_invalid_option(arg[1]));
 		if (!format_key_ok(arg[i]))
 			ret = unset_invalid_id(arg[i]);
-		tmp = NULL;
 		if (already_in_env(arg[i]))
 		{
 			prev = get_prev(arg[i]);
 			if (prev)
-			{
-				tmp = prev->next->next;
-				destroy_var_env(prev->next);
-				prev->next = tmp;
-			}
+				unset_has_prev(prev);
 			else
-				del_first_env(tmp);
+				del_first_env();
 		}
 	}
 	return (ret);
 }
-
-/*
-int	ft_unset(char **arg)
-{
-	t_env	*prev;
-	t_env	*tmp;
-	int		i;
-
-	i = 0;
-	while (arg[++i])
-	{
-		if (!format_key_ok(arg[i]))
-			return (unset_invalid(arg[i]));
-		tmp = NULL;
-		if (!already_in_env(arg[i]))
-			return (0);
-		prev = get_prev(arg[i]);
-		tmp = prev->next->next;
-		if (!tmp)
-		{
-			prev->next = NULL;
-			return (0);
-		}
-		destroy_var_env(prev->next);
-//		if (prev->next->value)
-//			free(prev->next->value);
-//		if (prev->next->key)
-//			free(prev->next->key);
-//		free(prev->next);
-		prev->next = tmp;
-	}
-	destroy_var_env(tmp);
-	return (0);
-}
-*/
