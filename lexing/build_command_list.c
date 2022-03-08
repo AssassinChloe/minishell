@@ -93,20 +93,18 @@ void	free_tab(char **tab)
 	tab = NULL;
 }
 
-t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2)
+t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 {
 	int	j;
 	int	multicmd;
 	char **split;
 	int	k;
-	int token;
 	t_split	*var;
 	t_list *list;
 
 	multicmd = 0;
 	list = g_data.split;
 	j = 0;
-	token = 0;
 	if (list != NULL)
 		var = (t_split *)list->content;
 	tmp->argc = i;
@@ -116,8 +114,7 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2)
 	tmp->type = malloc(sizeof(int) * 10);
 	while (tmplist2 && i > j)
 	{
-		//printf("test %s, j : %d, token %d\n", g_data.line, j, g_data.token);
-		if (list && token == var->token_nb)
+		if (list && *token == var->token_nb)
 		{
 			k = 0;
 			split = ft_split((char *)tmplist2->content, " ");
@@ -148,7 +145,7 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2)
 			
 			j++;
 		}
-		token++;
+		*token = *token + 1;
 		tmplist2 = tmplist2->next;
 	}
 	tmp->av[j] = NULL;
@@ -161,7 +158,9 @@ void	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 {
 	int		i;
 	t_cmd	*tmp;
+	int		token;
 
+	token = 0;
 	while (tmplist)
 	{
 		i = 0;
@@ -175,12 +174,12 @@ void	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 		{
 			tmplist = tmplist->next;
 			g_data.nb_pipe++;
+			token++;
 		}
-		tmplist2 = ft_init_cmdlist(tmp, i, tmplist2);
+		tmplist2 = ft_init_cmdlist(tmp, i, tmplist2, &token);
 		if (*commandlist == NULL)
 			*commandlist = ft_lstnew(tmp);
 		else
 			ft_lstadd_back(commandlist, ft_lstnew(tmp));
-		ft_free_splitlist(&g_data.split);
 	}
 }

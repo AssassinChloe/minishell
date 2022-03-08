@@ -69,7 +69,7 @@ void	ft_copyvarvalue(char **tmp, char *str, int *i)
 	}
 }
 
-char	*ft_extract_var(char *str, int quote)
+char	*ft_extract_var(char *str, int quote, int start)
 {
 	int		i;
 	char	*tmp;
@@ -77,6 +77,8 @@ char	*ft_extract_var(char *str, int quote)
 
 	tmp = NULL;
 	i = 0;
+	while (str[i] && i < start)
+		tmp = ft_strjoin_char(tmp, str[i++]);
 	if (quote == 0)
 	{
 		tmp_var = malloc(sizeof(t_split));

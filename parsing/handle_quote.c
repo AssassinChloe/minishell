@@ -93,7 +93,7 @@ void	ft_concatquote(char *str, char **tmp, int *i)
 	if (tmp2 == NULL && *i < 0)
 		return ;
 	if (ret == 2 && has_dollar(tmp2) == 1)
-		tmp2 = ft_extract_var(tmp2, 1);
+		tmp2 = ft_extract_var(tmp2, 1, 0);
 	if (*tmp != NULL)
 		*tmp = ft_strjoin(*tmp, tmp2);
 	else

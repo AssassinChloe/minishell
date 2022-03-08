@@ -102,7 +102,7 @@ void	ft_printchain(t_list *elem);
 void	ft_addone(t_list **tokens, char **tmp);
 int		has_dollar(char *str);
 int		get_token_type(char *str, int *multicmd);
-char	*ft_extract_var(char *str, int quote);
+char	*ft_extract_var(char *str, int quote, int start);
 int		ft_isredir(char c);
 int		ft_isdoubleredir(char *str, int i);
 void	ft_concatquote(char *str, char **tmp, int *i);
@@ -147,6 +147,7 @@ int 	is_valid_cmd(t_cmd *cmd);
 void	ft_print_error();
 void	ft_error_check_cmd(t_cmd *cmd, int *ret);
 char	*ft_remove_dollar(char *str, int start);
+void	ft_free_splitlist(t_list **splitlist);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);
