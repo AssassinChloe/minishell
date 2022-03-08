@@ -22,7 +22,7 @@ void	ft_freeparsing(char **str, t_list **chain)
 char	*is_forbidden_redir(int *i, int *multiple)
 {
 	*i = -1;
-	printf("minishell : syntax error\n");
+	printf("minishell: syntax error\n");
 	*multiple = 0;
 	g_data.exit_value = 2;
 	return (NULL);

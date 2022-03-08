@@ -65,7 +65,7 @@ char	*ft_handle_quote(char *str, int *i, int keepquote)
 	if (ret < 0)
 	{
 		*i = -1;
-		printf("minishell : error the quote is not closed\n");
+		printf("minishell: error the quote is not closed\n");
 		return (NULL);
 	}
 	else

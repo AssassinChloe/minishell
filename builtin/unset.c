@@ -55,13 +55,23 @@ t_env	*get_prev(char *key)
 	return (NULL);
 }
 
-int	unset_invalid(char *str)
+int	unset_invalid_id(char *str)
 {
 	ft_putstr_fd("unset: `", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
 	g_data.exit_value = 1;
 	return (1);
+}
+
+int	unset_invalid_option(char *str)
+{
+	ft_putstr_fd("unset: `", 2);
+	ft_putchar_fd(str[0], 2);
+	ft_putchar_fd(str[1], 2);
+	ft_putstr_fd("': invalid option\n", 2);
+	g_data.exit_value = 1;
+	return (2);
 }
 
 int	ft_unset(char **arg)
@@ -75,8 +85,10 @@ int	ft_unset(char **arg)
 	ret = 0;
 	while (arg[++i])
 	{
+		if (arg[1][0] == '-' && arg[1][1])
+			return (unset_invalid_option(arg[1]));
 		if (!format_key_ok(arg[i]))
-			ret = unset_invalid(arg[i]);
+			ret = unset_invalid_id(arg[i]);
 		tmp = NULL;
 		if (already_in_env(arg[i]))
 		{
