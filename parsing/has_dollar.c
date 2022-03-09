@@ -73,22 +73,13 @@ char	*ft_extract_var(char *str, int quote, int start)
 {
 	int		i;
 	char	*tmp;
-	t_split	*tmp_var;
 
 	tmp = NULL;
 	i = 0;
 	while (str[i] && i < start)
 		tmp = ft_strjoin_char(tmp, str[i++]);
 	if (quote == 0)
-	{
-		tmp_var = malloc(sizeof(t_split));
-		tmp_var->str = ft_strdup(str);
-		tmp_var->token_nb = g_data.token;
-		if (g_data.split == NULL)
-			g_data.split = ft_lstnew(tmp_var);
-		else
-			ft_lstadd_back(&g_data.split, ft_lstnew(tmp_var));
-	}
+		build_split_list(str);
 	while (str[i])
 	{
 		while (str[i] && str[i] != '$')
@@ -100,7 +91,7 @@ char	*ft_extract_var(char *str, int quote, int start)
 			else if (ft_isvarphabet(str[i + 1]) == 0)
 			{
 				if (ft_isspace(str[i + 1]) == 1 || str[i + 1] == '\0'
-				|| str[i + 1] == ':' || str[i + 1] == '=')
+					|| str[i + 1] == ':' || str[i + 1] == '=')
 					tmp = ft_strjoin_char(tmp, str[i]);
 				i++;
 			}

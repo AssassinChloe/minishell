@@ -94,4 +94,6 @@ void	free_g_data(void)
 		free(g_data.line);
 	if (g_data.env_in_tab)
 		free_table_string(g_data.env_in_tab);
+	if	(g_data.log)
+		free(g_data.log);
 }

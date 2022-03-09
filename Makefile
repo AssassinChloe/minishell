@@ -19,7 +19,7 @@ SRCS	=	minishell.c printf_error.c\
 			$(addprefix $(EXECDIR), $(EXEC))\
 
 PARSING	=	parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote.c handle_redir.c\
-			cleanparsing.c
+			cleanparsing.c split_list.c
 
 PARSDIR	=	parsing/
 

@@ -38,8 +38,8 @@ char	*ft_handleis(char *str, int *i, int *multiple)
 
 int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
 {
-	int start;
-	int quote;
+	int	start;
+	int	quote;
 
 	start = 0;
 	quote = 0;
@@ -76,7 +76,7 @@ char	*ft_extract_limit(char *str, int *i, int *hasquote)
 	char	*tmp2;
 
 	tmp = NULL;
-	tmp2 = NULL; 
+	tmp2 = NULL;
 	while (str[*i] && ft_special(str[*i]) == 0)
 	{
 		if (ft_isquote(str[*i]) > 0)

@@ -54,7 +54,7 @@ void	ft_print_error()
 
 	if (g_data.nb_pipe > 0)
 	{
-		fd = open(".log", O_RDONLY);
+		fd = open(g_data.log, O_RDONLY);
 		if (fd < 0)
 			return ;
 		log = NULL;
@@ -91,6 +91,6 @@ void	ft_print_error()
 		free(log);
 		log = NULL;
 		close(fd);
-		unlink(".log");
+		unlink(g_data.log);
 	}
 }

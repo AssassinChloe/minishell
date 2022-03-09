@@ -38,28 +38,15 @@ void	ft_free_commandlist(t_list **commandlist)
 	ft_lstclear(commandlist);
 }
 
-void	ft_free_splitlist(t_list **splitlist)
+int	ft_divide_redirection(t_cmd *cmd)
 {
-	t_list	*tmp;
-	t_split	*split;
-
-	tmp = *splitlist;
-	while (tmp)
-	{
-		split = (t_split *)tmp->content;
-		if (split->str)
-			free(split->str);
-		tmp = tmp->next;
-	}
-	ft_lstclear(splitlist);
-}
-void	ft_divide_redirection(t_cmd *cmd)
-{
-	int		i;
-	int		j;
+	int	i;
+	int	j;
+	int	ret;
 
 	i = 0;
 	j = 0;
+	ret = 0;
 	ft_countredir(cmd);
 	if (cmd->redir_nb > 0)
 	{
@@ -71,11 +58,13 @@ void	ft_divide_redirection(t_cmd *cmd)
 			if (j < cmd->redir_nb && (cmd->type[i] >= T_LOWER
 					&& cmd->type[i] <= T_GGREATER))
 			{
-				ft_handleredir(j, cmd, &i);
+				if (ft_handleredir(j, cmd, &i) > 0 )
+					return (1);
 				j++;
 			}
 		}
 	}
+	return (0);
 }
 
 void	free_tab(char **tab)

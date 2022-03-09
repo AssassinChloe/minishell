@@ -25,7 +25,17 @@ void	exec_cmd(t_cmd *cmd)
 int	ft_child(int **pip, int i, t_cmd *cmd)
 {
 	char	*nb;
-	ft_divide_redirection(cmd);
+
+	if (i == g_data.nb_pipe)
+		dup2(g_data.check, STDERR_FILENO);
+	if (ft_divide_redirection(cmd) > 0)
+	{
+		ft_closepipe(pip);
+		ft_endredir(cmd);
+		close(g_data.check);
+		g_data.exit_value = 1;
+		return (0);
+	}
 	if (g_data.nb_pipe > 0)
 	{
 		if (i < g_data.nb_pipe)
@@ -100,7 +110,7 @@ int	execute_command(t_list *commandlist)
 	int		**pip;
 	int		pid;
 	
-	g_data.check = open(".log", O_CREAT | O_RDWR | O_APPEND, 0666);
+	g_data.check = open(g_data.log, O_CREAT | O_RDWR | O_APPEND, 0666);
 	if (g_data.check < 0)
 		printf("error open\n");
 	pid = 1;

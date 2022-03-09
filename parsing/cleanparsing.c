@@ -30,8 +30,8 @@ char	*is_forbidden_redir(int *i, int *multiple)
 
 char	*ft_remove_dollar(char *str, int start)
 {
-	int	i;
-	char *tmp;
+	int		i;
+	char	*tmp;
 
 	i = 0;
 	tmp = NULL;
@@ -49,7 +49,6 @@ char	*ft_remove_dollar(char *str, int start)
 			i++;
 		}
 		tmp[i] = '\0';
-
 	}
 	free(str);
 	str = NULL;

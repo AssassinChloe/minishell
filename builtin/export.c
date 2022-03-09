@@ -153,7 +153,6 @@ void	free_table_string(char **table)
 		{
 			free(table[i]);
 			i++;
-			printf("i : %d\n", i);
 		}
 		free(table);
 	}
