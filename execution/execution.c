@@ -51,9 +51,9 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 		launch_builtin(cmd);
 		if (i == g_data.nb_pipe)
 		{
-		nb = ft_itoa(g_data.exit_value);
-		write(2, nb, ft_strlen(nb));
-		free(nb);
+			nb = ft_itoa(g_data.exit_value);
+			write(2, nb, ft_strlen(nb));
+			free(nb);
 		}
 		close(g_data.check);
 	}
@@ -122,7 +122,13 @@ int	execute_command(t_list *commandlist)
 	}
 	if (g_data.nb_pipe == 0 && !ft_isbuiltin(command->av[0]))
 	{
-		ft_divide_redirection(command);
+		if (ft_divide_redirection(command) > 0)
+		{
+			ft_endredir(command);
+			close(g_data.check);
+			g_data.exit_value = 1;
+			return (0);
+		}
 		launch_builtin(command);
 		if (command->redir_nb > 0)
 			ft_endredir(command);

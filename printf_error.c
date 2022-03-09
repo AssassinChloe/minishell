@@ -37,7 +37,7 @@ int	ft_is_only_digit(char *str)
 	int	i;
 
 	i = 0;
-	if (!str)
+	if (ft_strlen(str) == 0)
 		return (0);
 	while (str[i] && ft_isdigit(str[i]) == 1)
 		i++;
@@ -45,6 +45,7 @@ int	ft_is_only_digit(char *str)
 		return (0);
 	return (1);
 }
+
 void	ft_print_error()
 {
 	char	*log;
@@ -52,45 +53,39 @@ void	ft_print_error()
 	int		ret;
 	int     fd;
 
-	if (g_data.nb_pipe > 0)
+	fd = open(g_data.log, O_RDONLY);
+	if (fd < 0)
+		return ;
+	log = NULL;
+	error = NULL;
+	ret = get_next_line(fd, &log);
+	if (ret >= 0)
 	{
-		fd = open(g_data.log, O_RDONLY);
-		if (fd < 0)
-			return ;
-		log = NULL;
-		error = NULL;
-		ret = get_next_line(fd, &log);
-		if (ret >= 0)
+		if (g_data.nb_pipe > 0 && ft_is_only_digit(log) == 1)
+			g_data.exit_value = ft_atoi(log);
+		else 
+			error = ft_strdup(log);
+		while (ret == 1)
 		{
-
-			if (ft_is_only_digit(log) == 1)
+			if (error != NULL)
+				error = ft_strjoin(error, "\n");
+			free(log);
+			log = NULL;
+			ret = get_next_line(fd, &log);
+			if (g_data.nb_pipe > 0 && ft_is_only_digit(log) == 1)
 				g_data.exit_value = ft_atoi(log);
 			else 
-				error = ft_strdup(log);
-			while (ret == 1)
-			{
-				if (error != NULL)
-					error = ft_strjoin(error, "\n");
-				free(log);
-				log = NULL;
-				ret = get_next_line(fd, &log);
-				if (ft_is_only_digit(log) == 1)
-				{
-					g_data.exit_value = ft_atoi(log);
-				}
-				else 
-					error = ft_strjoin(error, log);
-			}
-			if (ft_strlen(error) > 0)
-			{
-				write(STDERR_FILENO, error, (ft_strlen(error) + 1));
-				g_data.exit_value = 1;
-			}
-			free(error);  
+				error = ft_strjoin(error, log);
 		}
-		free(log);
-		log = NULL;
-		close(fd);
-		unlink(g_data.log);
+		if (ft_strlen(error) > 0)
+		{
+			g_data.exit_value = 1;
+			write(STDERR_FILENO, error, (ft_strlen(error) + 1));
+		}
+		free(error);  
 	}
+	free(log);
+	log = NULL;
+	close(fd);
+	unlink(g_data.log);
 }

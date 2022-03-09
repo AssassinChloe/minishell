@@ -42,11 +42,9 @@ int	ft_divide_redirection(t_cmd *cmd)
 {
 	int	i;
 	int	j;
-	int	ret;
 
 	i = 0;
 	j = 0;
-	ret = 0;
 	ft_countredir(cmd);
 	if (cmd->redir_nb > 0)
 	{
@@ -82,6 +80,33 @@ void	free_tab(char **tab)
 	tab = NULL;
 }
 
+void	ft_add_mem(t_cmd **cmd, int k)
+{
+	char	**tmp_av;
+	int		*tmp_ac;
+	int		i;
+
+	i = 0;
+	while ((*cmd)->av[i])
+		i++;
+	tmp_av = malloc(sizeof(char *) * (i + k + 1));
+	tmp_ac = malloc(sizeof(int) * (i + k));
+	i = 0;
+	while((*cmd)->av[i])
+	{
+		tmp_av[i] = ft_strdup((*cmd)->av[i]);
+		free((*cmd)->av[i]);
+		(*cmd)->av[i] = NULL;
+		tmp_ac[i] = (*cmd)->type[i];
+		i++;
+	}
+	tmp_av[i] = NULL;
+	free((*cmd)->av);
+	(*cmd)->av = tmp_av;
+	free((*cmd)->type);
+	(*cmd)->type = tmp_ac;
+}
+
 t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 {
 	int	j;
@@ -99,14 +124,19 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 	tmp->argc = i;
 	tmp->argc_init = i;
 	tmp->redir_nb = 0;
-	tmp->av = malloc(sizeof(char *) * (i + 10));
-	tmp->type = malloc(sizeof(int) * 10);
+	k = 0;
+	tmp->av = malloc(sizeof(char *) * (i + 1));
+	tmp->type = malloc(sizeof(int) * i);
 	while (tmplist2 && i > j)
 	{
 		if (list && *token == var->token_nb)
 		{
 			k = 0;
 			split = ft_split((char *)tmplist2->content, " ");
+			while (split[k])
+				k++;
+			ft_add_mem(&tmp, k);
+			k = 0;
 			while (split[k])
 			{
 				tmp->av[j] = ft_strdup(split[k]);
@@ -134,10 +164,10 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 			
 			j++;
 		}
+		tmp->av[j] = NULL;
 		*token = *token + 1;
 		tmplist2 = tmplist2->next;
 	}
-	tmp->av[j] = NULL;
 	if (tmplist2 && ft_strcmp((char *)tmplist2->content, "|") == 0)
 		tmplist2 = tmplist2->next;
 	return (tmplist2);
