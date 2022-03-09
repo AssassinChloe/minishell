@@ -100,7 +100,7 @@ int	execute_command(t_list *commandlist)
 	int		**pip;
 	int		pid;
 	
-	g_data.check = open(".log", O_CREAT | O_RDWR | O_APPEND, 0666);
+	g_data.check = open(g_data.log, O_CREAT | O_RDWR | O_APPEND, 0666);
 	if (g_data.check < 0)
 		printf("error open\n");
 	pid = 1;

@@ -25,6 +25,7 @@ void	init_data(char **envp)
 	g_data.nb_pipe = 0;
 	g_data.execution = 0;
 	g_data.token = 0;
+	g_data.log = ft_strjoin(get_env_value("HOME"), "/.log");
 }
 
 void	handle_sig(int sig)
@@ -71,7 +72,7 @@ int	minishell(void)
 				ft_parse(buffer);
 				ft_print_error();
 				unlink(".heredoc");
-				unlink(".log");
+				unlink(g_data.log);
 				g_data.nb_pipe = 0;
 				g_data.token = 0;
 				ft_free_splitlist(&g_data.split);

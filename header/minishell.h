@@ -79,6 +79,7 @@ typedef struct s_data // globale ?
 	t_list	*split;
 	t_cmd	*cmd_lst;
 	char	*line;
+	char	*log;
 	int		token;
 	char	**splited_line;
 	char	**args;
