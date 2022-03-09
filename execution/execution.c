@@ -16,11 +16,10 @@ void	exec_cmd(t_cmd *cmd)
 {
 	if (is_valid_cmd(cmd) == 0)
 	{
-		printf("%s\n", cmd->av[0]);
 		if (execve(cmd->av[0], cmd->av, g_data.env_in_tab) < 0)
 				perror("minishell");
 	}
-	close(g_data.check);	
+	close(g_data.check);
 }
 
 int	ft_child(int **pip, int i, t_cmd *cmd)
@@ -47,7 +46,7 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 		if (i == g_data.nb_pipe)
 		dup2(g_data.check, STDERR_FILENO);
 	}
-	if (cmd->av[0] && cmd->type[0] == T_BUILTIN/*!ft_isbuiltin(cmd->av[0])*/)
+	if (cmd->av[0] && cmd->type[0] == T_BUILTIN)
 	{
 		launch_builtin(cmd);
 		if (i == g_data.nb_pipe)

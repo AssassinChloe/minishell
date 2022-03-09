@@ -20,7 +20,7 @@ void	init_data(char **envp)
 	g_data.line = NULL;
 	g_data.split = NULL;
 	g_data.env = get_env(envp);
-//	g_data.env_in_tab = ft_env_in_tab(); //
+	g_data.env_in_tab = ft_env_in_tab();
 	g_data.exit_value = 0;
 	g_data.cmd_lst = NULL;
 	g_data.nb_pipe = 0;
