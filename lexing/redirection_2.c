@@ -25,17 +25,18 @@ void	ft_countredir(t_cmd *cmd)
 	}
 }
 
-void	ft_handleredir(int j, t_cmd *cmd, int *i)
+int	ft_handleredir(int j, t_cmd *cmd, int *i)
 {
 	cmd->redir[j].type = cmd->type[*i];
 	if (cmd->redir[j].type == T_GREATER)
-		ft_greaterstart(cmd, *i, j);
+		return (ft_greaterstart(cmd, *i, j));
 	else if (cmd->redir[j].type == T_GGREATER)
-		ft_ggreaterstart(cmd, *i, j);
+		return (ft_ggreaterstart(cmd, *i, j));
 	else if (cmd->redir[j].type == T_LOWER)
-		ft_lowerstart(cmd, *i, j);
+		return (ft_lowerstart(cmd, *i, j));
 	else if (cmd->redir[j].type == T_LLOWER)
-		ft_llowerstart(cmd, *i, j);
+		return (ft_llowerstart(cmd, *i, j));
+	return (0);
 }
 
 void	ft_endredir(t_cmd *cmd)
@@ -43,7 +44,7 @@ void	ft_endredir(t_cmd *cmd)
 	int	i;
 
 	i = cmd->redir_nb - 1;
-	while (i >= 0)
+	while (i >= 0 && cmd->redir[i].fd && cmd->redir[i].fd != -1)
 	{
 		if (cmd->redir[i].type == T_GREATER || cmd->redir[i].type == T_GGREATER)
 		{
