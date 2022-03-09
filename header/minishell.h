@@ -147,6 +147,7 @@ int 	is_valid_cmd(t_cmd *cmd);
 void	ft_print_error();
 void	ft_error_check_cmd(t_cmd *cmd, int *ret);
 char	*ft_remove_dollar(char *str, int start);
+void	build_split_list(char *str);
 void	ft_free_splitlist(t_list **splitlist);
 
 void	destroy_var(t_env *var);

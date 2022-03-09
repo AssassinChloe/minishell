@@ -38,21 +38,6 @@ void	ft_free_commandlist(t_list **commandlist)
 	ft_lstclear(commandlist);
 }
 
-void	ft_free_splitlist(t_list **splitlist)
-{
-	t_list	*tmp;
-	t_split	*split;
-
-	tmp = *splitlist;
-	while (tmp)
-	{
-		split = (t_split *)tmp->content;
-		if (split->str)
-			free(split->str);
-		tmp = tmp->next;
-	}
-	ft_lstclear(splitlist);
-}
 void	ft_divide_redirection(t_cmd *cmd)
 {
 	int		i;
