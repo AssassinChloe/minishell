@@ -16,6 +16,7 @@ void	exec_cmd(t_cmd *cmd)
 {
 	if (is_valid_cmd(cmd) == 0)
 	{
+		printf("%s\n", cmd->av[0]);
 		if (execve(cmd->av[0], cmd->av, /**(g_data.env_p)*/NULL) < 0)
 				perror("minishell");
 	}
