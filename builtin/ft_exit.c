@@ -26,6 +26,8 @@ int	err_many_arg_exit(char *str)
 {
 	if (!check_format_exit(str))
 		return (err_format_exit(str));
+	if (g_data.nb_pipe == 0)
+		ft_putstr_fd("exit\n", STDERR_FILENO);
 	ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
 	return (1);
 }
@@ -40,7 +42,8 @@ int	ft_exit(t_cmd cmd)
 {
 	long long	number;
 
-	number = init_exit();
+	number = 0;
+//	number = init_exit();
 	if (cmd.argc == 1)
 		g_data.loop = -1;
 	if (cmd.argc > 2)
