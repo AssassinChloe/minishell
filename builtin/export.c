@@ -147,15 +147,19 @@ void	free_table_string(char **table)
 	int	i;
 
 	i = 0;
-	while (table[i])
+	if (table)
 	{
-		free(table[i]);
-		i++;
+		while (table[i])
+		{
+			free(table[i]);
+			i++;
+			printf("i : %d\n", i);
+		}
+		free(table);
 	}
-	free(table);
 }
 
-int	print_table(char **table)
+int	print_table_export(char **table)
 {
 	int		i;
 	t_env	*var;
@@ -289,7 +293,7 @@ int	ft_export(t_cmd cmd)
 	{
 		table = table_export_key();
 		table = sort_table(table);
-		return (print_table(table));
+		return (print_table_export(table));
 	}
 	i = 0;
 	ret = 0;

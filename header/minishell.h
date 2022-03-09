@@ -65,7 +65,7 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct s_env //ajout
+typedef struct s_env
 {
 	char			*key;
 	char			*value;
@@ -74,7 +74,7 @@ typedef struct s_env //ajout
 	struct s_env	*prev;
 }	t_env;
 
-typedef struct s_data // globale ?
+typedef struct s_data
 {
 	t_list	*split;
 	t_cmd	*cmd_lst;
@@ -82,6 +82,7 @@ typedef struct s_data // globale ?
 	int		token;
 	char	**splited_line;
 	char	**args;
+	char 	**env_in_tab;
 	t_env	*env;
 	int		exit_value;
 	int		nb_pipe;
@@ -191,4 +192,9 @@ int		ft_is_long_long(char *str);
 void	free_env(void);
 void	del_first_env(void);
 t_env	*get_prev(char *key);
+int		count_var_env(void);
+char **ft_env_in_tab();
+int	print_table_string(char **table);
+void	free_table_string(char **table);
+char	*ft_strjoin_d(char *s1, char *s2);
 #endif

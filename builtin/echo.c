@@ -51,6 +51,7 @@ int	ft_echo(char **args)
 
 	flag_n = 0;
 	i = 1;
+	g_data.exit_value = 0;
 	while (is_flag_n(args[i]))
 	{
 		flag_n = 1;
