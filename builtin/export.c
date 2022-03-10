@@ -257,9 +257,8 @@ int	ft_export_with_equal(char *str)
 		spvar = ft_split_env(str);
 	if (!format_key_ok(spvar[0]))
 	{
-		err_format_id_export(str);
 		free_tab2(spvar);
-		return (1);
+		return (err_format_id_export(str));
 	}
 	if (!format_value_ok(spvar[1]))
 		return (err_format_value_export(spvar));
@@ -296,8 +295,7 @@ int	ft_export(t_cmd cmd)
 
 	if (cmd.argc == 1)
 	{
-		table = table_export_key();
-		table = sort_table(table);
+		table = sort_table(table_export_key());
 		return (print_table_export(table));
 	}
 	i = 0;

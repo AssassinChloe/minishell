@@ -159,7 +159,6 @@ void	ft_parse(char *str)
 	// ft_printchain(tokens);
 	i = ft_lexing(&tokens);
 	ft_lstclear(&tokens);
-	printf("plop\n");
 	if (i == 0)
 	{
 		close(STDOUT_FILENO);
