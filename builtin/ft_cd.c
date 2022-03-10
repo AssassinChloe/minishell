@@ -82,9 +82,10 @@ int	ft_cd_alone(t_cmd cmd)
 	char	*src_path;
 	char	*dest_path;
 
-	src_path = getcwd(NULL, 0);dest_path = get_env_value("HOME");
+	src_path = getcwd(NULL, 0);
+	dest_path = get_env_value("HOME");
 	if (!dest_path)
-			return (err_cd_home_unset(src_path, dest_path));
+		return (err_cd_home_unset(src_path, dest_path));
 	if (chdir(dest_path))
 		return (err_cd_wrong_path(cmd.av[1], src_path, dest_path));
 	ft_cd_end(src_path, dest_path);
@@ -97,10 +98,10 @@ int	ft_cd(t_cmd cmd)
 		return (cd_too_many());
 	if (cmd.argc == 1)
 	{
-		return(ft_cd_alone(cmd));
+		return (ft_cd_alone(cmd));
 	}
 	else
-		return(ft_cd_arg(cmd));
+		return (ft_cd_arg(cmd));
 }
 
 /*

@@ -12,7 +12,7 @@
 
 NAME	=	minishell
 
-SRCS	=	minishell.c printf_error.c\
+SRCS	=	minishell.c printf_error.c signals.c\
 			$(addprefix $(PARSDIR), $(PARSING))\
 			$(addprefix $(LEXDIR), $(LEXING))\
 			$(addprefix $(BUILDIR), $(BUILTIN))\
@@ -32,7 +32,7 @@ EXEC	=	execution.c pipe.c
 EXECDIR	=	execution/
 
 BUILTIN	=	echo.c pwd.c env.c launch_builtin.c export.c ft_cd.c ft_exit.c unset.c unset_utils.c\
-			env_utils.c env_init.c split_env.c exit_utils.c cd_utils.c		
+			env_utils.c env_init.c split_env.c exit_utils.c cd_utils.c export_utils.c export_utils2.c	
 
 BUILDIR	=	builtin/
 

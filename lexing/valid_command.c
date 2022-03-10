@@ -52,7 +52,8 @@ void	ft_check_for_env(t_cmd *cmd)
 	else
 		cmd->env = 0;
 }
-int is_valid_cmd(t_cmd *cmd)
+
+int	is_valid_cmd(t_cmd *cmd)
 {
     struct stat	*test;
     int         ret;
@@ -66,11 +67,11 @@ int is_valid_cmd(t_cmd *cmd)
 		i++;
 	if (i < cmd->argc && cmd->av[i] && stat(cmd->av[i], test) >= 0 && S_ISDIR(test->st_mode) == 1)
 	{	
-        free(test);
-	    test = NULL;
+		free(test);
+		test = NULL;
 		return (126);
 	}
-    free(test);
+	free(test);
 	test = NULL;
     if (i < cmd->argc && (ft_strcmp(cmd->av[i], "") == 0 || (cmd->type[i] != T_BUILTIN && ft_get_cmd_path(&cmd->av[i]) > 0)))
 		return (127);

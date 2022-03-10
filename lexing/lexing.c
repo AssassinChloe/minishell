@@ -34,12 +34,12 @@ int	get_token_type(char *str, int *multicmd)
 		return (T_GREATER);
 	else if (ft_strcmp(str, ">>") == 0)
 		return (T_GGREATER);
-	else if (*multicmd == 0) 
+	else if (*multicmd == 0)
 	{
 		*multicmd = 1;
 		if (ft_isbuiltin(str) == 0)
 			return (T_BUILTIN);
-		else	
+		else
 			return (T_CMD);
 	}
 	else
@@ -90,7 +90,7 @@ int	test_iscmd(t_list *cmdlist)
 int	ft_lexing(t_list **list)
 {
 	t_list	*commandlist;
-	int	pid;
+	int		pid;
 
 	commandlist = NULL;
 	if (ft_divide_pipe(*list, *list, &commandlist) < 0)
