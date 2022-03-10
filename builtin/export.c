@@ -16,7 +16,7 @@
 - si pas d'argument (argc == 1)
 affichage des variables (voir diff avec env  : 
 export au début de chaque ligne + “” autour de la value 
-+ ordre alphabetique de key : voir avec strcmp pour ordre d'impression)
++ ordre alphabetique de key 
 
 - si 1 argument (ne contient pas de '=')
 export NOMVARIABLE → la variable sera exportee dans tous les childs process 
@@ -41,10 +41,6 @@ pas rester de $ dans le nom
 - memes regles d'extension des $ que pour le parsing, sauf ' + $ -> \$... 
 
 - doit-on gerer export truc+=chose ? OK
-
-RESTE A FAIRE : 
-	couper fonction principale 
-	impression par ordre alpha
 
 */
 
@@ -243,6 +239,14 @@ int	err_format_id_export(char *str)
 	return (1);
 }
 
+int	err_format_value_export(char **tab)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token\n", 2);
+	g_data.exit_value = 2;
+	free_tab2(tab);
+	return (2);
+}
+
 int	ft_export_with_equal(char *str)
 {
 	char	**spvar;
@@ -257,6 +261,8 @@ int	ft_export_with_equal(char *str)
 		free_tab2(spvar);
 		return (1);
 	}
+	if (!format_value_ok(spvar[1]))
+		return (err_format_value_export(spvar));
 	if (!already_in_env(spvar[0]))
 		add_env_value(spvar[0], spvar[1], 1);
 	else
@@ -308,7 +314,7 @@ int	ft_export(t_cmd cmd)
 				ret = err_format_id_export(cmd.av[i]);
 		}
 		else
-			ft_export_with_equal(cmd.av[i]);
+			ret = ft_export_with_equal(cmd.av[i]);
 	}
 	return (ret);
 }

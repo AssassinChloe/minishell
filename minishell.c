@@ -98,6 +98,7 @@ int	main(int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 	init_data(envp);
 	modify_shlvl_value();
+	g_data.env_in_tab = ft_env_in_tab();
 	init_signal();
 	minishell();
 	close(STDOUT_FILENO);
