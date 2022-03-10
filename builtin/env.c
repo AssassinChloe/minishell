@@ -12,6 +12,18 @@
 
 #include "minishell.h"
 
+t_env	*find_last_env(void)
+{
+	t_env	*env;
+
+	env = g_data.env;
+	if (!env)
+		return (NULL);
+	while (env->next != NULL)
+		env = env->next;
+	return (env);
+}
+
 void	modify_shlvl_value(void)
 {
 	char	*tmp;
