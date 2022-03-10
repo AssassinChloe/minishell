@@ -97,8 +97,12 @@ int	ft_cd(t_cmd cmd)
 	if (cmd.argc > 2)
 		return (cd_too_many());
 	if (cmd.argc == 1)
-	{
 		return (ft_cd_alone(cmd));
+	else if (!ft_strcmp(cmd.av[1], "---"))
+	{
+		ft_putendl_fd("minishell: cd: --: invalid option", STDOUT_FILENO);
+		g_data.exit_value = 2;
+		return (2);
 	}
 	else
 		return (ft_cd_arg(cmd));
