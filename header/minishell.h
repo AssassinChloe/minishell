@@ -40,6 +40,13 @@
 # define T_BUILTIN 10
 # define T_FILENAME 11
 
+typedef struct s_gnl
+{
+	char 	*log;
+	int		fd;
+	int		ret;
+}	t_gnl;
+
 typedef struct s_parse
 {
 	int		i;
