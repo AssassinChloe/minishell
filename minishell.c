@@ -17,12 +17,10 @@ t_data	g_data;
 void	init_data(char **envp)
 {
 	g_data.loop = 1;
-	g_data.line = NULL;
 	g_data.split = NULL;
 	g_data.env = get_env(envp);
 	g_data.env_in_tab = ft_env_in_tab();
 	g_data.exit_value = 0;
-	g_data.cmd_lst = NULL;
 	g_data.nb_pipe = 0;
 	g_data.execution = 0;
 	g_data.token = 0;
