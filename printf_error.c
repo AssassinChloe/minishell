@@ -78,7 +78,11 @@ void	ft_print_error(void)
 		}
 		if (ft_strlen(error) > 0)
 		{
-			g_data.exit_value = 1;
+			if (ft_strlen(error) > 20 && (ft_strncmp("/usr/bin/ls: cannot access", error, 20) == 0
+				|| ft_strncmp("/bin/ls: cannot access", error, 20) == 0))
+				g_data.exit_value = 2;
+			else
+				g_data.exit_value = 1;
 			write(STDERR_FILENO, error, (ft_strlen(error) + 1));
 		}
 		free(error);
@@ -86,5 +90,4 @@ void	ft_print_error(void)
 	free(log);
 	log = NULL;
 	close(fd);
-	unlink(g_data.log);
 }

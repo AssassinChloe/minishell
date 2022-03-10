@@ -28,7 +28,7 @@ char	*ft_handleis(char *str, int *i, int *multiple)
 	}
 	else if (ft_isredir(str[*i]) > 0)
 	{
-		if (*multiple == 0)
+		if (*multiple == 0 || (*multiple == 1 && g_data.token == 0))
 			return (extract_redir(str, i, multiple));
 		else
 			return (is_forbidden_redir(i, multiple));
@@ -156,7 +156,7 @@ void	ft_parse(char *str)
 	}
 	if (tokens == NULL)
 		return ;
-	// ft_printchain(tokens);
+	ft_printchain(tokens);
 	i = ft_lexing(&tokens);
 	ft_lstclear(&tokens);
 	if (i == 0)
