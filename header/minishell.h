@@ -40,6 +40,16 @@
 # define T_BUILTIN 10
 # define T_FILENAME 11
 
+typedef struct s_parse
+{
+	int		i;
+	char	*tmp;
+	t_list	*tokens;
+	int		ret;
+	int		pipe;
+	int		multiple;
+}	t_parse;
+
 typedef struct s_redir
 {
 	int	fd;
@@ -109,15 +119,15 @@ int		ft_isredir(char c);
 int		ft_isdoubleredir(char *str, int i);
 void	ft_concatquote(char *str, char **tmp, int *i);
 char	*ft_handle_quote(char *str, int *i, int keepquote);
-int		ft_parsetxt(char *str, int *i, char **tmp, int *multiple);
-void	ft_freeparsing(char **str, t_list **chain);
+int		ft_parsetxt(char *str, t_parse *parse);
+void	ft_freeparsing(t_parse **parse);
 int		is_forbidden_char(char c);
 void	ft_check_for_env(t_cmd *tokens);
 int		ft_lexing(t_list **list);
 void	ft_printtype(t_list *elem);
 void	ft_execution_test(t_cmd *cmd);
 int		ft_divide_redirection(t_cmd *cmd);
-void	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist);
+int		ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist);
 void	ft_free_commandlist(t_list **commandlist);
 int		ft_lowerstart(t_cmd *tmp, int i, int j);
 int		ft_llowerstart(t_cmd *tmp, int i, int j);
@@ -132,10 +142,10 @@ void	ft_pipe(t_list *commandlist);
 void	ft_closepipe(int **pip);
 void	ft_endredir(t_cmd *cmd);
 void	ft_redirstd(t_redir *redir, int std);
-char	*is_forbidden_redir(int *i, int *multiple);
-char	*ft_extract_pipe(char *str, int *i, int *multiple);
-char	*extract_redir(char *str, int *i, int *multiple);
-int		ft_get_cmd_path(t_cmd *cmd);
+char	*is_forbidden_redir(t_parse *parse);
+char	*ft_extract_pipe(char *str, t_parse *parse);
+char	*extract_redir(char *str, t_parse *parse);
+int		ft_get_cmd_path(char **cmd);
 int		execute_command(t_list *commandlist);
 void	exec_cmd(t_cmd *cmd);
 int		ft_isbuiltin(char *str);
@@ -151,6 +161,7 @@ void	ft_error_check_cmd(t_cmd *cmd, int *ret);
 char	*ft_remove_dollar(char *str, int start);
 void	build_split_list(char *str);
 void	ft_free_splitlist(t_list **splitlist);
+int		open_heredoc(t_cmd *cmd, int i, int j);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);

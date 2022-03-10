@@ -56,11 +56,15 @@ int is_valid_cmd(t_cmd *cmd)
 {
     struct stat	*test;
     int         ret;
-    
+    int			i;
+
     ret = 0;
+	i = 0;
 	ft_check_for_env(cmd);
     test = malloc(sizeof(struct stat));
-	if (cmd->av[0] && stat(cmd->av[0], test) >= 0 && S_ISDIR(test->st_mode) == 1)
+	while (cmd->av[i] && cmd->type[i] != T_BUILTIN && cmd->type[i] != T_CMD)
+		i++;
+	if (i < cmd->argc && cmd->av[i] && stat(cmd->av[i], test) >= 0 && S_ISDIR(test->st_mode) == 1)
 	{	
         free(test);
 	    test = NULL;
@@ -68,7 +72,7 @@ int is_valid_cmd(t_cmd *cmd)
 	}
     free(test);
 	test = NULL;
-    if (ft_strcmp(cmd->av[0], "") == 0 || (cmd->type[0] != T_BUILTIN && ft_get_cmd_path(cmd) > 0))
+    if (i < cmd->argc && (ft_strcmp(cmd->av[i], "") == 0 || (cmd->type[i] != T_BUILTIN && ft_get_cmd_path(&cmd->av[i]) > 0)))
 		return (127);
 	return (0);
 }

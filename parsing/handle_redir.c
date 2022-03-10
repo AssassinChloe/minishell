@@ -50,35 +50,36 @@ char	*extract_doubleredir(char *str, int *i)
 	return (quote);
 }
 
-char	*extract_redir(char *str, int *i, int *multiple)
+char	*extract_redir(char *str, t_parse *parse)
 {
 	int		ret;
 	char	*quote;
 
-	*multiple = 1;
-	ret = ft_isdoubleredir(str, *i);
+	parse->multiple = 1;
+	ret = ft_isdoubleredir(str, parse->i);
 	if (ret == 1)
-		return (extract_doubleredir(str, i));
+		return (extract_doubleredir(str, &parse->i));
 	else if (ret == 0)
 	{
 		quote = malloc(sizeof(char) * 2);
-		quote[0] = str[*i];
+		quote[0] = str[parse->i];
 		quote[1] = '\0';
-		*i = *i + 1;
+		parse->i++;
 		return (quote);
 	}
 	else
-		return (is_forbidden_redir(i, multiple));
+		return (is_forbidden_redir(parse));
 }
 
-char	*ft_extract_pipe(char *str, int *i, int *multiple)
+char	*ft_extract_pipe(char *str, t_parse *parse)
 {
 	char	*quote;
 
-	*multiple = 1;
+	parse->multiple = 0;
+	parse->pipe = 1;
 	quote = malloc(sizeof(char) * 2);
-	quote[0] = str[*i];
+	quote[0] = str[parse->i];
 	quote[1] = '\0';
-	*i = *i + 1;
+	parse->i++;
 	return (quote);
 }

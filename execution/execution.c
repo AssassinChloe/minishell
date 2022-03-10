@@ -12,8 +12,22 @@
 
 #include "minishell.h"
 
+void	print_t_cmd(t_cmd *type)
+{
+	int	i;
+
+	i = 0;
+	printf(" il y a %d argument dans la ligne de commande : \n", type->argc);
+	while (i < type->argc)
+	{
+		printf("type %d : -%s-\n", type->type[i], type->av[i]);
+		i++;
+	}
+}
+
 void	exec_cmd(t_cmd *cmd)
 {
+	print_t_cmd(cmd);
 	if (is_valid_cmd(cmd) == 0)
 	{
 		if (execve(cmd->av[0], cmd->av, g_data.env_in_tab) < 0)

@@ -161,23 +161,34 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 		else
 		{
 			tmp->av[j] = ft_strdup((char *)tmplist2->content);
-			tmp->type[j] = get_token_type((char *)tmplist2->content, &multicmd);
-			if (j > 0 && (tmp->type[j - 1] >= T_LOWER
-					&& tmp->type[j - 1] <= T_GGREATER))
+			if (j > 0 && (tmp->type[j - 1] >= T_LOWER && tmp->type[j - 1] <= T_GGREATER))
 				tmp->type[j] = T_FILENAME;
-			
+			else
+				tmp->type[j] = get_token_type((char *)tmplist2->content, &multicmd);
 			j++;
 		}
 		tmp->av[j] = NULL;
 		*token = *token + 1;
 		tmplist2 = tmplist2->next;
 	}
+	if (multicmd == 0)
+	{
+		tmp->argc = -1;
+		if (tmp->type[0] == T_LLOWER)
+		{	
+			tmp->redir = malloc(sizeof(t_redir));
+			open_heredoc(tmp, 0, 0);
+			close(tmp->redir[0].fd);
+			free(tmp->redir);
+		}
+		return (tmplist2);
+	}
 	if (tmplist2 && ft_strcmp((char *)tmplist2->content, "|") == 0)
 		tmplist2 = tmplist2->next;
 	return (tmplist2);
 }
 
-void	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
+int	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 {
 	int		i;
 	t_cmd	*tmp;
@@ -204,5 +215,8 @@ void	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 			*commandlist = ft_lstnew(tmp);
 		else
 			ft_lstadd_back(commandlist, ft_lstnew(tmp));
+		if (tmp->argc < 0)
+			return (-1);
 	}
+	return (0);
 }

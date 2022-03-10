@@ -12,18 +12,23 @@
 
 #include "minishell.h"
 
-void	ft_freeparsing(char **str, t_list **chain)
+void	ft_freeparsing(t_parse **parse)
 {
-	free(*str);
-	*str = NULL;
-	ft_lstclear(chain);
+	t_list *list;
+
+	list = (*parse)->tokens;
+	if ((*parse)->tmp)
+		free((*parse)->tmp);
+	(*parse)->tmp = NULL;
+	ft_lstclear(&list);
+	free(*parse);
 }
 
-char	*is_forbidden_redir(int *i, int *multiple)
+char	*is_forbidden_redir(t_parse *parse)
 {
-	*i = -1;
+	parse->i = -1;
 	printf("minishell: syntax error\n");
-	*multiple = 0;
+	parse->multiple = 0;
 	g_data.exit_value = 2;
 	return (NULL);
 }

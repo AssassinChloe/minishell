@@ -12,6 +12,33 @@
 
 #include "minishell.h"
 
+int	open_heredoc(t_cmd *cmd, int i, int j)
+{
+	char	*buffer;
+	char	*delimiter;
+	int		isquote;
+
+	isquote = 0;
+	if (ft_isquote(cmd->av[i + 1][0]) > 0)
+		delimiter = ft_handle_quote(cmd->av[i + 1], &isquote, 0);
+	else
+		delimiter = ft_strdup(cmd->av[i + 1]);
+	buffer = readline("heredoc> ");
+	cmd->redir[j].fd = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC, 0755);
+	if (cmd->redir->fd == -1)
+	{
+		printf("minishell: .heredoc: Permission denied\n");
+		free(buffer);
+		free(delimiter);
+		return (1);
+	}
+	while (buffer && ft_strcmp(buffer, delimiter) != 0)
+		ft_write_heredoc(&buffer, cmd, j, isquote);
+	free(buffer);
+	free(delimiter);
+	return (0);
+}
+
 void	ft_redirstd(t_redir *redir, int std)
 {
 	redir->fdsave = dup(std);
@@ -39,28 +66,8 @@ int	ft_lowerstart(t_cmd *cmd, int i, int j)
 
 int	ft_llowerstart(t_cmd *cmd, int i, int j)
 {
-	char	*buffer;
-	char	*delimiter;
-	int		isquote;
-
-	isquote = 0;
-	if (ft_isquote(cmd->av[i + 1][0]) > 0)
-		delimiter = ft_handle_quote(cmd->av[i + 1], &isquote, 0);
-	else
-		delimiter = ft_strdup(cmd->av[i + 1]);
-	buffer = readline("heredoc> ");
-	cmd->redir[j].fd = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC, 0755);
-	if (cmd->redir->fd == -1)
-	{
-		printf("minishell: .heredoc: Permission denied\n");
-		free(buffer);
-		free(delimiter);
+	if (open_heredoc(cmd, i, j) > 0)
 		return (1);
-	}
-	while (buffer && ft_strcmp(buffer, delimiter) != 0)
-		ft_write_heredoc(&buffer, cmd, j, isquote);
-	free(buffer);
-	free(delimiter);
 	modif_arg_heredoc(&cmd, ".heredoc");
 	ft_redirstd(&cmd->redir[j], STDIN_FILENO);
 	return (0);

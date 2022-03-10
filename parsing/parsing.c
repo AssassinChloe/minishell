@@ -12,60 +12,61 @@
 
 #include "minishell.h"
 
-char	*ft_handleis(char *str, int *i, int *multiple)
+char	*ft_handleis(char *str, t_parse *parse)
 {
-	if (ft_isspace(str[*i]) == 1)
+	if (ft_isspace(str[parse->i]) == 1)
 	{
-		while (str[*i] && ft_isspace(str[*i]) == 1)
-			*i = *i + 1;
+		while (str[parse->i] && ft_isspace(str[parse->i]) == 1)
+			parse->i++;
 	}
-	else if (ft_ispipe(str[*i]) == 1)
+	else if (ft_ispipe(str[parse->i]) == 1)
 	{
-		if (*multiple == 0)
-			return (ft_extract_pipe(str, i, multiple));
+		if (parse->pipe == 0 && parse->multiple == 0)
+			return (ft_extract_pipe(str, parse));
 		else
-			return (is_forbidden_redir(i, multiple));
+			return (is_forbidden_redir(parse));
 	}
-	else if (ft_isredir(str[*i]) > 0)
+	else if (ft_isredir(str[parse->i]) > 0)
 	{
-		if (*multiple == 0 || (*multiple == 1 && g_data.token == 0))
-			return (extract_redir(str, i, multiple));
+		if (parse->multiple == 0)
+			return (extract_redir(str, parse));
 		else
-			return (is_forbidden_redir(i, multiple));
+			return (is_forbidden_redir(parse));
 	}
 	return (NULL);
 }
 
-int	ft_parsetxt(char *str, int *i, char **tmp, int *multiple)
+int	ft_parsetxt(char *str, t_parse *parse)
 {
 	int	start;
 	int	quote;
 
 	start = 0;
 	quote = 0;
-	while (str[*i] && ft_special(str[*i]) == 0)
+	while (str[parse->i] && ft_special(str[parse->i]) == 0)
 	{
-		*multiple = 0;
-		while (str[*i] && ft_isquote(str[*i]) == 0 && ft_special(str[*i]) == 0)
+		parse->multiple = 0;
+		parse->pipe = 0;
+		while (str[parse->i] && ft_isquote(str[parse->i]) == 0 && ft_special(str[parse->i]) == 0)
 		{	
-			*tmp = ft_strjoin_char(*tmp, str[*i]);
-			*i = *i + 1;
+			parse->tmp = ft_strjoin_char(parse->tmp, str[parse->i]);
+			parse->i++;
 		}
-		if (*tmp && has_dollar(*tmp + start) == 1)
+		if (parse->tmp && has_dollar(parse->tmp + start) == 1)
 		{
-			if (str[*i - 1] && str[*i - 1] == '$' && ft_isquote(str[*i]) > 0)
-				*tmp = ft_remove_dollar(*tmp, start);
+			if (str[parse->i - 1] && str[parse->i - 1] == '$' && ft_isquote(str[parse->i]) > 0)
+				parse->tmp = ft_remove_dollar(parse->tmp, start);
 			else
-				*tmp = ft_extract_var(*tmp, quote, start);
+				parse->tmp = ft_extract_var(parse->tmp, quote, start);
 		}
-		if (str[*i] && ft_isquote(str[*i]) > 0)
+		if (str[parse->i] && ft_isquote(str[parse->i]) > 0)
 		{
 			quote++;
-			ft_concatquote(str, tmp, i);
-			if (*i < 0)
+			ft_concatquote(str, &parse->tmp, &parse->i);
+			if (parse->i < 0)
 				return (-1);
 		}
-		start = ft_strlen(*tmp);
+		start = ft_strlen(parse->tmp);
 	}
 	return (0);
 }
@@ -96,77 +97,78 @@ char	*ft_extract_limit(char *str, int *i, int *hasquote)
 	return (tmp);
 }
 
-int	ft_parsespecial(char *str, int *i, char	**tmp, t_list **tokens, int *multiple)
+int	ft_parsespecial(char *str, t_parse *parse)
 {
 	int	hasquote;
 
 	hasquote = 0;
-	if (*tmp == NULL && *i < 0)
+	if (parse->tmp == NULL && parse->i < 0)
 		return (-1);
-	else if (*i >= 0 && (ft_strcmp(*tmp, "<<") == 0))
+	else if (parse->tmp && parse->i >= 0 && (ft_strcmp(parse->tmp, "<<") == 0))
 	{
-		ft_addone(tokens, tmp);
-		while (str[*i] && ft_isspace(str[*i]) == 1)
-			*i = *i + 1;
-		*tmp = ft_extract_limit(str, i, &hasquote);
-		if (*tmp == NULL)
+		ft_addone(&parse->tokens, &parse->tmp);
+		while (str[parse->i] && ft_isspace(str[parse->i]) == 1)
+			parse->i++;
+		parse->tmp = ft_extract_limit(str, &parse->i, &hasquote);
+		if (parse->tmp == NULL)
 			return (0);
-		if (*tmp == NULL && *i < 0)
+		if (parse->tmp == NULL && parse->i < 0)
 			return (-1);
 		if (hasquote == 1)
-			*tmp = ft_addquote(*tmp);
-		ft_addone(tokens, tmp);
-		*multiple = 0;
+			parse->tmp = ft_addquote(parse->tmp);
+		ft_addone(&parse->tokens, &parse->tmp);
+		parse->pipe = 0;
+		parse->multiple = 0;
 	}
 	else
-		ft_addone(tokens, tmp);
+		ft_addone(&parse->tokens, &parse->tmp);
 	return (0);
 }
 
 void	ft_parse(char *str)
 {
-	int		i;
-	char	*tmp;
-	t_list	*tokens;
-	int		ret;
-	int		multiple;
+	t_parse *parse;
 
-	i = 0;
-	tmp = NULL;
-	tokens = NULL;
-	multiple = 1;
-	while (str[i])
+	parse = malloc(sizeof(t_parse));
+	parse->i = 0;
+	parse->tmp = NULL;
+	parse->tokens = NULL;
+	parse->multiple = 0;
+	parse->pipe = 1;
+	parse->ret = 0;
+	while (str[parse->i])
 	{
-		ret = ft_parsetxt(str, &i, &tmp, &multiple);
-		if (ret < 0)
-			return (ft_freeparsing(&tmp, &tokens));
+		parse->ret = ft_parsetxt(str, parse);
+		if (parse->ret < 0)
+			return (ft_freeparsing(&parse));
 		else
-			ft_addone(&tokens, &tmp);
-		while (str[i] && ft_special(str[i]) == 1)
+			ft_addone(&parse->tokens, &parse->tmp);
+		while (str[parse->i] && ft_special(str[parse->i]) == 1)
 		{
-			tmp = ft_handleis(str, &i, &multiple);
-			if (ft_parsespecial(str, &i, &tmp, &tokens, &multiple) < 0)
-				return (ft_freeparsing(&tmp, &tokens));
+			parse->tmp = ft_handleis(str, parse);
+			if (ft_parsespecial(str, parse) < 0)
+				return (ft_freeparsing(&parse));
 		}
 	}
-	if (multiple == 1)
+	if (parse->multiple == 1 || parse->pipe == 1)
 	{
-		is_forbidden_redir(&i, &multiple);
-		return (ft_freeparsing(&tmp, &tokens));
+		is_forbidden_redir(parse);
+		return (ft_freeparsing(&parse));
 	}
-	if (tokens == NULL)
+	if (parse->tokens == NULL)
 		return ;
-	ft_printchain(tokens);
-	i = ft_lexing(&tokens);
-	ft_lstclear(&tokens);
-	if (i == 0)
+	//ft_printchain(parse->tokens);
+	parse->i = ft_lexing(&parse->tokens);
+	if (parse->i == 0)
 	{
 		close(STDOUT_FILENO);
 		close(STDIN_FILENO);
 		close(STDERR_FILENO);
+		ft_freeparsing(&parse);
 		ft_free_splitlist(&g_data.split);
 		g_data.split = NULL;
 		free_g_data();
 		exit(EXIT_SUCCESS);
 	}
+	ft_freeparsing(&parse);
 }
