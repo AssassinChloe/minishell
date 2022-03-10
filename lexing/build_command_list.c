@@ -138,7 +138,8 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 			split = ft_split((char *)tmplist2->content, " ");
 			while (split[k])
 				k++;
-			ft_add_mem(&tmp, k);
+			if (k > 1)
+				ft_add_mem(&tmp, k);
 			k = 0;
 			while (split[k])
 			{
