@@ -42,7 +42,7 @@
 
 typedef struct s_gnl
 {
-	char 	*log;
+	char	*log;
 	int		fd;
 	int		ret;
 }	t_gnl;
@@ -169,6 +169,10 @@ char	*ft_remove_dollar(char *str, int start);
 void	build_split_list(char *str);
 void	ft_free_splitlist(t_list **splitlist);
 int		open_heredoc(t_cmd *cmd, int i, int j);
+void	exec_builtin_nopipe(t_cmd *command);
+int		end_redir_error(t_cmd *command);
+void	get_exit_val_pipe(int i);
+void	handle_pipe(int i, int **pip);
 
 void	destroy_var(t_env *var);
 void	clear_list(t_env **list);

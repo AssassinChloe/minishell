@@ -24,37 +24,19 @@ void	exec_cmd(t_cmd *cmd)
 
 int	ft_child(int **pip, int i, t_cmd *cmd)
 {
-	char	*nb;
-
 	if (i == g_data.nb_pipe)
 		dup2(g_data.check, STDERR_FILENO);
 	if (ft_divide_redirection(cmd) > 0)
 	{
 		ft_closepipe(pip);
-		ft_endredir(cmd);
-		g_data.exit_value = 1;
-		close(g_data.check);
-		return (1);
+		return (end_redir_error(cmd));
 	}
 	if (g_data.nb_pipe > 0)
-	{
-		if (i < g_data.nb_pipe)
-			dup2(pip[i][1], STDOUT_FILENO);
-		if (i > 0)
-			dup2(pip[i - 1][0], STDIN_FILENO);
-		ft_closepipe(pip);
-		if (i == g_data.nb_pipe)
-			dup2(g_data.check, STDERR_FILENO);
-	}
+		handle_pipe(i, pip);
 	if (cmd->av[0] && cmd->type[0] == T_BUILTIN)
 	{
 		launch_builtin(cmd);
-		if (i == g_data.nb_pipe)
-		{
-			nb = ft_itoa(g_data.exit_value);
-			write(2, nb, ft_strlen(nb));
-			free(nb);
-		}
+		get_exit_val_pipe(i);
 		close(g_data.check);
 	}
 	else
@@ -118,18 +100,7 @@ int	execute_command(t_list *commandlist)
 		ft_open_pipes(pip);
 	}
 	if (g_data.nb_pipe == 0 && !ft_isbuiltin(command->av[0]))
-	{
-		if (ft_divide_redirection(command) > 0)
-		{
-			ft_endredir(command);
-			g_data.exit_value = 1;
-			close(g_data.check);
-			return (1);
-		}
-		launch_builtin(command);
-		if (command->redir_nb > 0)
-			ft_endredir(command);
-	}
+		exec_builtin_nopipe(command);
 	else
 	{
 		pid = ft_exec(commandlist, pip);

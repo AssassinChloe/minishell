@@ -54,52 +54,25 @@ void	ft_closepipe(int **pip)
 	}
 }
 
-/*void if_redir(int **pip, t_cmd *cmd, int i)
+void	get_exit_val_pipe(int i)
 {
-	int	j;
-	int	tab_type[4];
+	char	*nb;
 
-	j = 0;
-	while (j < 4)
-		tab_type[j++] = 0;
-	j = 0;
-	if (cmd->redir_nb > 0)
+	if (i == g_data.nb_pipe)
 	{
-		while (j < cmd->redir_nb)
-		{
-			if (cmd->redir[j].type == T_LOWER)
-				tab_type[0] = 1;
-			if (cmd->redir[j].type == T_GREATER)
-				tab_type[1] = 1;
-			if (cmd->redir[j].type == T_LLOWER)
-				tab_type[2] = 1;
-			if (cmd->redir[j].type == T_GGREATER)
-				tab_type[3] = 1;
-			j++;
-		}
+		nb = ft_itoa(g_data.exit_value);
+		write(2, nb, ft_strlen(nb));
+		free(nb);
 	}
-	if (tab_type[0] == 1 || tab_type[2] == 1)
-	{
-		if (i < g_data.nb_pipe)
-		close(pip[i][1]);
-	}
-	if (tab_type[1] == 1 || tab_type[3] == 1)
-	{
-		if (i > 0)
-			close(pip[i - 1][0]);
-	}
-	if (cmd->redir_nb > 0)
-	{
-		if (i < g_data.nb_pipe && tab_type[2] == 0 && tab_type[0] == 0)
-			dup2(pip[i][1], STDOUT_FILENO);
-		if (i > 0 && tab_type[1] == 0 && tab_type[3] == 0)
-			dup2(pip[i - 1][0], STDIN_FILENO);
-	}
-	else
-	{
-		if (i < g_data.nb_pipe)
-			dup2(pip[i][1], STDOUT_FILENO);
-		if (i > 0)
-			dup2(pip[i - 1][0], STDIN_FILENO);
-	}
-}*/
+}
+
+void	handle_pipe(int i, int **pip)
+{
+	if (i < g_data.nb_pipe)
+		dup2(pip[i][1], STDOUT_FILENO);
+	if (i > 0)
+		dup2(pip[i - 1][0], STDIN_FILENO);
+	ft_closepipe(pip);
+	if (i == g_data.nb_pipe)
+		dup2(g_data.check, STDERR_FILENO);
+}
