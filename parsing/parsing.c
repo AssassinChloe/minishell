@@ -150,13 +150,16 @@ void	ft_parse(char *str)
 				return (ft_freeparsing(&parse));
 		}
 	}
-	if (parse->multiple == 1 || parse->pipe == 1)
+	if (parse->multiple == 1 || parse->pipe == 2)
 	{
 		is_forbidden_redir(parse);
 		return (ft_freeparsing(&parse));
 	}
 	if (parse->tokens == NULL)
+	{
+		ft_freeparsing(&parse);
 		return ;
+	}
 	//ft_printchain(parse->tokens);
 	parse->i = ft_lexing(&parse->tokens);
 	if (parse->i == 0)

@@ -34,7 +34,7 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 		ft_endredir(cmd);
 		g_data.exit_value = 1;
 		close(g_data.check);
-		return (0);
+		return (1);
 	}
 	if (g_data.nb_pipe > 0)
 	{
@@ -110,8 +110,6 @@ int	execute_command(t_list *commandlist)
 	int		pid;
 
 	g_data.check = open(g_data.log, O_CREAT | O_RDWR | O_APPEND, 0666);
-	if (g_data.check < 0)
-		printf("error open\n");
 	pid = 1;
 	command = (t_cmd *)commandlist->content;
 	if (g_data.nb_pipe > 0)
@@ -126,7 +124,7 @@ int	execute_command(t_list *commandlist)
 			ft_endredir(command);
 			g_data.exit_value = 1;
 			close(g_data.check);
-			return (pid);
+			return (1);
 		}
 		launch_builtin(command);
 		if (command->redir_nb > 0)

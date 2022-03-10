@@ -76,7 +76,7 @@ char	*ft_extract_pipe(char *str, t_parse *parse)
 	char	*quote;
 
 	parse->multiple = 0;
-	parse->pipe = 1;
+	parse->pipe = 2;
 	quote = malloc(sizeof(char) * 2);
 	quote[0] = str[parse->i];
 	quote[1] = '\0';

@@ -12,25 +12,6 @@
 
 #include "minishell.h"
 
-void	ft_error_check_cmd(t_cmd *cmd, int *ret)
-{
-	if (cmd->env == 0)
-	{
-		if (*ret == 126)
-			printf("minishell: %s: Is a directory\n", cmd->av[0]);
-		else if (*ret == 127)
-			printf("minishell: %s: command not found\n", cmd->av[0]);
-	}
-	else
-	{
-		if (*ret > 0)
-		{
-			printf("env: %s: No such file or directory\n", cmd->av[0]);
-			*ret = 127;
-		}
-	}
-}
-
 int	ft_is_only_digit(char *str)
 {
 	int	i;
@@ -55,17 +36,17 @@ void	check_log(char **log, char **error)
 
 void	handle_error(char **error)
 {
-		if (ft_strlen(*error) > 0)
-		{
-			if (ft_strlen(*error) > 20
-				&& (ft_strncmp("/usr/bin/ls: cannot access", *error, 20) == 0
-					|| ft_strncmp("/bin/ls: cannot access", *error, 20) == 0))
-				g_data.exit_value = 2;
-			else
-				g_data.exit_value = 1;
-			write(STDERR_FILENO, *error, (ft_strlen(*error) + 1));
-		}
-		free(*error);
+	if (ft_strlen(*error) > 0)
+	{
+		if (ft_strlen(*error) > 20
+			&& (ft_strncmp("/usr/bin/ls: cannot access", *error, 20) == 0
+				|| ft_strncmp("/bin/ls: cannot access", *error, 20) == 0))
+			g_data.exit_value = 2;
+		else
+			g_data.exit_value = 1;
+		write(STDERR_FILENO, *error, (ft_strlen(*error) + 1));
+	}
+	free(*error);
 }
 
 void	end_gnl_struct(t_gnl *gnl)
