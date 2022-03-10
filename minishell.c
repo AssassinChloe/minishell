@@ -58,6 +58,17 @@ void	init_signal(void)
 	signal(SIGQUIT, handle_sig);
 }
 
+void	end_one()
+{
+	ft_print_error();
+	unlink(g_data.log);
+	unlink(".heredoc");
+	g_data.nb_pipe = 0;
+	g_data.token = 0;
+	ft_free_splitlist(&g_data.split);
+	g_data.split = NULL;
+}
+
 int	minishell(void)
 {
 	char	*buffer;
@@ -71,13 +82,7 @@ int	minishell(void)
 			{
 				add_history(buffer);
 				ft_parse(buffer);
-				ft_print_error();
-				unlink(".heredoc");
-				unlink(g_data.log);
-				g_data.nb_pipe = 0;
-				g_data.token = 0;
-				ft_free_splitlist(&g_data.split);
-				g_data.split = NULL;
+				end_one();
 			}
 			free(buffer);
 			buffer = NULL;

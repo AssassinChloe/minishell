@@ -53,6 +53,8 @@ int	ft_llowerstart(t_cmd *cmd, int i, int j)
 	if (cmd->redir->fd == -1)
 	{
 		printf("minishell: .heredoc: Permission denied\n");
+		free(buffer);
+		free(delimiter);
 		return (1);
 	}
 	while (buffer && ft_strcmp(buffer, delimiter) != 0)
