@@ -56,8 +56,11 @@ int	ft_divide_redirection(t_cmd *cmd)
 			if (j < cmd->redir_nb && (cmd->type[i] >= T_LOWER
 					&& cmd->type[i] <= T_GGREATER))
 			{
-				if (ft_handleredir(j, cmd, &i) > 0 )
+				if (ft_handleredir(j, cmd, &i) > 0)
+				{
+					cmd->redir_nb = j + 1;
 					return (1);
+				}
 				j++;
 			}
 		}

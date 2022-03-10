@@ -32,8 +32,8 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 	{
 		ft_closepipe(pip);
 		ft_endredir(cmd);
-		close(g_data.check);
 		g_data.exit_value = 1;
+		close(g_data.check);
 		return (0);
 	}
 	if (g_data.nb_pipe > 0)
@@ -124,8 +124,8 @@ int	execute_command(t_list *commandlist)
 		if (ft_divide_redirection(command) > 0)
 		{
 			ft_endredir(command);
-			close(g_data.check);
 			g_data.exit_value = 1;
+			close(g_data.check);
 			return (0);
 		}
 		launch_builtin(command);
