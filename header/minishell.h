@@ -94,12 +94,8 @@ typedef struct s_env
 typedef struct s_data
 {
 	t_list	*split;
-	t_cmd	*cmd_lst;
-	char	*line;
 	char	*log;
 	int		token;
-	char	**splited_line;
-	char	**args;
 	char	**env_in_tab;
 	t_env	*env;
 	int		exit_value;
