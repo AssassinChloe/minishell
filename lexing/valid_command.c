@@ -31,17 +31,47 @@ void	ft_error_check_cmd(t_cmd *cmd, int *ret)
 	}
 }
 
+void	free_t_cmd(int i, t_cmd *cmd)
+{
+	while (i >= 0)
+	{
+		free(cmd->av[i]);
+		cmd->av[i] = NULL;
+		i--;
+	}
+	free(cmd->av);
+	free(cmd->type);
+}
+
+int	copy_cmdlist(t_cmd *cmd, char ***trunc_list, int **trunc_type, int i)
+{
+	int	multicmd;
+	int	j;
+
+	j = 0;
+	multicmd = 0;
+	while (i < cmd->argc)
+	{
+		if (j > 0 && (cmd->type[j - 1] >= T_LOWER
+				&& cmd->type[j - 1] <= T_GGREATER))
+			*trunc_type[j] = T_FILENAME;
+		else
+			*trunc_type[j] = get_token_type(cmd->av[i], &multicmd);
+		*trunc_list[j++] = ft_strdup(cmd->av[i++]);
+	}
+	trunc_list[j] = NULL;
+	return (i);
+}
+
 void	ft_check_for_env(t_cmd *cmd)
 {
 	int		i;
 	int		j;
 	char	**trunc_list;
 	int		*trunc_type;
-	int		multicmd;
 
 	i = 0;
 	j = 0;
-	multicmd = 0;
 	while (cmd->av[i] && ft_strcmp(cmd->av[i], "env") == 0)
 			i++;
 	if (i > 0 && i < cmd->argc)
@@ -49,22 +79,12 @@ void	ft_check_for_env(t_cmd *cmd)
 		cmd->env = 1;
 		trunc_list = malloc(sizeof(char *) * (cmd->argc - i + 1));
 		trunc_type = malloc(sizeof(int) * (cmd->argc - i));
-		while (i < cmd->argc)
-		{
-			trunc_type[j] = get_token_type(cmd->av[i], &multicmd);
-			trunc_list[j++] = ft_strdup(cmd->av[i++]);
-		}
-		trunc_list[j] = NULL;
-		while (i >= 0)
-		{
-			free(cmd->av[i]);
-			cmd->av[i] = NULL;
-			i--;
-		}
-		free(cmd->av);
+		i = copy_cmdlist(cmd, &trunc_list, &trunc_type, i);
+		free_t_cmd(i, cmd);
 		cmd->av = trunc_list;
-		free(cmd->type);
 		cmd->type = trunc_type;
+		while (cmd->av[j])
+			j++;
 		cmd->argc = j;
 		cmd->argc_init = j;
 	}
@@ -74,17 +94,18 @@ void	ft_check_for_env(t_cmd *cmd)
 
 int	is_valid_cmd(t_cmd *cmd)
 {
-    struct stat	*test;
-    int         ret;
-    int			i;
+	struct stat	*test;
+	int			ret;
+	int			i;
 
-    ret = 0;
+	ret = 0;
 	i = 0;
 	ft_check_for_env(cmd);
-    test = malloc(sizeof(struct stat));
+	test = malloc(sizeof(struct stat));
 	while (cmd->av[i] && cmd->type[i] != T_BUILTIN && cmd->type[i] != T_CMD)
 		i++;
-	if (i < cmd->argc && cmd->av[i] && stat(cmd->av[i], test) >= 0 && S_ISDIR(test->st_mode) == 1)
+	if (i < cmd->argc && cmd->av[i] && stat(cmd->av[i], test) >= 0
+		&& S_ISDIR(test->st_mode) == 1)
 	{	
 		free(test);
 		test = NULL;
@@ -92,7 +113,8 @@ int	is_valid_cmd(t_cmd *cmd)
 	}
 	free(test);
 	test = NULL;
-    if (i < cmd->argc && (ft_strcmp(cmd->av[i], "") == 0 || (cmd->type[i] != T_BUILTIN && ft_get_cmd_path(&cmd->av[i]) > 0)))
+	if (i < cmd->argc && (ft_strcmp(cmd->av[i], "") == 0
+			|| (cmd->type[i] != T_BUILTIN && ft_get_cmd_path(&cmd->av[i]) > 0)))
 		return (127);
 	return (0);
 }

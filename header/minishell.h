@@ -160,6 +160,7 @@ int		ft_get_cmd_path(char **cmd);
 int		ft_isbuiltin(char *str);
 int		is_valid_cmd(t_cmd *cmd);
 void	ft_error_check_cmd(t_cmd *cmd, int *ret);
+int		end_redir_error(t_cmd *command);
 
 /* Execution */
 void	ft_closepipe(int **pip);
@@ -170,6 +171,9 @@ void	ft_parent(int **pip);
 void	ft_free_pipe(int **pip);
 void	ft_open_pipes(int **pip);
 void	if_redir(int **pip, t_cmd *cmd, int i);
+void	exec_builtin_nopipe(t_cmd *command);
+void	get_exit_val_pipe(int i);
+void	handle_pipe(int i, int **pip);
 
 /* General */
 void	init_data(char **envp);
