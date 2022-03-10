@@ -105,13 +105,9 @@ int	ft_export(t_cmd cmd)
 {
 	int		i;
 	int		ret;
-	char	**table;
 
 	if (cmd.argc == 1)
-	{
-		table = sort_table(table_export_key());
-		return (print_table_export(table));
-	}
+		return (print_table_export());
 	i = 0;
 	ret = 0;
 	while (cmd.av[++i])

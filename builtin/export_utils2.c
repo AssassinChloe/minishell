@@ -26,15 +26,18 @@ void	free_table_string(char **table)
 		}
 		free(table);
 	}
+	table = NULL;
 }
 
-int	print_table_export(char **table)
+int	print_table_export(void)
 {
 	int		i;
 	t_env	*var;
 	char	*var_value;
+	char	**table;
 
 	i = 0;
+	table = sort_table(table_export_key());
 	while (table[i])
 	{
 		ft_putstr_fd("Export ", STDOUT_FILENO);

@@ -183,7 +183,7 @@ int		has_plus_equal(char *str);
 char	**table_export_key(void);
 char	**sort_table(char **table);
 int		print_exp_list(void);
-int		print_table_export(char **table);
+int		print_table_export(void);
 int		ft_export(t_cmd cmd);
 t_env	*find_last_env(void);
 void	add_env_value(char *newkey, char *newvalue, int int_value);
