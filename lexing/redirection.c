@@ -12,6 +12,22 @@
 
 #include "minishell.h"
 
+void	error_message(char *cmd)
+{
+	char *error;
+	char *tmp;
+
+	tmp = ft_strdup(cmd);
+	error = ft_strdup("minishell: ");
+	error = ft_strjoin(error, tmp);
+	free(tmp);
+	tmp = NULL;
+	error = ft_strjoin(error, ": No such file or directory\n");
+	write(STDERR_FILENO, error, (ft_strlen(error) + 1));
+	free(error);
+	error = NULL;
+}
+
 int	open_heredoc(t_cmd *cmd, int i, int j)
 {
 	char	*buffer;
@@ -27,7 +43,7 @@ int	open_heredoc(t_cmd *cmd, int i, int j)
 	cmd->redir[j].fd = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC, 0755);
 	if (cmd->redir->fd == -1)
 	{
-		printf("minishell: .heredoc: Permission denied\n");
+		write(STDERR_FILENO, "minishell: .heredoc: Permission denied\n", 41);
 		free(buffer);
 		free(delimiter);
 		return (1);
@@ -55,7 +71,7 @@ int	ft_lowerstart(t_cmd *cmd, int i, int j)
 		cmd->redir[j].fd = open(cmd->av[i + 1], O_RDONLY);
 		if (cmd->redir[j].fd == -1)
 		{
-			printf("minishell: %s: No such file or directory\n", cmd->av[i + 1]);
+			error_message(cmd->av[i + 1]);
 			return (1);
 		}
 	}
@@ -78,8 +94,8 @@ int	ft_greaterstart(t_cmd *cmd, int i, int j)
 	cmd->redir[j].fd = open(cmd->av[i + 1], O_RDWR | O_CREAT | O_TRUNC, 0655);
 	if (cmd->redir[j].fd == -1)
 	{
-		printf("minishell: %s: No such file or directory\n", cmd->av[i + 1]);
-		return (1);
+			error_message(cmd->av[i + 1]);
+			return (1);
 	}
 	modif_arg(&cmd);
 	ft_redirstd(&cmd->redir[j], STDOUT_FILENO);
@@ -91,8 +107,8 @@ int	ft_ggreaterstart(t_cmd *cmd, int i, int j)
 	cmd->redir[j].fd = open(cmd->av[i + 1], O_RDWR | O_CREAT | O_APPEND, 0655);
 	if (cmd->redir[j].fd == -1)
 	{
-		printf("minishell: %s: No such file or directory\n", cmd->av[i + 1]);
-		return (1);
+			error_message(cmd->av[i + 1]);
+			return (1);
 	}
 	modif_arg(&cmd);
 	ft_redirstd(&cmd->redir[j], STDOUT_FILENO);
