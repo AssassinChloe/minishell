@@ -72,7 +72,7 @@ int	ft_greaterstart(t_cmd *cmd, int i, int j)
 	if (cmd->redir[j].fd == -1)
 	{
 		printf("minishell: %s: No such file or directory\n", cmd->av[i + 1]);
-			return (1);
+		return (1);
 	}
 	modif_arg(&cmd);
 	ft_redirstd(&cmd->redir[j], STDOUT_FILENO);
@@ -85,7 +85,7 @@ int	ft_ggreaterstart(t_cmd *cmd, int i, int j)
 	if (cmd->redir[j].fd == -1)
 	{
 		printf("minishell: %s: No such file or directory\n", cmd->av[i + 1]);
-			return (1);
+		return (1);
 	}
 	modif_arg(&cmd);
 	ft_redirstd(&cmd->redir[j], STDOUT_FILENO);

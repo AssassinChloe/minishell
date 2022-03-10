@@ -70,7 +70,7 @@ int	ft_divide_redirection(t_cmd *cmd)
 
 void	free_tab(char **tab)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (tab[i])
@@ -95,7 +95,7 @@ void	ft_add_mem(t_cmd **cmd, int k)
 	tmp_av = malloc(sizeof(char *) * (i + k + 1));
 	tmp_ac = malloc(sizeof(int) * (i + k));
 	i = 0;
-	while((*cmd)->av[i])
+	while ((*cmd)->av[i])
 	{
 		tmp_av[i] = ft_strdup((*cmd)->av[i]);
 		free((*cmd)->av[i]);
@@ -112,12 +112,12 @@ void	ft_add_mem(t_cmd **cmd, int k)
 
 t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 {
-	int	j;
-	int	multicmd;
-	char **split;
-	int	k;
+	int		j;
+	int		multicmd;
+	char	**split;
+	int		k;
 	t_split	*var;
-	t_list *list;
+	t_list	*list;
 
 	multicmd = 0;
 	list = g_data.split;
@@ -165,7 +165,6 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 			if (j > 0 && (tmp->type[j - 1] >= T_LOWER
 					&& tmp->type[j - 1] <= T_GGREATER))
 				tmp->type[j] = T_FILENAME;
-			
 			j++;
 		}
 		tmp->av[j] = NULL;
