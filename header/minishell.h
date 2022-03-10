@@ -177,6 +177,7 @@ int		ft_atoi_exit(const char *str);
 int		ft_exit(t_cmd cmd);
 int		already_in_env(char *arg);
 int		format_key_ok(char *str);
+int		format_value_ok(char *str);
 int		has_equal(char *str);
 int		print_exp_list(void);
 int		ft_export(t_cmd cmd);

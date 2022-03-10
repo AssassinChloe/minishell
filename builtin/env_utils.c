@@ -55,6 +55,20 @@ int	format_key_ok(char *str)
 	return (1);
 }
 
+int	format_value_ok(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '(' || str[i] == ')' || str[i] == '&')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	change_env_value(char *key, char *newvalue, int int_value)
 {
 	t_env	*tmp;
