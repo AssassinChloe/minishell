@@ -288,7 +288,7 @@ int	ft_export(t_cmd cmd)
 	int		ret;
 	char	**table;
 
-	if (cmd.argc == 1) // ajout test d'impression  orde
+	if (cmd.argc == 1)
 	{
 		table = table_export_key();
 		table = sort_table(table);

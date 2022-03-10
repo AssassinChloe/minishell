@@ -15,7 +15,6 @@
 int	launch_builtin(t_cmd *cmd)
 {
 	close(g_data.check);
-//	g_data.exit_value = 0;
 	if (ft_strcmp(cmd->av[0], "cd") == 0)
 		g_data.exit_value = (ft_cd(*cmd));
 	if (ft_strcmp(cmd->av[0], "echo") == 0)
@@ -24,8 +23,6 @@ int	launch_builtin(t_cmd *cmd)
 	{
 		g_data.exit_value = ft_env();
 		g_data.env_in_tab = ft_env_in_tab();
-//		print_table_string(g_data.env_in_tab); // uniquement pour test
-//		return (g_data.exit_value);
 	}
 	if (ft_strcmp(cmd->av[0], "exit") == 0)
 		g_data.exit_value = ft_exit(*cmd);
@@ -33,7 +30,6 @@ int	launch_builtin(t_cmd *cmd)
 	{
 		g_data.exit_value = ft_export(*cmd);
 		g_data.env_in_tab = ft_env_in_tab();
-//		return (g_data.exit_value);
 	}	
 	if (ft_strcmp(cmd->av[0], "pwd") == 0)
 		g_data.exit_value = ft_pwd(*cmd);

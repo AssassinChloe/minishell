@@ -32,18 +32,11 @@ int	err_many_arg_exit(char *str)
 	return (1);
 }
 
-int	init_exit(void)
-{
-	printf("exit\n");
-	return (0);
-}
-
 int	ft_exit(t_cmd cmd)
 {
 	long long	number;
 
 	number = 0;
-//	number = init_exit();
 	if (cmd.argc == 1)
 		g_data.loop = -1;
 	if (cmd.argc > 2)

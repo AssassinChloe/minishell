@@ -16,7 +16,7 @@ void	ft_error_check_cmd(t_cmd *cmd, int *ret)
 {
 	if (cmd->env == 0)
 	{
-		if (*ret == 126) 
+		if (*ret == 126)
 			printf("minishell: %s: Is a directory\n", cmd->av[0]);
 		else if (*ret == 127)
 			printf("minishell: %s: command not found\n", cmd->av[0]);
@@ -29,7 +29,6 @@ void	ft_error_check_cmd(t_cmd *cmd, int *ret)
 			*ret = 127;
 		}
 	}
-
 }
 
 int	ft_is_only_digit(char *str)
@@ -46,12 +45,12 @@ int	ft_is_only_digit(char *str)
 	return (1);
 }
 
-void	ft_print_error()
+void	ft_print_error(void)
 {
 	char	*log;
 	char	*error;
 	int		ret;
-	int     fd;
+	int		fd;
 
 	fd = open(g_data.log, O_RDONLY);
 	if (fd < 0)
@@ -63,7 +62,7 @@ void	ft_print_error()
 	{
 		if (g_data.nb_pipe > 0 && ft_is_only_digit(log) == 1)
 			g_data.exit_value = ft_atoi(log);
-		else 
+		else
 			error = ft_strdup(log);
 		while (ret == 1)
 		{
@@ -74,7 +73,7 @@ void	ft_print_error()
 			ret = get_next_line(fd, &log);
 			if (g_data.nb_pipe > 0 && ft_is_only_digit(log) == 1)
 				g_data.exit_value = ft_atoi(log);
-			else 
+			else
 				error = ft_strjoin(error, log);
 		}
 		if (ft_strlen(error) > 0)
@@ -82,7 +81,7 @@ void	ft_print_error()
 			g_data.exit_value = 1;
 			write(STDERR_FILENO, error, (ft_strlen(error) + 1));
 		}
-		free(error);  
+		free(error);
 	}
 	free(log);
 	log = NULL;

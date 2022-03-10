@@ -17,7 +17,7 @@ void	exec_cmd(t_cmd *cmd)
 	if (is_valid_cmd(cmd) == 0)
 	{
 		if (execve(cmd->av[0], cmd->av, g_data.env_in_tab) < 0)
-				perror("minishell");
+			perror("minishell");
 	}
 	close(g_data.check);
 }
@@ -44,7 +44,7 @@ int	ft_child(int **pip, int i, t_cmd *cmd)
 			dup2(pip[i - 1][0], STDIN_FILENO);
 		ft_closepipe(pip);
 		if (i == g_data.nb_pipe)
-		dup2(g_data.check, STDERR_FILENO);
+			dup2(g_data.check, STDERR_FILENO);
 	}
 	if (cmd->av[0] && cmd->type[0] == T_BUILTIN)
 	{
@@ -71,7 +71,7 @@ void	ft_parent(int **pip)
 	g_data.execution = -1;
 	while (g_data.execution == -1)
 	{
-		while (wait(NULL) != -1 || errno!= ECHILD)
+		while (wait(NULL) != -1 || errno != ECHILD)
 			g_data.execution = 1;
 		g_data.execution = 0;
 	}
@@ -83,7 +83,6 @@ int	ft_exec(t_list *commandlist, int **pip)
 	int		pid;
 	t_cmd	*command;
 	int		i;
-
 
 	i = 0;
 	command = (t_cmd *)commandlist->content;
@@ -109,7 +108,7 @@ int	execute_command(t_list *commandlist)
 	t_cmd	*command;
 	int		**pip;
 	int		pid;
-	
+
 	g_data.check = open(g_data.log, O_CREAT | O_RDWR | O_APPEND, 0666);
 	if (g_data.check < 0)
 		printf("error open\n");

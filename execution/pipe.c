@@ -44,14 +44,14 @@ void	ft_closepipe(int **pip)
 	int	j;
 
 	j = 0;
-		while (j < g_data.nb_pipe)
-		{
-			if (close(pip[j][0]) < 0)
-				printf("error close\n");
-			if (close(pip[j][1]) < 0)
-				printf("error close\n");
-			j++;
-		}
+	while (j < g_data.nb_pipe)
+	{
+		if (close(pip[j][0]) < 0)
+			printf("error close\n");
+		if (close(pip[j][1]) < 0)
+			printf("error close\n");
+		j++;
+	}
 }
 
 /*void if_redir(int **pip, t_cmd *cmd, int i)

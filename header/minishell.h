@@ -26,7 +26,7 @@
 # include <signal.h>
 # include "../libft/libft.h"
 
-#include <sys/ioctl.h>
+# include <sys/ioctl.h>
 
 # define T_ERR 1
 # define T_PIPE 2
@@ -83,12 +83,12 @@ typedef struct s_data
 	int		token;
 	char	**splited_line;
 	char	**args;
-	char 	**env_in_tab;
+	char	**env_in_tab;
 	t_env	*env;
 	int		exit_value;
 	int		nb_pipe;
-	int		execution; // pour dire si on est en cours d'execution ou non
-	int		loop; // variable pour maintien de la boucle while
+	int		execution;
+	int		loop;
 	int		check;
 }		t_data;
 
@@ -144,9 +144,9 @@ void	ft_parent(int **pip);
 void	ft_free_pipe(int **pip);
 void	ft_open_pipes(int **pip);
 char	*ft_addquote(char *str);
-void 	if_redir(int **pip, t_cmd *cmd, int i);
-int 	is_valid_cmd(t_cmd *cmd);
-void	ft_print_error();
+void	if_redir(int **pip, t_cmd *cmd, int i);
+int		is_valid_cmd(t_cmd *cmd);
+void	ft_print_error(void);
 void	ft_error_check_cmd(t_cmd *cmd, int *ret);
 char	*ft_remove_dollar(char *str, int start);
 void	build_split_list(char *str);
@@ -172,7 +172,7 @@ int		cd_too_many(void);
 int		err_cd_home_unset(char *srcpath, char *destpath);
 int		err_cd_oldpwd_unset(char *srcpath, char *destpath);
 int		ft_cd(t_cmd cmd);
-int		ft_env();
+int		ft_env(void);
 int		ft_atoi_exit(const char *str);
 int		ft_exit(t_cmd cmd);
 int		already_in_env(char *arg);
@@ -188,15 +188,15 @@ void	free_env(void);
 void	modify_shlvl_value(void);
 void	change_env_value(char *key, char *newvalue, int int_value);
 void	destroy_var_env(t_env *var);
-void	free_g_data();
+void	free_g_data(void);
 int		check_format_exit(char *str);
 int		ft_is_long_long(char *str);
 void	free_env(void);
 void	del_first_env(void);
 t_env	*get_prev(char *key);
 int		count_var_env(void);
-char **ft_env_in_tab();
-int	print_table_string(char **table);
+char	**ft_env_in_tab(void);
+int		print_table_string(char **table);
 void	free_table_string(char **table);
 char	*ft_strjoin_d(char *s1, char *s2);
 #endif

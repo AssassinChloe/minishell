@@ -27,11 +27,11 @@ void	modify_shlvl_value(void)
 	free(tmp);
 }
 
-char **ft_env_in_tab()
+char	**ft_env_in_tab(void)
 {
-	char 	**tab_env;
-	char 	*tmp;
-	int 	i;
+	char	**tab_env;
+	char	*tmp;
+	int		i;
 	int		nb_env;
 	t_env	*var;
 
@@ -41,7 +41,7 @@ char **ft_env_in_tab()
 		free_table_string(g_data.env_in_tab);
 	g_data.env_in_tab = NULL;
 	nb_env = count_var_env();
-	tab_env = (char **)malloc(sizeof(char*) * (nb_env + 2));
+	tab_env = (char **)malloc(sizeof(char *) * (nb_env + 2));
 	while (i <= nb_env)
 	{
 		if (var->has_value)
@@ -51,7 +51,6 @@ char **ft_env_in_tab()
 			tmp = ft_strjoin_d(tmp, get_env_value(var->key));
 			tab_env[i] = ft_strdup(tmp);
 			free(tmp);
-//			printf("tab[%d] ; %s\n", i, tab_env[i]); ////
 		}
 		else
 			tab_env[i] = ft_strdup(var->key);
@@ -62,7 +61,8 @@ char **ft_env_in_tab()
 	return (tab_env);
 }
 
-int	print_table_string(char **table) // uniquement pour test
+//uniquement pour test
+int	print_table_string(char **table)
 {
 	int		i;
 
@@ -75,14 +75,11 @@ int	print_table_string(char **table) // uniquement pour test
 	return (0);
 }
 
-int	ft_env(t_cmd cmd)
+int	ft_env(void)
 {
 	t_env	*var;
 
-	(void)cmd;
 	var = g_data.env;
-//	ft_env_in_tab(); //
-//	printf("\n"); //
 	while (var)
 	{
 		if (var->has_value)
@@ -95,4 +92,3 @@ int	ft_env(t_cmd cmd)
 	}
 	return (0);
 }
-
