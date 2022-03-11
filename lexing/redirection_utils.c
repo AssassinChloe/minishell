@@ -52,7 +52,7 @@ void	ft_countredir(t_cmd *cmd)
 			cmd->redir_nb++;
 		i++;
 	}
-	printf("test %d : i, %d : argc\n", i, cmd->argc);
+//	printf("test %d : i, %d : argc\n", i, cmd->argc);
 }
 
 int	ft_handleredir(int j, t_cmd *cmd, int *i)
