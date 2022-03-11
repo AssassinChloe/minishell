@@ -20,8 +20,8 @@ int	launch_builtin(t_cmd *cmd)
 		g_data.exit_value = ft_echo((*cmd).av);
 	if (ft_strcmp(cmd->av[0], "env") == 0)
 	{
-		g_data.exit_value = ft_env();
-		g_data.env_in_tab = ft_env_in_tab();
+		g_data.exit_value = ft_env(*cmd);
+//		g_data.env_in_tab = ft_env_in_tab();
 	}
 	if (ft_strcmp(cmd->av[0], "exit") == 0)
 		g_data.exit_value = ft_exit(*cmd);

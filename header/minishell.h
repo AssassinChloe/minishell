@@ -218,7 +218,7 @@ int		cd_too_many(void);
 int		err_cd_home_unset(char *srcpath, char *destpath);
 int		err_cd_oldpwd_unset(char *srcpath, char *destpath);
 int		ft_cd(t_cmd cmd);
-int		ft_env(void);
+int		ft_env(t_cmd cmd);
 int		ft_atoi_exit(const char *str);
 int		ft_exit(t_cmd cmd);
 int		has_equal(char *str);

@@ -78,7 +78,7 @@ int	copy_cmdlist(t_cmd *cmd, char ***trunc_list, int **trunc_type, int i)
 	trunc_list[j] = NULL;
 	return (i);
 }
-
+/*
 void	ft_check_for_env(t_cmd *cmd)
 {
 	int		i;
@@ -107,7 +107,7 @@ void	ft_check_for_env(t_cmd *cmd)
 	else
 		cmd->env = 0;
 }
-
+*/
 int	is_valid_cmd(t_cmd *cmd)
 {
 	struct stat	*test;
@@ -116,7 +116,7 @@ int	is_valid_cmd(t_cmd *cmd)
 
 	ret = 0;
 	i = 0;
-	ft_check_for_env(cmd);
+//	ft_check_for_env(cmd);
 	test = malloc(sizeof(struct stat));
 	while (cmd->av[i] && cmd->type[i] != T_BUILTIN && cmd->type[i] != T_CMD)
 		i++;
