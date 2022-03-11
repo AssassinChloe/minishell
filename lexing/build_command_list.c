@@ -64,6 +64,8 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 		}
 		else
 		{
+			if (i < tmp->argc)
+				ft_add_mem(&tmp, 1);
 			tmp->av[j] = ft_strdup((char *)tmplist2->content);
 			if (j > 0 && (tmp->type[j - 1] >= T_LOWER && tmp->type[j - 1] <= T_GGREATER))
 				tmp->type[j] = T_FILENAME;
@@ -71,12 +73,15 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 				tmp->type[j] = get_token_type((char *)tmplist2->content, &multicmd);
 			j++;
 		}
-		*token = *token + 1;
 		tmp->av[j] = NULL;
+		*token = *token + 1;
 		tmplist2 = tmplist2->next;
 	}
 	if (tmplist2 && ft_strcmp((char *)tmplist2->content, "|") == 0)
+	{
 		tmplist2 = tmplist2->next;
+		*token = *token + 1;
+	}
 	if (multicmd == 0)
 	{
 		tmp->argc = -1;
@@ -94,12 +99,30 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 	return (tmplist2);
 }
 
+void	ft_free_tmp(t_cmd *tmp)
+{
+	int j;
+
+	j = 0;
+	while (tmp->av[j])
+	{
+		free(tmp->av[j]);
+		tmp->av[j] = NULL;
+		j++;
+	}
+	free(tmp->av);
+	tmp->av = NULL;
+	free(tmp->type);
+	tmp->type = NULL;
+	free(tmp);
+	tmp = NULL;
+}
+
 int	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 {
 	int		i;
 	t_cmd	*tmp;
 	int		token;
-	int j;
 
 	token = 0;
 	while (tmplist)
@@ -115,7 +138,6 @@ int	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 		{
 			tmplist = tmplist->next;
 			g_data.nb_pipe++;
-			token++;
 		}
 		tmplist2 = ft_init_cmdlist(tmp, i, tmplist2, &token);
 		if (tmp->argc > 0)
@@ -129,19 +151,7 @@ int	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 		{
 			if (g_data.nb_pipe > 0)
 				g_data.nb_pipe--;
-			j = 0;
-			while (tmp->av[j])
-			{
-				free(tmp->av[j]);
-				tmp->av[j] = NULL;
-				j++;
-			}
-			free(tmp->av);
-			tmp->av = NULL;
-			free(tmp->type);
-			tmp->type = NULL;
-			free(tmp);
-			tmp = NULL;
+			ft_free_tmp(tmp);
 		}
 	}
 	return (0);
