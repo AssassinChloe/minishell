@@ -66,7 +66,7 @@ int	copy_cmdlist(t_cmd *cmd, char ***trunc_list, int **trunc_type, int i)
 				&& cmd->type[j - 1] <= T_GGREATER))
 			*trunc_type[j] = T_FILENAME;
 		else
-			*trunc_type[j] = get_token_type(cmd->av[i], &multicmd);
+			*trunc_type[j] = get_type(cmd->av[i], &multicmd);
 		*trunc_list[j++] = ft_strdup(cmd->av[i++]);
 	}
 	trunc_list[j] = NULL;

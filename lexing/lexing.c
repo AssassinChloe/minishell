@@ -22,7 +22,7 @@ int	ft_isbuiltin(char *str)
 	return (1);
 }
 
-int	get_token_type(char *str, int *multicmd)
+int	get_type(char *str, int *multicmd)
 {
 	if (ft_strcmp(str, "|") == 0)
 		return (T_PIPE);

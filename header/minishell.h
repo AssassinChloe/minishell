@@ -137,7 +137,7 @@ void	build_split_list(char *str);
 void	ft_free_splitlist(t_list **splitlist);
 
 /* Lexing */
-int		get_token_type(char *str, int *multicmd);
+int		get_type(char *str, int *multicmd);
 void	ft_check_for_env(t_cmd *tokens);
 int		ft_lexing(t_list **list);
 void	ft_printtype(t_list *elem);

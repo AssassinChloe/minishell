@@ -124,20 +124,7 @@ int	ft_parsespecial(char *str, t_parse *parse)
 		ft_addone(&parse->tokens, &parse->tmp);
 	return (0);
 }
-void	ft_printchain(t_list *elem)
-{
-	t_list	*tmp;
-	int		i;
 
-	i = 0;
-	tmp = elem;
-	while (tmp)
-	{
-		printf("token %d : -%s-\n", i, (char *)tmp->content);
-		tmp = tmp->next;
-		i++;
-	}
-}
 void	ft_parse(char *str)
 {
 	t_parse *parse;
@@ -173,7 +160,6 @@ void	ft_parse(char *str)
 		ft_freeparsing(&parse);
 		return ;
 	}
-	ft_printchain(parse->tokens);
 	parse->i = ft_lexing(&parse->tokens);
 	if (parse->i == 0)
 	{
