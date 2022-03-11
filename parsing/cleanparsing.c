@@ -14,7 +14,7 @@
 
 void	ft_freeparsing(t_parse **parse)
 {
-	t_list *list;
+	t_list	*list;
 
 	list = (*parse)->tokens;
 	if ((*parse)->tmp)

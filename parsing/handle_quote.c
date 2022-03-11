@@ -96,10 +96,10 @@ void	ft_concatquote(char *str, char **tmp, int *i)
 		tmp2 = ft_extract_var(tmp2, 1, 0);
 	if (tmp2)
 	{
-	if (*tmp != NULL)
-		*tmp = ft_strjoin(*tmp, tmp2);
-	else
-		*tmp = ft_strdup(tmp2);
-	free(tmp2);
+		if (*tmp != NULL)
+			*tmp = ft_strjoin(*tmp, tmp2);
+		else
+			*tmp = ft_strdup(tmp2);
+		free(tmp2);
 	}
 }
