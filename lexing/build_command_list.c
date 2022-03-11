@@ -31,7 +31,7 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 	tmp->redir_nb = 0;
 	tmp->av = malloc(sizeof(char *) * (i + 1));
 	tmp->type = malloc(sizeof(int) * i);
-	while (tmplist2 && i > j)
+	while (tmplist2 && tmp->argc > j)
 	{
 		if (list && *token == var->token_nb)
 		{

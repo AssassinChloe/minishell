@@ -23,7 +23,7 @@ void	ft_free_commandlist(t_list **commandlist)
 	{
 		type = (t_cmd *)tmp->content;
 		i = 0;
-		while (i < (type->argc_init))
+		while (i < type->argc)
 		{
 			if (type->av[i])
 				free(type->av[i]);
@@ -65,43 +65,50 @@ void	ft_add_mem(t_cmd **cmd, int k)
 	(*cmd)->type = tmp_ac;
 }
 
-void	copy_and_free_end(t_cmd **cmd, int j, int i)
+void	copy_without_redir(t_cmd **cmd, char **tmp)
 {
-	while ((*cmd)->av[j])
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while ((*cmd)->av[j] && ((*cmd)->type[j] < T_LOWER
+			|| (*cmd)->type[j] > T_GGREATER))
 	{
-		(*cmd)->av[i] = ft_strdup((*cmd)->av[j]);
+		tmp[i] = ft_strdup((*cmd)->av[j]);
 		(*cmd)->type[i] = (*cmd)->type[j];
 		j++;
 		i++;
 	}
-	while ((*cmd)->av[i])
+	j+=2;
+	while ((*cmd)->av[j])
 	{
-		free((*cmd)->av[i]);
-		(*cmd)->av[i] = NULL;
-		(*cmd)->type[i] = 0;
+		tmp[i] = ft_strdup((*cmd)->av[j]);
+		(*cmd)->type[i] = (*cmd)->type[j];
+		j++;
 		i++;
 	}
+	tmp[i] = NULL;
 }
 
 void	modif_arg(t_cmd **cmd)
 {
 	int	j;
-	int	i;
+	char **tmp;
 
 	j = 0;
-	i = 0;
-	while ((*cmd)->av[j] && ((*cmd)->type[j] < T_LOWER
-			|| (*cmd)->type[j] > T_GGREATER))
-	{
+	while((*cmd)->av[j])
 		j++;
-		i++;
+	tmp = malloc(sizeof(char *) * (j + 1));
+	copy_without_redir(cmd, tmp);
+	j = 0;
+	while ((*cmd)->av[j]) 
+	{
+		free((*cmd)->av[j]);
+		(*cmd)->av[j] = NULL;
+		j++;
 	}
-	free((*cmd)->av[j]);
-	(*cmd)->av[j] = NULL;
-	free((*cmd)->av[j + 1]);
-	(*cmd)->av[j + 1] = NULL;
-	j = j + 2;
-	copy_and_free_end(cmd, j, i);
+	free((*cmd)->av);
+	(*cmd)->av = tmp;
 	(*cmd)->argc = (*cmd)->argc - 2;
-	return ;
 }

@@ -107,5 +107,6 @@ int	execute_command(t_list *commandlist)
 		if (g_data.nb_pipe != 0)
 			ft_free_pipe(pip);
 	}
+	close(g_data.check);
 	return (pid);
 }

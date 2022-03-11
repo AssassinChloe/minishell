@@ -14,7 +14,6 @@
 
 int	launch_builtin(t_cmd *cmd)
 {
-	close(g_data.check);
 	if (ft_strcmp(cmd->av[0], "cd") == 0)
 		g_data.exit_value = (ft_cd(*cmd));
 	if (ft_strcmp(cmd->av[0], "echo") == 0)

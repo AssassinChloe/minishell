@@ -12,6 +12,24 @@
 
 #include "minishell.h"
 
+void	copy_and_free_end(t_cmd **cmd, int j, int i)
+{
+	while ((*cmd)->av[j])
+	{
+		(*cmd)->av[i] = ft_strdup((*cmd)->av[j]);
+		(*cmd)->type[i] = (*cmd)->type[j];
+		j++;
+		i++;
+	}
+	while ((*cmd)->av[i])
+	{
+		free((*cmd)->av[i]);
+		(*cmd)->av[i] = NULL;
+		(*cmd)->type[i] = 0;
+		i++;
+	}
+}
+
 void	modif_arg_heredoc(t_cmd **cmd, char *filename)
 {
 	int	j;
