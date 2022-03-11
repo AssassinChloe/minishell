@@ -93,10 +93,18 @@ int	print_table_string(char **table)
 }
 */
 
-int	ft_env(void)
+int	ft_env(t_cmd cmd)
 {
 	t_env	*var;
 
+	if (cmd.argc!= 1)
+	{
+		ft_putstr_fd("env : ", STDOUT_FILENO);
+		ft_putstr_fd(cmd.av[1], STDOUT_FILENO);
+		ft_putendl_fd(": Syntax error : read the subject !", STDOUT_FILENO);
+		g_data.exit_value = 127;
+		return (127);
+	}
 	var = g_data.env;
 	while (var)
 	{
@@ -110,3 +118,32 @@ int	ft_env(void)
 	}
 	return (0);
 }
+
+/*
+int	ft_env(t_cmd cmd)
+{
+	t_env	*var;
+
+	(void)cmd;
+	if (cmd.argc!= 1)
+	{
+		ft_putstr_fd("env : ", STDOUT_FILENO);
+		ft_putstr_fd(cmd.av[1], STDOUT_FILENO);
+		ft_putendl_fd(": No such file or directory", STDOUT_FILENO);
+		g_data.exit_value = 127;
+		return (0);
+	}
+	var = g_data.env;
+	while (var)
+	{
+		if (var->has_value)
+		{
+			ft_putstr_fd(var->key, STDOUT_FILENO);
+			ft_putchar_fd('=', STDOUT_FILENO);
+			ft_putendl_fd(var->value, STDOUT_FILENO);
+		}
+		var = var->next;
+	}
+	return (0);
+}
+*/

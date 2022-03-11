@@ -59,7 +59,7 @@ int	test_iscmd(t_list *cmdlist)
 	{
 		cmd = (t_cmd *)command->content;
 		ret = is_valid_cmd(cmd);
-		ft_error_check_cmd(cmd, &ret);
+//		ft_error_check_cmd(cmd, &ret);
 		command = command->next;
 	}
 	return (ret);
