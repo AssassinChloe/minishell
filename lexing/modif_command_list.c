@@ -80,7 +80,7 @@ void	copy_without_redir(t_cmd **cmd, char **tmp)
 		j++;
 		i++;
 	}
-	j+=2;
+	j += 2;
 	while ((*cmd)->av[j])
 	{
 		tmp[i] = ft_strdup((*cmd)->av[j]);
@@ -93,16 +93,16 @@ void	copy_without_redir(t_cmd **cmd, char **tmp)
 
 void	modif_arg(t_cmd **cmd)
 {
-	int	j;
-	char **tmp;
+	int		j;
+	char	**tmp;
 
 	j = 0;
-	while((*cmd)->av[j])
+	while ((*cmd)->av[j])
 		j++;
 	tmp = malloc(sizeof(char *) * (j + 1));
 	copy_without_redir(cmd, tmp);
 	j = 0;
-	while ((*cmd)->av[j]) 
+	while ((*cmd)->av[j])
 	{
 		free((*cmd)->av[j]);
 		(*cmd)->av[j] = NULL;
