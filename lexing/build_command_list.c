@@ -75,6 +75,8 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 		tmp->av[j] = NULL;
 		tmplist2 = tmplist2->next;
 	}
+	if (tmplist2 && ft_strcmp((char *)tmplist2->content, "|") == 0)
+		tmplist2 = tmplist2->next;
 	if (multicmd == 0)
 	{
 		tmp->argc = -1;
@@ -84,11 +86,11 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 			open_heredoc(tmp, 0, 0);
 			close(tmp->redir[0].fd);
 			free(tmp->redir);
+			tmp->redir = NULL;
+			tmp->redir_nb = 0;
 		}
 		return (tmplist2);
 	}
-	if (tmplist2 && ft_strcmp((char *)tmplist2->content, "|") == 0)
-		tmplist2 = tmplist2->next;
 	return (tmplist2);
 }
 
@@ -97,6 +99,7 @@ int	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 	int		i;
 	t_cmd	*tmp;
 	int		token;
+	int j;
 
 	token = 0;
 	while (tmplist)
@@ -115,12 +118,31 @@ int	ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist)
 			token++;
 		}
 		tmplist2 = ft_init_cmdlist(tmp, i, tmplist2, &token);
-		if (*commandlist == NULL)
-			*commandlist = ft_lstnew(tmp);
+		if (tmp->argc > 0)
+		{
+			if (*commandlist == NULL)
+				*commandlist = ft_lstnew(tmp);
+			else
+				ft_lstadd_back(commandlist, ft_lstnew(tmp));
+		}
 		else
-			ft_lstadd_back(commandlist, ft_lstnew(tmp));
-		if (tmp->argc < 0)
-			return (-1);
+		{
+			if (g_data.nb_pipe > 0)
+				g_data.nb_pipe--;
+			j = 0;
+			while (tmp->av[j])
+			{
+				free(tmp->av[j]);
+				tmp->av[j] = NULL;
+				j++;
+			}
+			free(tmp->av);
+			tmp->av = NULL;
+			free(tmp->type);
+			tmp->type = NULL;
+			free(tmp);
+			tmp = NULL;
+		}
 	}
 	return (0);
 }

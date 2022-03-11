@@ -164,6 +164,7 @@ int		is_valid_cmd(t_cmd *cmd);
 void	ft_error_check_cmd(t_cmd *cmd, int *ret);
 int		end_redir_error(t_cmd *command);
 void	error_message(char *cmd);
+void	free_t_cmd(int i, t_cmd *cmd);
 
 /* Execution */
 void	ft_closepipe(int **pip);

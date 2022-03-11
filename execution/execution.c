@@ -14,7 +14,7 @@
 
 void	exec_cmd(t_cmd *cmd)
 {
-	if (is_valid_cmd(cmd) == 0)
+	if (is_valid_cmd(cmd) == 0 )
 	{
 		if (execve(cmd->av[0], cmd->av, g_data.env_in_tab) < 0)
 			perror("minishell");
@@ -90,7 +90,9 @@ int	execute_command(t_list *commandlist)
 	t_cmd	*command;
 	int		**pip;
 	int		pid;
-
+	int i;
+	i = 0;
+	
 	g_data.check = open(g_data.log, O_CREAT | O_RDWR | O_APPEND, 0666);
 	pid = 1;
 	command = (t_cmd *)commandlist->content;
