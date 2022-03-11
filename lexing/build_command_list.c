@@ -35,12 +35,12 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 	{
 		if (list && *token == var->token_nb)
 		{
+			printf("test %d %s\n", *token, (char *)tmplist2->content);
 			k = 0;
 			split = ft_split((char *)tmplist2->content, " ");
 			while (split[k])
 				k++;
-			if (k > 1)
-				ft_add_mem(&tmp, k);
+			ft_add_mem(&tmp, k);
 			k = 0;
 			while (split[k])
 			{
@@ -52,7 +52,7 @@ t_list	*ft_init_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token)
 				k++;
 				j++;
 			}
-			if (k >= 1)
+			if (k > 1)
 			{
 				tmp->argc = tmp->argc + k - 1;
 				tmp->argc_init = tmp->argc_init + k - 1;
