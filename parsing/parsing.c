@@ -160,7 +160,6 @@ void	ft_parse(char *str)
 		ft_freeparsing(&parse);
 		return ;
 	}
-	//ft_printchain(parse->tokens);
 	parse->i = ft_lexing(&parse->tokens);
 	if (parse->i == 0)
 	{

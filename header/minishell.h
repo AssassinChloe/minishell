@@ -143,6 +143,7 @@ int		ft_lexing(t_list **list);
 void	ft_printtype(t_list *elem);
 int		ft_divide_redirection(t_cmd *cmd);
 int		ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist);
+void	ft_add_mem(t_cmd **cmd, int k);
 void	ft_free_commandlist(t_list **commandlist);
 int		ft_lowerstart(t_cmd *tmp, int i, int j);
 int		ft_llowerstart(t_cmd *tmp, int i, int j);
@@ -150,6 +151,7 @@ int		ft_greaterstart(t_cmd *tmp, int i, int j);
 int		ft_ggreaterstart(t_cmd *tmp, int i, int j);
 void	modif_arg(t_cmd **cmd);
 void	modif_arg_heredoc(t_cmd **cmd, char *filename);
+void	copy_and_free_end(t_cmd **cmd, int j, int i);
 void	ft_write_heredoc(char **buffer, t_cmd *cmd, int j, int isquote);
 int		open_heredoc(t_cmd *cmd, int i, int j);
 void	ft_countredir(t_cmd *cmd);
@@ -161,6 +163,7 @@ int		ft_isbuiltin(char *str);
 int		is_valid_cmd(t_cmd *cmd);
 void	ft_error_check_cmd(t_cmd *cmd, int *ret);
 int		end_redir_error(t_cmd *command);
+void	error_message(char *cmd);
 
 /* Execution */
 void	ft_closepipe(int **pip);

@@ -46,28 +46,6 @@ int	get_token_type(char *str, int *multicmd)
 		return (T_STRING);
 }
 
-void	ft_printtype(t_list *elem)
-{
-	t_list	*tmp;
-	t_cmd	*type;
-	int		i;
-
-	i = 0;
-	tmp = elem;
-	while (tmp)
-	{
-		type = (t_cmd *)tmp->content;
-		printf(" il y a %d argument dans la ligne de commande : \n", type->argc);
-		while (i < type->argc)
-		{
-			printf("type %d : -%s-\n", type->type[i], type->av[i]);
-			i++;
-		}
-		i = 0;
-		tmp = tmp->next;
-	}
-}
-
 int	test_iscmd(t_list *cmdlist)
 {
 	t_cmd		*cmd;
@@ -99,7 +77,6 @@ int	ft_lexing(t_list **list)
 		return (1);
 	}
 	g_data.exit_value = test_iscmd(commandlist);
-	//ft_printtype(commandlist);
 	if (g_data.exit_value > 0)
 	{
 		ft_free_commandlist(&commandlist);

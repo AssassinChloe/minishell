@@ -12,19 +12,6 @@
 
 #include "minishell.h"
 
-void	ft_free_tab(char **path_split)
-{
-	int	i;
-
-	i = 0;
-	while (path_split[i])
-	{
-		free(path_split[i]);
-		i++;
-	}
-	free(path_split);
-}
-
 int	ft_lauch_cmd(char **cmd, char *path)
 {
 	if (path == NULL)
@@ -67,13 +54,11 @@ int	ft_get_cmd_path(char **cmd)
 	char	*path;
 	char	**path_split;
 	int		i;
-	int		j;
 	char	*tmp;
 
 	if (access(*cmd, F_OK | X_OK) != 0)
 	{
 		i = 0;
-		j = 0;
 		path = NULL;
 		tmp = get_env_value("PATH");
 		if (tmp == NULL)
@@ -83,9 +68,9 @@ int	ft_get_cmd_path(char **cmd)
 		tmp = NULL;
 		while (path_split[i])
 			i++;
-		ft_concat_path(path_split[j], &path, cmd);
+		ft_concat_path(path_split[0], &path, cmd);
 		ft_checkpath(path_split, &path, cmd, i);
-		ft_free_tab(path_split);
+		free_table_string(path_split);
 		i = ft_lauch_cmd(cmd, path);
 		if (i > 0)
 			return (i);

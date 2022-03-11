@@ -15,7 +15,10 @@
 void	exec_builtin_nopipe(t_cmd *command)
 {
 	if (ft_divide_redirection(command) > 0)
-		return (end_redir_error(command));
+	{
+		end_redir_error(command);
+		return ;
+	}
 	launch_builtin(command);
 	if (command->redir_nb > 0)
 		ft_endredir(command);

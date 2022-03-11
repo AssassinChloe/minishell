@@ -23,8 +23,8 @@ PARSING	=	parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote
 
 PARSDIR	=	parsing/
 
-LEXING	=	lexing.c build_command_list.c valid_command.c get_path.c redirection.c redirection_2.c modif_command_list.c\
-			redirection_utils.c
+LEXING	=	lexing.c build_command_list.c valid_command.c get_path.c redirection.c redirection_utils.c\
+			modif_command_list.c redirection_error.c handle_heredoc.c
 
 LEXDIR	=	lexing/
 
