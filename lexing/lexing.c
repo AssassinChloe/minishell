@@ -81,7 +81,7 @@ void	ft_lexing(t_parse *parse)
 		return ;
 	}
 	parse->i = execute_command(commandlist);
+	ft_free_commandlist(&commandlist);
 	ft_close_child(parse);
 	ft_freeparsing(&parse);
-	ft_free_commandlist(&commandlist);
 }
