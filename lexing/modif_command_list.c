@@ -65,6 +65,17 @@ void	ft_add_mem(t_cmd **cmd, int k)
 	(*cmd)->type = tmp_ac;
 }
 
+void	ft_set_mem(t_cmd **cmd, int k)
+{
+	if ((*cmd)->av)
+		ft_add_mem(cmd, k);
+	else
+	{
+		(*cmd)->av = malloc(sizeof(char *) * (k + 1));
+		(*cmd)->type = malloc(sizeof(int) * (k));
+	}	
+}
+
 void	copy_without_redir(t_cmd **cmd, char **tmp)
 {
 	int	i;

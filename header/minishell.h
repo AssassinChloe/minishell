@@ -54,6 +54,8 @@ typedef struct s_parse
 	t_list	*tokens;
 	int		ret;
 	int		pipe;
+	int		buf;
+	int		quote;
 	int		multiple;
 }	t_parse;
 
@@ -78,7 +80,6 @@ typedef struct s_cmd
 	int				*type;
 	t_redir			*redir;
 	int				redir_nb;
-	int				env;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -114,36 +115,40 @@ void	ft_pipe(t_list *commandlist); // a supprimer ?
 /* Parsing */
 int		ft_isvarphabet(char c);
 void	ft_parse(char *str);
+char	*ft_handleis(char *str, t_parse *parse);
 int		ft_isspace(char c);
 int		ft_isquote(char c);
 int		ft_ispipe(char c);
 int		ft_special(char c);
 void	ft_printchain(t_list *elem);
 void	ft_addone(t_list **tokens, char **tmp);
+void	ft_deal_with_dollar(char *str, t_parse *parse);
 int		has_dollar(char *str);
-char	*ft_extract_var(char *str, int quote, int start);
+char	*ft_extract(char *str, int quote, int start);
 int		ft_isredir(char c);
 int		ft_isdoubleredir(char *str, int i);
 void	ft_concatquote(char *str, char **tmp, int *i);
 char	*ft_handle_quote(char *str, int *i, int keepquote);
-int		ft_parsetxt(char *str, t_parse *parse);
+void	ft_parsetxt(char *str, t_parse *parse);
 void	ft_freeparsing(t_parse **parse);
 char	*is_forbidden_redir(t_parse *parse);
 char	*ft_extract_pipe(char *str, t_parse *parse);
 char	*extract_redir(char *str, t_parse *parse);
+char	*ft_extract_limit(char *str, int *i, int *hasquote);
 char	*ft_addquote(char *str);
 char	*ft_remove_dollar(char *str, int start);
 void	build_split_list(char *str);
 void	ft_free_splitlist(t_list **splitlist);
 
 /* Lexing */
+t_list	*ft_build_cmdlist(t_cmd *tmp, int i, t_list *tmplist2, int *token);
 int		get_type(char *str, int *multicmd);
 void	ft_check_for_env(t_cmd *tokens);
-int		ft_lexing(t_list **list);
+void	ft_lexing(t_parse *parse);
 void	ft_printtype(t_list *elem);
 int		ft_divide_redirection(t_cmd *cmd);
 int		ft_divide_pipe(t_list *tmplist, t_list *tmplist2, t_list **commandlist);
-void	ft_add_mem(t_cmd **cmd, int k);
+void	ft_set_mem(t_cmd **cmd, int k);
 void	ft_free_commandlist(t_list **commandlist);
 int		ft_lowerstart(t_cmd *tmp, int i, int j);
 int		ft_llowerstart(t_cmd *tmp, int i, int j);
@@ -161,7 +166,7 @@ void	ft_redirstd(t_redir *redir, int std);
 int		ft_get_cmd_path(char **cmd);
 int		ft_isbuiltin(char *str);
 int		is_valid_cmd(t_cmd *cmd);
-void	ft_error_check_cmd(t_cmd *cmd, int *ret);
+void	ft_error_check_cmd(t_cmd *cmd, int ret);
 int		end_redir_error(t_cmd *command);
 void	error_message(char *cmd);
 void	free_t_cmd(int i, t_cmd *cmd);
@@ -178,6 +183,7 @@ void	if_redir(int **pip, t_cmd *cmd, int i);
 void	exec_builtin_nopipe(t_cmd *command);
 void	get_exit_val_pipe(int i);
 void	handle_pipe(int i, int **pip);
+void	ft_close_child(t_parse *parse);
 
 /* General */
 void	init_data(char **envp);

@@ -12,89 +12,31 @@
 
 #include "minishell.h"
 
-char	*ft_handleis(char *str, t_parse *parse)
+void	ft_parsetxt(char *str, t_parse *parse)
 {
-	if (ft_isspace(str[parse->i]) == 1)
-	{
-		while (str[parse->i] && ft_isspace(str[parse->i]) == 1)
-			parse->i++;
-	}
-	else if (ft_ispipe(str[parse->i]) == 1)
-	{
-		if (parse->pipe == 0 && parse->multiple == 0)
-			return (ft_extract_pipe(str, parse));
-		else
-			return (is_forbidden_redir(parse));
-	}
-	else if (ft_isredir(str[parse->i]) > 0)
-	{
-		if (parse->multiple == 0)
-			return (extract_redir(str, parse));
-		else
-			return (is_forbidden_redir(parse));
-	}
-	return (NULL);
-}
-
-int	ft_parsetxt(char *str, t_parse *parse)
-{
-	int	start;
-	int	quote;
-
-	start = 0;
-	quote = 0;
 	while (str[parse->i] && ft_special(str[parse->i]) == 0)
 	{
 		parse->multiple = 0;
 		parse->pipe = 0;
-		while (str[parse->i] && ft_isquote(str[parse->i]) == 0 && ft_special(str[parse->i]) == 0)
+		while (str[parse->i] && ft_isquote(str[parse->i]) == 0
+			&& ft_special(str[parse->i]) == 0)
 		{	
 			parse->tmp = ft_strjoin_char(parse->tmp, str[parse->i]);
 			parse->i++;
 		}
-		if (parse->tmp && has_dollar(parse->tmp + start) == 1)
-		{
-			if (str[parse->i - 1] && str[parse->i - 1] == '$' && ft_isquote(str[parse->i]) > 0)
-				parse->tmp = ft_remove_dollar(parse->tmp, start);
-			else
-				parse->tmp = ft_extract_var(parse->tmp, quote, start);
-		}
+		if (parse->tmp && has_dollar(parse->tmp + parse->buf) == 1)
+			ft_deal_with_dollar(str, parse);
 		if (str[parse->i] && ft_isquote(str[parse->i]) > 0)
 		{
-			quote++;
+			parse->quote++;
 			ft_concatquote(str, &parse->tmp, &parse->i);
 			if (parse->i < 0)
-				return (-1);
+				return ;
 		}
-		start = ft_strlen(parse->tmp);
+		parse->buf = ft_strlen(parse->tmp);
 	}
-	return (0);
-}
-
-char	*ft_extract_limit(char *str, int *i, int *hasquote)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp = NULL;
-	tmp2 = NULL;
-	while (str[*i] && ft_special(str[*i]) == 0)
-	{
-		if (ft_isquote(str[*i]) > 0)
-		{
-			*hasquote = 1;
-			tmp2 = ft_handle_quote(str, i, 0);
-			if (*i < 0)
-				return (NULL);
-			tmp = ft_strjoin(tmp, tmp2);
-		}
-		else
-		{
-			tmp = ft_strjoin_char(tmp, str[*i]);
-			*i = *i + 1;
-		}
-	}
-	return (tmp);
+	parse->buf = 0;
+	parse->quote = 0;
 }
 
 int	ft_parsespecial(char *str, t_parse *parse)
@@ -125,9 +67,9 @@ int	ft_parsespecial(char *str, t_parse *parse)
 	return (0);
 }
 
-void	ft_parse(char *str)
+t_parse	*ft_init_parse(void)
 {
-	t_parse *parse;
+	t_parse	*parse;
 
 	parse = malloc(sizeof(t_parse));
 	parse->i = 0;
@@ -135,11 +77,20 @@ void	ft_parse(char *str)
 	parse->tokens = NULL;
 	parse->multiple = 0;
 	parse->pipe = 1;
-	parse->ret = 0;
+	parse->quote = 0;
+	parse->buf = 0;
+	return (parse);
+}
+
+void	ft_parse(char *str)
+{
+	t_parse	*parse;
+
+	parse = ft_init_parse();
 	while (str[parse->i])
 	{
-		parse->ret = ft_parsetxt(str, parse);
-		if (parse->ret < 0)
+		ft_parsetxt(str, parse);
+		if (parse->i < 0)
 			return (ft_freeparsing(&parse));
 		else
 			ft_addone(&parse->tokens, &parse->tmp);
@@ -150,27 +101,11 @@ void	ft_parse(char *str)
 				return (ft_freeparsing(&parse));
 		}
 	}
-	if (parse->multiple == 1 || parse->pipe == 2)
+	if (parse->tokens == NULL || parse->multiple == 1 || parse->pipe == 2)
 	{
-		is_forbidden_redir(parse);
+		if (parse->tokens != NULL)
+			is_forbidden_redir(parse);
 		return (ft_freeparsing(&parse));
 	}
-	if (parse->tokens == NULL)
-	{
-		ft_freeparsing(&parse);
-		return ;
-	}
-	parse->i = ft_lexing(&parse->tokens);
-	if (parse->i == 0)
-	{
-		close(STDOUT_FILENO);
-		close(STDIN_FILENO);
-		close(STDERR_FILENO);
-		ft_freeparsing(&parse);
-		ft_free_splitlist(&g_data.split);
-		g_data.split = NULL;
-		free_g_data();
-		exit(EXIT_SUCCESS);
-	}
-	ft_freeparsing(&parse);
+	ft_lexing(parse);
 }

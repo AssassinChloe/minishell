@@ -14,12 +14,14 @@
 
 void	exec_cmd(t_cmd *cmd)
 {
-	if (is_valid_cmd(cmd) == 0)
+	if (ft_strcmp(".heredoc", cmd->av[0]) == 0)
+		close(g_data.check);
+	else if (cmd->av[0] && is_valid_cmd(cmd) == 0)
 	{
 		if (execve(cmd->av[0], cmd->av, g_data.env_in_tab) < 0)
 			perror("minishell");
+		close(g_data.check);
 	}
-	close(g_data.check);
 }
 
 int	ft_child(int **pip, int i, t_cmd *cmd)
@@ -60,26 +62,27 @@ void	ft_parent(int **pip)
 	close(g_data.check);
 }
 
-int	ft_exec(t_list *commandlist, int **pip)
+int	ft_exec(t_list *commandlist, int **pip, int *i)
 {
 	int		pid;
 	t_cmd	*command;
-	int		i;
 
-	i = 0;
+	pid = 1;
 	command = (t_cmd *)commandlist->content;
-	pid = fork();
-	if (pid < 0)
-		printf("error fork\n");
-	while (pid != 0 && (i + 1) <= g_data.nb_pipe)
+	if (command->argc < 0)
+		*i = *i + 1;
+	else
+		pid = fork();
+	while (pid != 0 && (*i + 1) <= g_data.nb_pipe)
 	{
-		i++;
+		*i = *i +1;
 		commandlist = commandlist->next;
 		command = (t_cmd *)commandlist->content;
-		pid = fork();
+		if (command)
+			pid = fork();
 	}
 	if (pid == 0)
-		ft_child(pip, i, command);
+		ft_child(pip, *i, command);
 	else
 		ft_parent(pip);
 	return (pid);
@@ -90,7 +93,9 @@ int	execute_command(t_list *commandlist)
 	t_cmd	*command;
 	int		**pip;
 	int		pid;
+	int		i;
 
+	i = 0;
 	g_data.check = open(g_data.log, O_CREAT | O_RDWR | O_APPEND, 0666);
 	pid = 1;
 	command = (t_cmd *)commandlist->content;
@@ -103,7 +108,7 @@ int	execute_command(t_list *commandlist)
 		exec_builtin_nopipe(command);
 	else
 	{
-		pid = ft_exec(commandlist, pip);
+		pid = ft_exec(commandlist, pip, &i);
 		if (g_data.nb_pipe != 0)
 			ft_free_pipe(pip);
 	}

@@ -28,7 +28,7 @@ int	ft_is_only_digit(char *str)
 
 void	check_log(char **log, char **error)
 {
-	if (/*g_data.nb_pipe > 0 && */ft_is_only_digit(*log) == 1)
+	if (ft_is_only_digit(*log) == 1)
 				g_data.exit_value = ft_atoi(*log);
 	else
 		*error = ft_strjoin(*error, *log);

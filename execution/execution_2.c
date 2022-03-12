@@ -23,3 +23,18 @@ void	exec_builtin_nopipe(t_cmd *command)
 	if (command->redir_nb > 0)
 		ft_endredir(command);
 }
+
+void	ft_close_child(t_parse *parse)
+{
+	if (parse->i == 0)
+	{
+		close(STDOUT_FILENO);
+		close(STDIN_FILENO);
+		close(STDERR_FILENO);
+		ft_freeparsing(&parse);
+		ft_free_splitlist(&g_data.split);
+		g_data.split = NULL;
+		free_g_data();
+		exit(EXIT_SUCCESS);
+	}
+}

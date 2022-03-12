@@ -59,29 +59,29 @@ int	test_iscmd(t_list *cmdlist)
 	{
 		cmd = (t_cmd *)command->content;
 		ret = is_valid_cmd(cmd);
+		ft_error_check_cmd(cmd, ret);
 		command = command->next;
 	}
 	return (ret);
 }
 
-int	ft_lexing(t_list **list)
+void	ft_lexing(t_parse *parse)
 {
 	t_list	*commandlist;
-	int		pid;
+	t_list	*list;
 
+	list = parse->tokens;
 	commandlist = NULL;
-	if (ft_divide_pipe(*list, *list, &commandlist) < 0)
-	{
-		ft_free_commandlist(&commandlist);
-		return (1);
-	}
+	ft_divide_pipe(list, list, &commandlist);
 	g_data.exit_value = test_iscmd(commandlist);
 	if (g_data.exit_value > 0)
 	{
+		ft_freeparsing(&parse);
 		ft_free_commandlist(&commandlist);
-		return (1);
+		return ;
 	}
-	pid = execute_command(commandlist);
+	parse->i = execute_command(commandlist);
+	ft_close_child(parse);
+	ft_freeparsing(&parse);
 	ft_free_commandlist(&commandlist);
-	return (pid);
 }

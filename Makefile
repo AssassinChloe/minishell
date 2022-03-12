@@ -19,12 +19,12 @@ SRCS	=	minishell.c printf_error.c signals.c\
 			$(addprefix $(EXECDIR), $(EXEC))\
 
 PARSING	=	parsing.c ft_issomething.c handlechainlist.c has_dollar.c handle_quote.c handle_redir.c\
-			cleanparsing.c split_list.c
+			cleanparsing.c split_list.c has_dollar_utils.c parsing_2.c
 
 PARSDIR	=	parsing/
 
 LEXING	=	lexing.c build_command_list.c valid_command.c get_path.c redirection.c redirection_utils.c\
-			modif_command_list.c redirection_error.c handle_heredoc.c
+			modif_command_list.c redirection_error.c handle_heredoc.c divide_around_pipe.c
 
 LEXDIR	=	lexing/
 

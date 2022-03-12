@@ -12,29 +12,6 @@
 
 #include "minishell.h"
 
-int	has_dollar(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str || !*str)
-		return (0);
-	while (str[i])
-	{
-		if (str[i] == '$')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	ft_isvarphabet(char c)
-{
-	if (ft_isalnum(c) == 1 || c == '_')
-		return (1);
-	return (0);
-}
-
 void	ft_extract_exitval(char **tmp, int *i)
 {
 	char	*conv;
@@ -46,13 +23,15 @@ void	ft_extract_exitval(char **tmp, int *i)
 	*i = *i + 2;
 }
 
-void	ft_copyvarvalue(char **tmp, char *str, int *i)
+void	ft_copyvarvalue(char **tmp, char *str, int *i, int quote)
 {
 	char	*var;
 	char	*conv;
 
 	var = NULL;
 	*i = *i + 1;
+	if (quote == 0)
+		build_split_list(str);
 	while (str[*i] && ft_isvarphabet(str[*i]) == 1)
 	{
 		var = ft_strjoin_char(var, str[*i]);
@@ -69,7 +48,15 @@ void	ft_copyvarvalue(char **tmp, char *str, int *i)
 	}
 }
 
-char	*ft_extract_var(char *str, int quote, int start)
+void	handle_spechar_next_dollar(int *i, char *str, char **tmp)
+{
+	if (ft_isspace(str[*i + 1]) == 1 || str[*i + 1] == '\0'
+		|| str[*i + 1] == ':' || str[*i + 1] == '=')
+		*tmp = ft_strjoin_char(*tmp, str[*i]);
+	*i = *i + 1;
+}
+
+char	*ft_extract(char *str, int quote, int start)
 {
 	int		i;
 	char	*tmp;
@@ -78,8 +65,6 @@ char	*ft_extract_var(char *str, int quote, int start)
 	i = 0;
 	while (str[i] && i < start)
 		tmp = ft_strjoin_char(tmp, str[i++]);
-	if (quote == 0)
-		build_split_list(str);
 	while (str[i])
 	{
 		while (str[i] && str[i] != '$')
@@ -89,14 +74,9 @@ char	*ft_extract_var(char *str, int quote, int start)
 			if (str[i + 1] == '?')
 				ft_extract_exitval(&tmp, &i);
 			else if (ft_isvarphabet(str[i + 1]) == 0)
-			{
-				if (ft_isspace(str[i + 1]) == 1 || str[i + 1] == '\0'
-					|| str[i + 1] == ':' || str[i + 1] == '=')
-					tmp = ft_strjoin_char(tmp, str[i]);
-				i++;
-			}
+				handle_spechar_next_dollar(&i, str, &tmp);
 			else
-				ft_copyvarvalue(&tmp, str, &i);
+				ft_copyvarvalue(&tmp, str, &i, quote);
 		}
 	}
 	free(str);

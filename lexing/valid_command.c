@@ -12,32 +12,19 @@
 
 #include "minishell.h"
 
-void	ft_error_check_cmd(t_cmd *cmd, int *ret)
+void	ft_error_check_cmd(t_cmd *cmd, int ret)
 {
-	if (cmd->env == 0)
+	if (ret == 126)
 	{
-		if (*ret == 126)
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(cmd->av[0], STDERR_FILENO);
-			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-		}
-		else if (*ret == 127)
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(cmd->av[0], STDERR_FILENO);
-			ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		}
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->av[0], STDERR_FILENO);
+		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
 	}
-	else
+	else if (ret == 127)
 	{
-		if (*ret > 0)
-		{
-			ft_putstr_fd("env: ", STDERR_FILENO);
-			ft_putstr_fd(cmd->av[0], STDERR_FILENO);
-			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-			*ret = 127;
-		}
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->av[0], STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	}
 }
 
@@ -80,8 +67,11 @@ int	is_valid_cmd(t_cmd *cmd)
 
 	i = 0;
 	test = malloc(sizeof(struct stat));
-	while (cmd->av[i] && cmd->type[i] != T_BUILTIN && cmd->type[i] != T_CMD)
-		i++;
+	if (cmd->av[0] && (cmd->type[0] >= T_LOWER && cmd->type[0] <= T_GGREATER))
+	{
+		while (cmd->av[i] && cmd->type[i] != T_BUILTIN && cmd->type[i] != T_CMD)
+			i++;
+	}
 	if (i < cmd->argc && cmd->av[i] && stat(cmd->av[i], test) >= 0
 		&& S_ISDIR(test->st_mode) == 1)
 	{	
