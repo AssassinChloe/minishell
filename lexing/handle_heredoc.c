@@ -37,8 +37,7 @@ void	modif_arg_heredoc(t_cmd **cmd, char *filename)
 
 	j = 0;
 	i = 0;
-	while ((*cmd)->av[j] && ((*cmd)->type[j] < T_LOWER
-			|| (*cmd)->type[j] > T_GGREATER))
+	while ((*cmd)->av[j] && (*cmd)->type[j] != T_LLOWER)
 	{
 		j++;
 		i++;

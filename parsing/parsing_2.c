@@ -61,6 +61,8 @@ char	*ft_extract_limit(char *str, int *i, int *hasquote)
 			if (*i < 0)
 				return (NULL);
 			tmp = ft_strjoin(tmp, tmp2);
+			free(tmp2);
+			tmp2 = NULL;
 		}
 		else
 		{

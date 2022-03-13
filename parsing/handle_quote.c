@@ -20,6 +20,7 @@ char	*ft_addquote(char *str)
 	tmp = ft_strjoin_char(tmp, '"');
 	tmp = ft_strjoin(tmp, str);
 	tmp = ft_strjoin_char(tmp, '"');
+	free(str);
 	return (tmp);
 }
 

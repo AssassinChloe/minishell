@@ -52,10 +52,10 @@ int	ft_parsespecial(char *str, t_parse *parse)
 		while (str[parse->i] && ft_isspace(str[parse->i]) == 1)
 			parse->i++;
 		parse->tmp = ft_extract_limit(str, &parse->i, &hasquote);
-		if (parse->tmp == NULL)
-			return (0);
 		if (parse->tmp == NULL && parse->i < 0)
 			return (-1);
+		if (parse->tmp == NULL)
+			return (0);
 		if (hasquote == 1)
 			parse->tmp = ft_addquote(parse->tmp);
 		ft_addone(&parse->tokens, &parse->tmp);
